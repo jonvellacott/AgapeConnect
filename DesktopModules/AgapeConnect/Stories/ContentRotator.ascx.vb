@@ -13,7 +13,7 @@ Imports DotNetNuke.Services.FileSystem
 Namespace DotNetNuke.Modules.AgapeConnect.Stories
     Partial Class ContentRotator
         Inherits Entities.Modules.PortalModuleBase
-
+        'Adding Stories Translation
         Dim d As New StoriesDataContext
 
         Protected Sub Page_Init(sender As Object, e As System.EventArgs) Handles Me.Init
