@@ -79,6 +79,24 @@ Partial Class DesktopModules_AgapeConnect_Stories_RSS
             If Not row.Latitude Is Nothing Then
                 insert.ElementExtensions.Add(New XElement(geo + "long", New XAttribute(XNamespace.Xmlns + "geo", "http://www.w3.org/2003/01/geo/wgs84_pos#"), row.Longitude))
             End If
+
+
+            Dim lang As XNamespace = XNamespace.Get("http://www.w3.org/2003/01/lang/wgs84_pos#")
+
+
+            If Not row.Language Is Nothing Then
+                insert.ElementExtensions.Add(New XElement(lang + "language", New XAttribute(XNamespace.Xmlns + "lang", "http://www.w3.org/2003/01/lang/wgs84_pos#"), row.Language))
+            End If
+            If Not row.TranslationGroup Is Nothing Then
+                insert.ElementExtensions.Add(New XElement(lang + "translationGroup", New XAttribute(XNamespace.Xmlns + "lang", "http://www.w3.org/2003/01/lang/wgs84_pos#"), row.TranslationGroup))
+            End If
+
+            insert.Id = row.StoryId
+
+
+
+
+
         Next
 
         myFeed.Items = myList
