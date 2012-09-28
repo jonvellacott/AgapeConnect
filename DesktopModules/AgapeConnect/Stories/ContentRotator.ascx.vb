@@ -20,7 +20,7 @@ Namespace DotNetNuke.Modules.AgapeConnect.Stories
             Dim addTitle = MyBase.Actions.Add(GetNextActionID, "AgapeConnect", "AgapeConnect", "", "", "", "", True, SecurityAccessLevel.Edit, True, False)
             addTitle.Actions.Add(GetNextActionID, "Story Settings", "StorySettings", "", "action_settings.gif", EditUrl("StorySettings"), False, SecurityAccessLevel.Edit, True, False)
             addTitle.Actions.Add(GetNextActionID, "New Story", "NewStory", "", "add.gif", EditUrl("AddEditStory"), False, SecurityAccessLevel.Edit, True, False)
-          
+
         End Sub
 
 
@@ -123,6 +123,6 @@ Namespace DotNetNuke.Modules.AgapeConnect.Stories
 
 
 
-        
+
     End Class
 End Namespace
