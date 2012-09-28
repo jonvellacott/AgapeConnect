@@ -1,0 +1,688 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AgapeEncryption.ADCEncrypt" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App_Code\Account\ADCEncrypt.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AgapeEncryption.AgapeEncrypt" Collapsed="true">
+    <Position X="16.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App_Code\AgapeEncrypt.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DSAccount" Collapsed="true">
+    <Position X="11" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gATBAAAIADCAAEBAAAAoAAIAgAgCABgIBQEQCAAEUAQ=</HashCode>
+      <FileName>App_Code\Account\DSAccount.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DSPortals" Collapsed="true">
+    <Position X="12.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>App_Code\Account\DSPortals.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DSPortalUsers" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAACAAAAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>App_Code\Account\DSPortalUsers.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AgapeRmb" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAEAAAAAAgAAAAAAAAACAAAAA=</HashCode>
+      <FileName>App_Code\AgapeRmb.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CASforMobile" Collapsed="true">
+    <Position X="11" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAACAAAQA=</HashCode>
+      <FileName>App_Code\casAuth\CASforMobile.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DatatSync" Collapsed="true">
+    <Position X="2.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgCSAAAAgDBAIgAAAAAAAAEEAJAEggAQAIggCAAAAA=</HashCode>
+      <FileName>App_Code\DatatSync.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Appa0" Collapsed="true">
+    <Position X="9.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>App_Code\GeoIP\cityExample.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Country" Collapsed="true">
+    <Position X="14.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAIAAEAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>App_Code\GeoIP\Country.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DatabaseInfo" Collapsed="true">
+    <Position X="16.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAiQAAAEAiQAAAAAAABAAAKQAwAAQAQAYAgAACDEE=</HashCode>
+      <FileName>App_Code\GeoIP\DatabaseInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Location" Collapsed="true">
+    <Position X="9.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACARCAgABAAAAAAACAACCEACEgAAAAAAEAAAACAAAA=</HashCode>
+      <FileName>App_Code\GeoIP\Location.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LookupService" Collapsed="true">
+    <Position X="11" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IrICaCCiYBEAggPQCAAAIYCAAUgAQMJABIhBAEoAgBA=</HashCode>
+      <FileName>App_Code\GeoIP\LookupService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Region" Collapsed="true">
+    <Position X="4" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAACAoAAAAACAACAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App_Code\GeoIP\Region.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RegionName" Collapsed="true">
+    <Position X="5.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>App_Code\GeoIP\RegionName.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MobileCAS" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAgAAAAAAAAAIAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>App_Code\MobileCAS\MobileCAS.vb</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MenuLinkType" Collapsed="true">
+    <Position X="12.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAIAAQAAAAABAAAAAAACAAABACAAAACAAABAA=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBrokerFunctions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CostCentreType" Collapsed="true">
+    <Position X="12.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAAAAAAAAAAECAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBrokerFunctions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AccountType" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAQAAAAAAAACAQAAAKABAAAAAAAAAAAAA=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBrokerFunctions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StaffBrokerFunctions" Collapsed="true">
+    <Position X="14.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAEAAAAADVAAIAKCgEAQAAAAAAAAAQAAkkAtIQAAAAg=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBrokerFunctions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StoryFunctions" Collapsed="true">
+    <Position X="5.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAEAAAAIBAAAAAAAAgAAAEEAkAAAAAAAAAAAEQAAAA=</HashCode>
+      <FileName>App_Code\Stories\StoryFunctions.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="tntWebUsers" Collapsed="true">
+    <Position X="9.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgABAAAAAABIgAAAAAAAAAIAkAAIAEAAIQQAAAAAAA=</HashCode>
+      <FileName>App_Code\tntWebUsers\tntWebUsers.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Account.DataserverPortalUsersEntities" Collapsed="true">
+    <Position X="0.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQACAAAAAAQAAAAAAAAAAAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>App_Code\Account\DSPortalUser.Designer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Account.DSUserPortal" Collapsed="true">
+    <Position X="16.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAACAAAgAAAAAAIgAAAAAAAABAgAAACAAAAAAAAUAgA=</HashCode>
+      <FileName>App_Code\Account\DSPortalUser.Designer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KeyUser.KeyAuthentication" Collapsed="true">
+    <Position X="4" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAQEAKAQACAEAYABQA4AAAEAAgEMAAAiBRJAAAAAAAM=</HashCode>
+      <FileName>App_Code\Account\KeyAuthentication.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AgapeConnect.DSUserPortalView" Collapsed="true">
+    <Position X="0.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>App_Code\Account\UserPortal.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AgapeIconAdmin.AgapeIconsDataContext" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAQAAAAAAgAgARCQgACIAAAAAAAkAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AgapeIconAdmin.File" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEgABwBBgIDgAACQKETAUIBjSAgIQQQ4AJQAIJEBBQ=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AgapeIconAdmin.Agape_Skin_AgapeIcon" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgQAKLAMiAAETAQAERAwABiKAAIAAEBoBApQEEAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AgapeIconAdmin.Agape_Skin_IconSetting" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAkABCBAAAAAAAAwCERAAABiCAAokAAAAIAAAAWEEA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Documents.DocumentsDataContext" Collapsed="true">
+    <Position X="9.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAgAABAEAIQCAAABgAAAIQQhGAAACAEAAwAEgUBgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Documents.AP_Documents_Doc" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AhAgFAKJEQEhCNQCwg0QAwgFiWFAAAaOFoRAMIYQkAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Documents.AP_Documents_Folder" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AFAiAABBAEEwCBAAQAERIAwBiCBg4ACMAgRAAAAEAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Documents.AP_Documents_TagMeta" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAEBAEABIARAQAEAAAAByCABAEAAAgQAECBIAAE=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Documents.AP_Documents_Tag" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABBkBAABAAAAAIAAQAERAAgBiGAAIACCAASAEABMCAE=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Documents.AP_Documents_Comment" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAgFAEABQAQIQkEBAQwRyCAAAAQgAgUwAAAAAAg=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Documents.AP_Documents_Version" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgEAABAUABAFQAQEkAAQABySAAAAIAAkSAAIYCAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Documents.DocumentsController" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IBAAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App_Code\Documents\DocumentsController.vb</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="MicrosoftTranslatorSdk.HttpSamples.Program" Collapsed="true">
+    <Position X="2.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>App_Code\StaffBroker\BingTranslate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MicrosoftTranslatorSdk.HttpSamples.AdmAccessToken" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAACAAAAAQAA=</HashCode>
+      <FileName>App_Code\StaffBroker\BingTranslate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MicrosoftTranslatorSdk.HttpSamples.AdmAuthentication" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEIAAAAAAAACAAAAEAAAAgAAAAAAACAA=</HashCode>
+      <FileName>App_Code\StaffBroker\BingTranslate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StaffBroker.StaffBrokerDataContext" Collapsed="true">
+    <Position X="12.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>1JBABCgUwXCEwGEETEAAxBkkkWwYAiEmAZwEhGIdSxg=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StaffBroker.User" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ASAxMlazCikUAACLZR9FgpgFqG0ABAAACIwIASYAADo=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.UserProfile" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEUhAAABAAgASJAAQAEBABoBiDgACAAgACAAKBwgkIA=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.ProfilePropertyDefinition" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AG4gdgSZBiMFYEOIwCXUkFBZuCxQAAAJhDggiQJAGLs=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.AP_StaffBroker_Staff" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EBQlEAAFQASQAIBAQAkRBBTBiCAAIEAiAIAGIASEJIA=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.AP_StaffBroker_StaffType" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAiAAIFAAAAEABAQAERIAQBiCAAYAQAAAACACAEAAA=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.ProfilePropertyDefinition2" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AG4hdgSZBiMFYGOIwCXWkEBZmChQAAAJhDggiQJAGLs=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.UserProfile2" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BEUgAAABQAgASJAAQAEBAAoBiDgACAAgACAAKBwgkIA=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.User2" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ASIxMkKzCikUACACbR9HAogFiG0AAIAACIwIASYAATo=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.AP_StaffBroker_StaffProfile" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAUgAEAJAACABAAgQEEAAABBiHAAAAAiAAAAAKAIBAA=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.AP_StaffBroker_Children" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQgEEgBAQAQAACAQBEAAAhBiCAJAAACSAAABCAAFAg=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.AP_StaffBroker_LeaderMeta" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAhAAABAACAgICITAEACB5BiCAEAIgEAAAAAAQABAg=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.Leader" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ASAxMkCzCikUAACCZR9FAogFiG0AAAAgCIwIAQYAADo=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.Delegate" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ASAxMkCzCikUAACCZR9FAogFiG0AAAAACIwIAQYAADo=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.AP_StaffBroker_LeaderMeta2" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAABQAAAgICYTAEACBxhiCAEAIgEAAgAAAQABAg=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.Delegate2" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ASAxMkCzCikUAACCbR9FAogFiG0AAAAACIwIAQYAADo=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.Leader2" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ASAxMkCzCikUAACCbR9FAogFiG0AAAAACIwIAQYAADo=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.AP_StaffBroker_Department" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QgYiM4JFAhAEQEAoSAkRKAQhjCIAcAIQAgAQAASFBBA=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.AP_StaffBroker_AccountCode" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAggAQBAhAAAEAAQAEdAAARiiAgICCAAAEAAAAEAAA=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.AP_StaffBroker_CostCenter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAgBAgAAAABASAERIAEBiCAAICAQAQIEQAAEBMA=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.AP_StaffBroker_Setting" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIgAAABBAEAAAAIQAERAAABqCACIAIAEAAAJCAEAEA=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.UserPortal" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAhAQABAAkAIIAIQEURCgwBiCAEIAQAAoEAAQAEAag=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.AP_Image" Collapsed="true">
+    <Position X="14.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAgAAgAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StaffBroker.AP_StaffBroker_StaffPropertyDefinition" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgQkABAgGYAIDgQgFRQQARiGCQIEAQAQAEgQRMBCA=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.AP_Staff_SuggestedPayment" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>SAAgIABBAAAAAAAgQEkRAEBBiyAAIAACSAwAAACFAIA=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.AP_Menu_Link" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BQAg0AIJQgAgAgCESAkTAigBiCCgIABAAKgAoQREAAA=</HashCode>
+      <FileName>App_Code\StaffBroker\StaffBroker.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffBroker.TemplatesDataContext" Collapsed="true">
+    <Position X="7.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAQAAAAAAAAAAAAACAAAAAAAAgABBAAAAA=</HashCode>
+      <FileName>App_Code\StaffBroker\Templates.designer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StaffBroker.AP_StaffBroker_Template" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAABAASAAJAAQAGRgQABiCQIIABEAAIAAAAEMAA=</HashCode>
+      <FileName>App_Code\StaffBroker\Templates.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffRmb.RmbReceiptMode" Collapsed="true">
+    <Position X="9.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgEAAAgAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App_Code\StaffRmb\StaffRmb.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StaffRmb.RmbStatus" Collapsed="true">
+    <Position X="11" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACACAAAEAAAAkAACQAAAAAAAABgAAAAAAAAAA=</HashCode>
+      <FileName>App_Code\StaffRmb\StaffRmb.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StaffRmb.RmbAccess" Collapsed="true">
+    <Position X="7.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAKAAAAAAAAAAAAACEYAAAAAAACAAAAAAAAAAAA=</HashCode>
+      <FileName>App_Code\StaffRmb\StaffRmb.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StaffRmb.StaffRmbFunctions" Collapsed="true">
+    <Position X="0.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAAAAgBAIAACAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App_Code\StaffRmb\StaffRmb.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StaffRmb.StaffRmbDataContext" Collapsed="true">
+    <Position X="16.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAUBQBgBAEEACoAAQANAAEAGAAAoAAAQ0EgAAZQIA=</HashCode>
+      <FileName>App_Code\StaffRmb\StaffRmb.designer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StaffRmb.AP_Staff_RmbLineType" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ARAgAogpAEAAQBAAQAEAJAAHimEQQBABAAICCRIAAAA=</HashCode>
+      <FileName>App_Code\StaffRmb\StaffRmb.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffRmb.AP_StaffRmb_PortalLineType" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAhQAEDAEIAAACAQAURIAABjCARMAQAAAIEhSAWAIA=</HashCode>
+      <FileName>App_Code\StaffRmb\StaffRmb.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffRmb.AP_StaffBroker_Department" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QgYiAYJFAhAEQEAoSAERKAQhjCIAcAIQAgAQAASFBBA=</HashCode>
+      <FileName>App_Code\StaffRmb\StaffRmb.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffRmb.AP_StaffBroker_CostCenter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAgBAgAAAABASAERIAEBiCAAICAQAQIEQAAEBMA=</HashCode>
+      <FileName>App_Code\StaffRmb\StaffRmb.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffRmb.AP_StaffBroker_AccountCode" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAggAQBAhAAAEAAQAEdAAARiiAgICCAAAEAAAAEAAA=</HashCode>
+      <FileName>App_Code\StaffRmb\StaffRmb.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffRmb.AP_Staff_RmbLine" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gCI7B55NkDokBaAo2AUZEcRxmyFAoCaQyCLdeIzakIA=</HashCode>
+      <FileName>App_Code\StaffRmb\StaffRmb.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffRmb.AP_Staff_Rmb" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AdVlQoonlIJNZQWOVUWVJVxPnnIQYoAA4tGiVVe1gc4=</HashCode>
+      <FileName>App_Code\StaffRmb\StaffRmb.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StaffRmb.AP_Staff_AdvanceRequest" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQRhEAIRBABEIaAKwgEVAAwhjCiQIERAorFAYQsEQRo=</HashCode>
+      <FileName>App_Code\StaffRmb\StaffRmb.designer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Stories.StoriesDataContext" Collapsed="true">
+    <Position X="2.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAIEgAEAAkABAACAAAAAQAIiAYAIAAABgAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Stories.AP_Stories_Module" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAiAACFQQwgBAAAQAMIKICRiCCoAAUhAKAAAAgAAAg=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Stories.AP_Stories_Module_Channel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIggIEwDS8AFAABAYQEIAgSBiCAAUBFAIQToBAAgRBE=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Stories.AP_Stories_Module_Channel_Cache" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>FIAmAAgDAMEgDECQUoEIQ4BpiCAEWh0ECBQyUAAmghE=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Stories.AP_Story" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EIQlAACDFOEgeAGKxMEYQCwJqCCYEJgEgLE6QQCgAQk=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Stories.StoryController" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App_Code\Stories\StoryFunctions.vb</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="UK.AgapeDocuments.AgapeDocumentsDataContext" Collapsed="true">
+    <Position X="14.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAQCABAAAAAAAAAkAAACAAAAAAAQiAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UK.AgapeDocuments.Agape_Main_AgapeDocument" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAQgBVIJAAABoEABYIERAxRB3SgAIAAGEgQBJIIGAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="UK.AgapeDocuments.Agape_Main_AgapeDocuments_Comment" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAgFAAAAwkAIQEEAAAwBmCAAAAQgAgUwAAAAAAg=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Interface Name="IDSPortalUsers" Collapsed="true">
+    <Position X="0.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAACAAAAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>App_Code\Account\IDSPortalUsers.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IMobileCAS" Collapsed="true">
+    <Position X="2.25" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAgAAAAAAAAAIAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>App_Code\MobileCAS\IMobileCAS.vb</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

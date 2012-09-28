@@ -1,0 +1,277 @@
+@import url("/Portals/_default/Skins/AgapeBlue/start/jquery-ui-1.8.16.custom.css");
+@import url("skin.css");
+/*@import url("/AgapeBetaPortal/DesktopModules/AgapePortal/AgapePortal.css");
+@import url("/DesktopModules/AgapePortal/AgapePortal.css");*/
+/* SKIN ELEMENTS */
+
+
+/*Fonts and Styles*/
+body,th,td,div,p,table,h1,h2,h3,h4,h5,h6.Normal,.NormalDisabled,.Head,.SubHead,.SubSubHead, a:link, a:visited, a:hover, input{color:#2E3D47; font-family:Verdana, Arial, Helvetica, sans-serif;}
+/*body,th,td,div,table,.Normal,.NormalDisabled,.Head,.SubHead,.SubSubHead, a:link, a:visited, a:hover{font-size:11px;}*/
+
+
+
+a:link,a:visited,a:active{color:#3E81B5; text-decoration:none; font-weight:normal; }
+a:hover{color:#660000; text-decoration: underline;  }
+.Head, .SubHead, .SubSubHead, .Normal, .NormalDisabled, .NormalDisabled, .NormalBold, .NormalRed, .NormalTextBox
+{font-family:Verdana, Arial, Helvetica, sans-serif;}
+.Head{color:#2E3D47;font-weight:bold;}
+.SubHead {color:#4C6171;}
+.SubSubHead{color:#6E8AA0;}
+.NormalRed {color:#F00;}
+
+h1, .AgapeH1{color: #730303;font-size:  36pt; font-family:  Verdana, Geneva, sans-serif; font-weight: bold ;border-bottom: solid 2px #730303;}
+h2, .AgapeH2{color: #730303;font-size: 24pt; font-family:  Verdana, Geneva, sans-serif; font-weight: bold ;border-bottom: solid 2px #730303;}
+h3, .AgapeH3{color: #730303;font-size: 18pt; font-family:  Verdana, Geneva, sans-serif; font-weight: bold ;}
+h4, .AgapeH4{color: #730303;font-size: 12pt; font-family:  Verdana, Geneva, sans-serif; font-weight: bold ;}
+h5, .AgapeH5{color: #730303;font-size: 10pt; font-family:  Verdana, Geneva, sans-serif; font-weight: bold ;}
+
+
+.FullTopLeft
+{
+    background-image: url(images/FullSlices/FullRedTL.png);
+    min-width: 57px !important;
+    height: 51px;
+}
+
+.FullTop
+{
+    background-image: url(images/FullSlices/FullRedT.png);
+    background-repeat: repeat-x ;
+    height: 51px; 
+}
+.FullTopRight
+{
+    background-image: url(images/FullSlices/FullRedTR.png);
+    min-width: 2px !important;
+    height: 51px;
+}
+.FullLeft
+{
+    background-image: url(images/FullSlices/FullRedL.png);
+    background-repeat: repeat-Y ;
+    width: 57px; 
+}
+.FullRight
+{
+   background-image: url(images/FullSlices/FullRedR.png);
+    background-repeat: repeat-Y ;
+    width: 2px;  
+}
+.FullBack
+{
+    background-color: #FFF;
+    min-height: 300px;
+    width: 100%;
+   /* border-left: 2px ouset #B9D1EF ;*/
+   padding-left: 10px;    
+   padding-right: 10px;  
+}
+.FullBottomLeft
+{
+    background-image: url(images/FullSlices/FullRedBL.png);
+    min-width: 57px !important;
+    height: 50px;
+}
+
+.FullBottom
+{
+    background-image: url(images/FullSlices/FullRedB.png);
+    background-repeat: repeat-x ;
+    
+    
+    height: 50px; 
+    
+}
+.FullBottomRight
+{
+    background-image: url(images/FullSlices/FullRedBR.png);
+    min-width: 2px !important;
+    height: 50px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
