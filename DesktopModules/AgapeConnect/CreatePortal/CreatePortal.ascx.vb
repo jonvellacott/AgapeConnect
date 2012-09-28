@@ -112,7 +112,8 @@ Namespace DotNetNuke.Modules.AgapeConnect
                     insert.DCode = ""
                     insert.PortalId = thePortalId
                     d.AP_StaffRmb_PortalLineTypes.InsertOnSubmit(insert)
-          
+
+
                 End If
 
             Next
