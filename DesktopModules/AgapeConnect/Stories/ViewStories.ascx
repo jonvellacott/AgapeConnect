@@ -97,6 +97,8 @@
 <asp:HiddenField ID="StoryIdHF" runat="server" />
 <asp:HiddenField ID="ShortTextHF" runat="server" />
 <asp:HiddenField ID="PhotoIdHF" runat="server" />
+<asp:HiddenField ID="TranslationGroupHF" runat="server" />
+
 <table  style="width: 100%">
     <tr valign="top">
         <td style="width: 100%">
@@ -171,7 +173,7 @@
                             fjs.parentNode.insertBefore(js, fjs);
                         } (document, 'script', 'facebook-jssdk'));</script>
                     <br />
-                    <br />
+                   
                     
                 </div>
                 <div style="clear: both;"> </div>
@@ -179,11 +181,10 @@
             <asp:Panel ID="pnlLanguages" runat="server" Visible="false" Width="100%"  >
 
                 <i>This story is also available in:</i>
-                <div style="margin: 4px 0 4px 0;">
+                <div style="margin: 4px 0 12px 0;">
              <asp:DataList ID="dlLanuages" runat="server" RepeatDirection="Horizontal" ItemStyle-HorizontalAlign="Center"  Width="100%" >
                     <ItemTemplate>
-                        <asp:ImageButton ID="btnLanguage" runat="server" ToolTip='<%# GetLanguageName(Eval("Language")) %>' ImageUrl='<%# GetFlag(Eval("Language"))  %>' />
-                            
+                       <asp:HyperLink ID="HyperLink2" runat="server" ToolTip='<%# GetLanguageName(Eval("Language")) %>' ImageUrl='<%# GetFlag(Eval("Language"))  %>' NavigateUrl ='<%# NavigateURL() & "?StoryId=" & Eval("StoryId") %>'>HyperLink</asp:HyperLink>
                     </ItemTemplate>
              </asp:DataList>
                     </div>

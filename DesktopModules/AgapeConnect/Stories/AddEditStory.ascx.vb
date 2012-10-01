@@ -27,7 +27,7 @@ Namespace DotNetNuke.Modules.Stories
 
             If Not Page.IsPostBack Then
 
-               
+
 
                 Dim mc As New DotNetNuke.Entities.Modules.ModuleController
 
@@ -52,7 +52,7 @@ Namespace DotNetNuke.Modules.Stories
                 ddlChannels.DataValueField = "Key"
                 ddlChannels.DataBind()
 
-                ddlLanguage.DataSource = From c In CultureInfo.GetCultures(CultureTypes.AllCultures) Order By c.EnglishName Select Name = c.Name.ToLower, EnglishName = c.EnglishName
+                ddlLanguage.DataSource = From c In CultureInfo.GetCultures(CultureTypes.SpecificCultures) Order By c.EnglishName Select Name = c.Name.ToLower, EnglishName = c.EnglishName
                 ddlLanguage.DataValueField = "Name"
                 ddlLanguage.DataTextField = "EnglishName"
                 ddlLanguage.DataBind()
@@ -137,7 +137,21 @@ Namespace DotNetNuke.Modules.Stories
                     Else
                         ddlLanguage.SelectedValue = CultureInfo.CurrentCulture.Name.ToLower
                     End If
-                   
+                    pnlLanguages.Visible = False
+                    If Not String.IsNullOrEmpty(r.TranslationGroup) Then
+
+                        
+                        Dim Translist = From c In d.AP_Stories Where c.TranslationGroup = r.TranslationGroup And c.PortalID = r.PortalID And c.StoryId <> r.StoryId Select c.Language, c.StoryId
+
+                        If Translist.Count > 1 Then
+                            pnlLanguages.Visible = True
+                            dlLanuages.DataSource = Translist
+                            dlLanuages.DataBind()
+
+                        End If
+
+
+                    End If
 
                 Else
 
@@ -149,6 +163,8 @@ Namespace DotNetNuke.Modules.Stories
                         Session("Long") = l.longitude
                         Session("Lat") = l.latitude
                     End If
+
+
 
                     Dim lg As Double = Session("Long")
                     Dim lt As Double = Session("Lat")
@@ -174,7 +190,45 @@ Namespace DotNetNuke.Modules.Stories
 
 
 
+        Public Function GetLanguageName(ByVal language As String) As String
 
+            Dim thename = CultureInfo.GetCultures(CultureTypes.AllCultures).Where(Function(x) x.Name.ToLower = language.ToLower).Select(Function(x) x.EnglishName & " / " & x.NativeName)
+            If thename.Count > 0 Then
+                Return thename.First()
+            Else
+                Return ""
+            End If
+        End Function
+
+        Public Function GetFlag(ByVal language As String) As String
+            If String.IsNullOrEmpty(language) Then
+                Return ""
+            End If
+            If language = "en" Then
+                language = "en-GB"
+
+            ElseIf language.Length = 2 Then
+                language = language.ToLower & "-" & language.ToUpper
+
+            End If
+
+
+            Dim flagDir = New DirectoryInfo(Server.MapPath("/images/Flags/"))
+            If Not flagDir Is Nothing Then
+
+                Dim flags = flagDir.GetFiles().Where(Function(x) x.Name.ToLower.Contains(language.ToLower))
+
+                If flags.Count = 0 Then
+                    Return ""  ' couldn't find flag
+                Else
+                    Return "/images/Flags/" & flags.First.Name
+
+                End If
+            Else
+                Return ""
+            End If
+
+        End Function
 
 
 
@@ -231,6 +285,12 @@ Namespace DotNetNuke.Modules.Stories
                 insert.TabId = TabId
                 insert.Language = ddlLanguage.SelectedValue
                 insert.TabModuleId = CInt(ddlChannels.SelectedValue)
+
+                If Request.QueryString("tg") <> "" Then
+                    insert.TranslationGroup = Request.QueryString("tg")
+                End If
+
+
                 Try
                     Dim geoLoc = tbLocation.Text.Split(",")
                     If geoLoc.Count = 2 Then
@@ -251,7 +311,7 @@ Namespace DotNetNuke.Modules.Stories
                     StoryFunctions.PrecalAllCaches(row.AP_Stories_Module.TabModuleId)
                 Next
 
-               
+
                 Response.Redirect(EditUrl("ViewStory") & "?StoryId=" & insert.StoryId)
             End If
 

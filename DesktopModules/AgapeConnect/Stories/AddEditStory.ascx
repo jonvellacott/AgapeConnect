@@ -91,12 +91,23 @@
                 <br />
                     
                       <asp:TextBox ID="tbLocation" runat="server" Width="130px" style="margin-right: 3px;"></asp:TextBox>
-                         <br />
+                         <br /><br />
+                        <asp:Panel ID="pnlLanguages" runat="server" Visible="false" Width="100%"  >
+                            
+                <b>Translations:</b><br /><i>(Click to open in new tab)</i>
 
+                <div style="margin: 4px 0 4px 0;">
+             <asp:DataList ID="dlLanuages" runat="server" RepeatDirection="Horizontal" ItemStyle-HorizontalAlign="Center"  Width="100%" >
+                    <ItemTemplate>
+                       <asp:HyperLink ID="HyperLink2" runat="server" target="_blank"  ToolTip='<%# GetLanguageName(Eval("Language")) %>' ImageUrl='<%# GetFlag(Eval("Language"))  %>' NavigateUrl ='<%# NavigateURL() & "?StoryId=" & Eval("StoryId") %>'>HyperLink</asp:HyperLink>
+                    </ItemTemplate>
+             </asp:DataList>
+                    </div>
+           </asp:Panel>
                 
                </td>
                 <td>
-                <dnn:TextEditor ID="StoryText" runat="server"  TextRenderMode="Raw"  Width="100%"  HtmlEncode="False" defaultmode="Rich" height="600" choosemode="True" chooserender="False"   />
+                <dnn:TextEditor ID="StoryText" runat="server"  TextRenderMode="Raw"  Width="100%"  HtmlEncode="False" defaultmode="Rich" height="700" choosemode="True" chooserender="False"   />
                 </td>
             </tr>
         </table>
@@ -109,6 +120,9 @@
    
    
     <div style="clear: both;" />
+
+ 
+
     <asp:Panel ID="SuperPowers" runat="server" Visible="false">
         <br />
         <table style="border-style: groove; border-width: thin">
