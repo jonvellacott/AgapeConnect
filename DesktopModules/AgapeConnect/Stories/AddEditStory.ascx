@@ -64,24 +64,35 @@
         <div class="Agape_FullStory_bodytext" style="padding-right: 12px; margin-bottom: 10px;">
         <table>
             <tr valign="top">
-                <td>
+                <td >
                 <uc1:acImage ID="acImage1" runat="server" Aspect="1.3" /><br />
                     <table border="0" cellpadding="0" cellspacing="0">
-                        <tr>
+                         <tr>
                             <td>
-                              <dnn:Label ID="Label5" runat="server" Text="Channel:" HelpText="Select the (local) channel you would like to use for this story. Every instance of the story module, has its own channel. You will find a list of all of the channels that you have been authorised to add stories to. select the most appropriate channel for this story."  ResourceKey="lblChannel" />
+                              <b>Language:</b>
                             </td>
                             <td>
-                             <asp:DropDownList ID="ddlChannels" runat="server"></asp:DropDownList>
+                             <asp:DropDownList ID="ddlLanguage" runat="server" Width="130px">
+
+</asp:DropDownList>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                              <b>Channel:</b>
+                            </td>
+                            <td>
+                             <asp:DropDownList ID="ddlChannels" runat="server"  Width="130px"></asp:DropDownList>
                             </td>
                         </tr>
                     </table>
                    
-               
+                    
                 <br />
                     
                       <asp:TextBox ID="tbLocation" runat="server" Width="130px" style="margin-right: 3px;"></asp:TextBox>
-                         
+                         <br />
+
                 
                </td>
                 <td>

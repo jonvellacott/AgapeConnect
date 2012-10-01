@@ -40,7 +40,7 @@
    
 
 </style>
-Hello World
+
 <div style="width: 420px; height: 420px; ">
     <div class="slider-wrapper theme-default">
         
