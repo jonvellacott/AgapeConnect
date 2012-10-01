@@ -27,11 +27,11 @@ Namespace DotNetNuke.Modules.Stories
 
             If Not Page.IsPostBack Then
 
-               
+
 
                 Dim mc As New DotNetNuke.Entities.Modules.ModuleController
 
-              
+
                 Dim allTabs = mc.GetAllTabsModulesByModuleID(ModuleId)
 
                 Dim channels As New Dictionary(Of Integer, String)
@@ -89,7 +89,7 @@ Namespace DotNetNuke.Modules.Stories
 
                         'just use the current tab
                         ddlChannels.SelectedValue = TabModuleId
-                      
+
                     End If
 
 
@@ -411,7 +411,7 @@ Namespace DotNetNuke.Modules.Stories
                     StoryFunctions.PrecalAllCaches(row.AP_Stories_Module.TabModuleId)
                 Next
 
-               
+
                 Response.Redirect(EditUrl("ViewStory") & "?StoryId=" & insert.StoryId)
             End If
 

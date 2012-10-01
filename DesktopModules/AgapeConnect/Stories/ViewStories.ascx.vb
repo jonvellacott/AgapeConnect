@@ -22,7 +22,7 @@ Namespace DotNetNuke.Modules.FullStory
             Dim d As New StoriesDataContext
             Dim r = (From c In d.AP_Stories Where c.StoryId = Request.QueryString("StoryID")).First
             Dim thecache = From c In d.AP_Stories_Module_Channel_Caches Where c.AP_Stories_Module_Channel.AP_Stories_Module.TabModuleId = r.TabModuleId And c.Link.EndsWith("StoryId=" & r.StoryId)
-           
+
             If Not String.IsNullOrEmpty(Request.Form("Boosted")) Then
 
                 If thecache.Count > 0 Then
@@ -147,10 +147,10 @@ Namespace DotNetNuke.Modules.FullStory
 
         End Sub
 
-       
 
 
-       
+
+
 
         Protected Sub CancelPowerBtn_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles CancelPowerBtn.Click
             'Dim d As New FullStoryDataContext
@@ -325,9 +325,9 @@ Namespace DotNetNuke.Modules.FullStory
             Return Out
         End Function
 
-      
 
-       
+
+
         Protected Sub btnNew_Click(sender As Object, e As System.EventArgs) Handles btnNew.Click
             Response.Redirect(EditUrl("AddEditStory"))
         End Sub
