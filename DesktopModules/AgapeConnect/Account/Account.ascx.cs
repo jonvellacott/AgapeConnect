@@ -119,7 +119,7 @@ namespace DotNetNuke.Modules.Account
 
 
             DataTable IncomeTable;
-            IncomeTable = SummaryTable(true, true, "Income");
+            IncomeTable = SummaryTable(true, true, Translate("lblIncome"));
             gvIncome.DataSource = IncomeTable;
             gvIncome.DataBind();
             SetColumnWidth(ref gvIncome, System.Drawing.Color.Blue, true);
@@ -133,15 +133,16 @@ namespace DotNetNuke.Modules.Account
 
             DataTable DonationsTable;
             DonationsTable = SummaryTable(false, false, "", true);
+            
 
             gvDonationSummary.DataSource = DonationsTable;
             gvDonationSummary.DataBind();
-            SetColumnWidth(ref gvDonationSummary, System.Drawing.Color.Black);
+            SetColumnWidth(ref gvDonationSummary,  System.Drawing.Color.Black);
 
 
 
             DataTable ExpensesTable;
-            ExpensesTable = SummaryTable(false, true, "Expenses");
+            ExpensesTable = SummaryTable(false, true, Translate("lblExpenses"));
             if ((ExpensesTable != null) && (ExpensesTable.Rows.Count != 0))
                 gvExpenses.DataSource = ExpensesTable;
             gvExpenses.DataBind();
@@ -174,7 +175,7 @@ namespace DotNetNuke.Modules.Account
             foreach (DataColumn col in BalanceTable.Columns)
             {
                 int index = BalanceTable.Columns.IndexOf(col);
-                if (index == 0) BalanceTable.Rows[0][col.ColumnName] = "Balance";
+                if (index == 0) BalanceTable.Rows[0][col.ColumnName] = Translate("lblBalance");
                 else
                 {
 
@@ -187,7 +188,7 @@ namespace DotNetNuke.Modules.Account
 
                     BalanceTable.Rows[0][index] =  FormatNumber( balCounter);
                   //  _googleGraph += "data.addRow(['" + GetMonth(index - 13) + "', " + DecodeNumberString((string)IncomeTable.Rows[0][index]) + ", " + (BalanceTable.Columns.IndexOf(col) == 13 ?  avgIncome.ToString() : "") + ",'', " + DecodeNumberString((string)ExpensesTable.Rows[0][index]) + ", " + (BalanceTable.Columns.IndexOf(col) == 13 ? avgExpense.ToString() : "") + ",'',  " + (BalanceTable.Columns.IndexOf(col) == 13 ? Math.Round( avgBalance).ToString() : "") + ", '',  " + DecodeNumberString((string)BalanceTable.Rows[0][index]) + "]);" + Environment.NewLine;
-                    _googleGraph += "data.addRow(['" + GetMonth(index - 13) + "', " + DecodeNumberString((string)IncomeTable.Rows[0][index]) + ", " + ((index > 6 && (BalanceTable.Columns.IndexOf(col) < 13)) ? avgIncome.ToString() : "") + "," + (index == 12 ? "'Avg Income: " + FormatNumber(avgIncome) + "'" : "''") + ", false, " + DecodeNumberString((string)ExpensesTable.Rows[0][index]) + ", " + DecodeNumberString((string)BalanceTable.Rows[0][index]) + "]);" + Environment.NewLine;
+                    _googleGraph += "data.addRow(['" + GetMonth(index - 13) + "', " + DecodeNumberString((string)IncomeTable.Rows[0][index]) + ", " + ((index > 6 && (BalanceTable.Columns.IndexOf(col) < 13)) ? avgIncome.ToString() : "") + "," + (index == 12 ? "'" + Translate("lblAvgIncome") + FormatNumber(avgIncome) + "'" : "''") + ", false, " + DecodeNumberString((string)ExpensesTable.Rows[0][index]) + ", " + DecodeNumberString((string)BalanceTable.Rows[0][index]) + "]);" + Environment.NewLine;
 
                 }
             }
@@ -211,7 +212,12 @@ namespace DotNetNuke.Modules.Account
 
         }
 
-  
+        public string Translate(String ResourceString)
+        {
+            return DotNetNuke.Services.Localization.Localization.GetString(ResourceString + ".Text", LocalResourceFile );
+        }
+
+   
         
         private void saveTransactions()
         {
