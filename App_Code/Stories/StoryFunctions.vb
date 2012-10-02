@@ -226,9 +226,16 @@ Public Class StoryFunctions
                         End If
 
                         set_if(existingStory.First.StoryDate, row.PublishDate.DateTime)
+                        Try
 
+                       
+                        If row.ElementExtensions.Where(Function(x) x.OuterName = "translationGroup").Count > 0 Then
+                                existingStory.First.TranslationGroup = CInt(row.ElementExtensions.Where(Function(x) x.OuterName = "translationGroup").First.GetObject(Of XElement).Value)
+                        End If
 
+                        Catch ex As Exception
 
+                        End Try
 
 
                     End If
