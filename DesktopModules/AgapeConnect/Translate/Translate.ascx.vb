@@ -47,56 +47,9 @@ Namespace DotNetNuke.Modules.AgapeConnect
                         Dim KeyName = splitItem(1).Trim(":")
                         Dim Value = splitItem(2).Trim(":")
 
-
-                        Dim tDoc As New XmlDocument()
-                        Dim tDataNodes As XmlNodeList
-
-                        If Not File.Exists(FileName) Then
-                            'create a new Resx
-                            System.IO.File.Copy(Server.MapPath("/DesktopModules/AgapeConnect/Translate/Template.resx"), FileName)
-
-                            tDoc.Load(FileName)
-                            Dim rootNode = tDoc.SelectSingleNode("root")
-                            Dim dummyData = tDoc.SelectSingleNode("data")
-                            If Not dummyData Is Nothing Then
-                                rootNode.RemoveChild(dummyData)
-
-                            End If
-
-                        Else
-
-                            tDoc.Load(FileName)
-                        End If
-
-                        tDataNodes = tDoc.SelectNodes("root/data")
-                        If tDataNodes.Count = 0 Then
-                            'Need  to create the Node
-                            CreateNewDataNode(tDoc, KeyName)
-                            tDataNodes = tDoc.SelectNodes("root/data")
-                        End If
-
-                        Dim foreignNode = (From c As XmlNode In tDataNodes Where c.Attributes(0).Value = KeyName Select c)
-                        If foreignNode.Count = 0 Then
-                            CreateNewDataNode(tDoc, KeyName)
-                            tDataNodes = tDoc.SelectNodes("root/data")
-                            foreignNode = (From c As XmlNode In tDataNodes Where c.Attributes(0).Value = KeyName Select c)
-
-                        End If
-                        If foreignNode.First.ChildNodes.Count > 0 Then
-
-                            For Each child As XmlNode In foreignNode.First.ChildNodes
-                                If child.Name = "value" Then
-                                    child.InnerText = Value
-                                End If
-                            Next
-                        Else
-                            Dim newNode As XmlElement = tDoc.CreateElement("value")
-                            newNode.InnerText = Value
-                            foreignNode.First.AppendChild(newNode)
-                        End If
-
-
-                        tDoc.Save(FileName)
+                        SaveTranslation(FileName, KeyName, Value)
+                       
+                        
 
 
 
@@ -161,7 +114,70 @@ Namespace DotNetNuke.Modules.AgapeConnect
 
         End Sub
 
+        Private Sub SaveTranslation(ByVal FileName As String, ByVal KeyName As String, ByVal Value As String)
+
+            Dim tDoc As New XmlDocument()
+            Dim tDataNodes As XmlNodeList
+
+            If Not File.Exists(FileName) Then
+                'create a new Resx
+                System.IO.File.Copy(Server.MapPath("/DesktopModules/AgapeConnect/Translate/Template.resx"), FileName)
+
+                tDoc.Load(FileName)
+                Dim rootNode = tDoc.SelectSingleNode("root")
+                Dim dummyData = tDoc.SelectSingleNode("data")
+                If Not dummyData Is Nothing Then
+                    rootNode.RemoveChild(dummyData)
+
+                End If
+
+            Else
+
+                tDoc.Load(FileName)
+            End If
+
+            tDataNodes = tDoc.SelectNodes("root/data")
+            If tDataNodes.Count = 0 Then
+                'Need  to create the Node
+                CreateNewDataNode(tDoc, KeyName)
+                tDataNodes = tDoc.SelectNodes("root/data")
+            End If
+
+            Dim foreignNode = (From c As XmlNode In tDataNodes Where c.Attributes(0).Value = KeyName Select c)
+            If foreignNode.Count = 0 Then
+                CreateNewDataNode(tDoc, KeyName)
+                tDataNodes = tDoc.SelectNodes("root/data")
+                foreignNode = (From c As XmlNode In tDataNodes Where c.Attributes(0).Value = KeyName Select c)
+
+            End If
+            If foreignNode.First.ChildNodes.Count > 0 Then
+
+                For Each child As XmlNode In foreignNode.First.ChildNodes
+                    If child.Name = "value" Then
+                        child.InnerText = Value
+                    End If
+                Next
+            Else
+                Dim newNode As XmlElement = tDoc.CreateElement("value")
+                newNode.InnerText = Value
+                foreignNode.First.AppendChild(newNode)
+            End If
+
+
+            tDoc.Save(FileName)
+        End Sub
+
         Protected Sub ddlRoot_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlRoot.SelectedIndexChanged
+            If ddlRoot.SelectedValue = "Core" Then
+                pnlDnnTranslation.Visible = True
+                pnlTranslation.Visible = False
+                LoadValues()
+
+
+                Return
+            End If
+            pnlDnnTranslation.Visible = False
+            pnlTranslation.Visible = True
             Dim rootPath As String = ddlRoot.SelectedValue
 
             Dim Modules As New DirectoryInfo(Server.MapPath(rootPath))
@@ -200,7 +216,7 @@ Namespace DotNetNuke.Modules.AgapeConnect
                     pnlExpenses.Visible = False
                     cbSaveAll.Checked = False
                 End If
-               
+
                 Dim theModule = New DirectoryInfo(rootPath)
                 Dim ResxFiles = From c In theModule.GetFiles("*.ascx.resx", SearchOption.AllDirectories)
 
@@ -213,7 +229,7 @@ Namespace DotNetNuke.Modules.AgapeConnect
 
                 End If
 
-               
+
 
                 For Each File In ResxFiles
 
@@ -337,9 +353,56 @@ Namespace DotNetNuke.Modules.AgapeConnect
 
 
         Protected Sub ddlLanguages_SelectedIndexChanged(sender As Object, e As System.EventArgs) Handles ddlLanguages.SelectedIndexChanged
+            If ddlRoot.SelectedValue = "Core" Then
+                pnlDnnTranslation.Visible = True
+                pnlTranslation.Visible = False
+                LoadValues()
+
+
+                Return
+            End If
             lbModules_SelectedIndexChanged(Me, Nothing)
         End Sub
 
-     
+        Protected Sub LoadValues()
+            Dim coreFile = Server.MapPath("/Portals/_default/Skins/AgapeBlue/App_LocalResources/index.ascx.resx")
+
+            tbSearch.Text = DotNetNuke.Services.Localization.Localization.GetString("SearchText.Text", coreFile, PortalSettings, ddlLanguages.SelectedValue)
+            tbBreadcrumb.Text = DotNetNuke.Services.Localization.Localization.GetString("Breadcrumb.Text", coreFile, PortalSettings, ddlLanguages.SelectedValue)
+            
+
+
+            coreFile = Server.MapPath("/admin/Skins/App_LocalResources/Login.ascx.resx")
+            tbLogin.Text = DotNetNuke.Services.Localization.Localization.GetString("Login.Text", coreFile, PortalSettings, ddlLanguages.SelectedValue)
+
+         
+        End Sub
+
+
+        Protected Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
+            'Store the core elements
+            Dim coreFile = Server.MapPath("/Portals/_default/Skins/AgapeBlue/App_LocalResources/index.ascx.resx")
+
+           
+            If DotNetNuke.Services.Localization.Localization.SystemLocale <> ddlLanguages.SelectedValue Then
+                coreFile = coreFile.Replace(".resx", "." & ddlLanguages.SelectedValue & ".Portal-" & PortalId & ".resx")
+            Else
+                coreFile = coreFile.Replace(".resx", ".Portal-" & PortalId & ".resx")
+            End If
+           
+            SaveTranslation(coreFile, "SearchText.Text", tbSearch.Text)
+            SaveTranslation(coreFile, "Breadcrumb.Text", tbBreadcrumb.Text)
+
+
+            coreFile = Server.MapPath("/admin/Skins/App_LocalResources/Login.ascx.resx")
+
+            If DotNetNuke.Services.Localization.Localization.SystemLocale <> ddlLanguages.SelectedValue Then
+                coreFile = coreFile.Replace(".resx", "." & ddlLanguages.SelectedValue & ".Portal-" & PortalId & ".resx")
+            Else
+                coreFile = coreFile.Replace(".resx", ".Portal-" & PortalId & ".resx")
+            End If
+
+            SaveTranslation(coreFile, "Login.Text", tbLogin.Text)
+        End Sub
     End Class
 End Namespace

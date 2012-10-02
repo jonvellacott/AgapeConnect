@@ -110,6 +110,23 @@
 			</Setting>
 		</Settings>
 	</Object>
+  <Object>
+    <Token>[SEARCHTEXT]</Token>
+    <Settings>
+      <Setting>
+        <Name>CssClass</Name>
+        <Value>breadcrumb_text</Value>
+      </Setting>
+      <Setting>
+        <Name>Text</Name>
+        <Value>Search:</Value>
+      </Setting>
+      <Setting>
+        <Name>ResourceKey</Name>
+        <Value>SearchText</Value>
+      </Setting>
+    </Settings>
+  </Object>
 	<Object>
 		<Token>[BREADCRUMB]</Token>
 		<Settings>
