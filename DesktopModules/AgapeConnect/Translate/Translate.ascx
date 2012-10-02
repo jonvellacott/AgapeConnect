@@ -17,8 +17,8 @@
             });
 
             $('.aButton').button();
-            $('.aGoogleButton').button({ icons: { primary: "ui-icon-pencil"} }).css('background-image', "url('/DesktopModules/AgapeConnect/Translate/images/googleLogo.png')")
-               .css('background-repeat', 'no-repeat').css('width', '40px').css('height', '40px'); 
+            $('.aGoogleButton').button({ icons: { primary: "ui-icon-pencil" } }).css('background-image', "url('/DesktopModules/AgapeConnect/Translate/images/googleLogo.png')")
+               .css('background-repeat', 'no-repeat').css('width', '40px').css('height', '40px');
 
 
             window.setInterval(saveDraft, 5000);
@@ -50,7 +50,7 @@
                 try {
                     if ($('#<%= cbSaveAll.ClientId() %>').is(':checked')) {
                         var s = $(this).attr("TagKey").substring($(this).attr("TagKey").lastIndexOf("::") + 2);
-                       // alert('hello');
+                        // alert('hello');
                         var t = $(this).val()
 
                         $('[tagkey$="' + s + '"]').each(function () {
@@ -66,7 +66,8 @@
             if (data != "") {
                 $('#<%= lblSaveStatus.ClientId() %>').html("auto-saving...");
                 $('#<%= lblSaveStatus.ClientId() %>').css('color', 'Gray');
-                $.ajax({ type: 'POST', url: "<%= NavigateURL() %>",
+                $.ajax({
+                    type: 'POST', url: "<%= NavigateURL() %>",
                     data: ({ UpdateItems: data }),
                     success: function (response) {
 
@@ -90,20 +91,20 @@
             }
         }
 
-    } (jQuery, window.Sys));
+    }(jQuery, window.Sys));
     function pendingChanges() {
 
         $('#<%= lblSaveStatus.ClientId() %>').html("Changes pending...");
         $('#<%= lblSaveStatus.ClientId() %>').css('color', 'Gray');
     }
 
-   
+
 
 
     function bingTranslate(text, foreignName) {
         var from = "en"
-        var to = $('#<%= ddlLanguages.ClientId() %>').val().substring(0,2);
-        
+        var to = $('#<%= ddlLanguages.ClientId() %>').val().substring(0, 2);
+
         $(".waitingForBing").each(function (index) {
             $(this).removeClass("waitingForBing");
         });
@@ -112,7 +113,7 @@
         $('.foreign').each(function (index) {
 
             var fn = ($(this).attr("TagKey"));
-            
+
             if (fn == foreignName) {
                 $(this).addClass("waitingForBing");
 
@@ -121,33 +122,37 @@
 
         var s = document.createElement("script");
         s.src = 'https://www.googleapis.com/language/translate/v2?key=AIzaSyD3cbZmohNT5TudxQgp8Jlj2OJ_j5L5d8A&source=' + from + '&target=' + to + '&callback=mycallback&q=' + encodeURIComponent(text);
-      
 
 
 
-//        s.src = "http://api.microsofttranslator.com/V2/Ajax.svc/Translate" +
-//                "?appId=Bearer " + encodeURIComponent($('#<%= hfBingToken.ClientID  %>').attr('value')) +
-//                "&from=" + encodeURIComponent(from) +
-//                "&to=" + encodeURIComponent(to) +
-//                "&text=" + encodeURIComponent(text) +
-//                "&oncomplete=mycallback";
+
+        //        s.src = "http://api.microsofttranslator.com/V2/Ajax.svc/Translate" +
+        //                "?appId=Bearer " + encodeURIComponent($('#<%= hfBingToken.ClientID  %>').attr('value')) +
+        //                "&from=" + encodeURIComponent(from) +
+        //                "&to=" + encodeURIComponent(to) +
+        //                "&text=" + encodeURIComponent(text) +
+        //                "&oncomplete=mycallback";
         document.body.appendChild(s);
 
     }
+
+   
+
+
     function mycallback(response) {
         $(".waitingForBing").each(function (index) {
             $(this).val(response.data.translations[0].translatedText);
             $(this).removeClass("waitingForBing");
-            $(this).addClass('Translation'); 
+            $(this).addClass('Translation');
             pendingChanges();
         });
-       // alert(response);
+        // alert(response);
     }
 
 </script>
 
 <asp:HiddenField ID="theHiddenTabIndex" runat="server" Value="0" ViewStateMode="Enabled" />
-<asp:HiddenField ID="hfBingToken" runat="server"  />
+<asp:HiddenField ID="hfBingToken" runat="server" />
 <table width="100%" cellpadding="3px">
     <tr valign="top">
         <td>
@@ -173,17 +178,19 @@
             <table>
                 <tr>
                     <td><b>Show:</b> </td>
-                    <td>  <asp:DropDownList ID="ddlRoot" runat="server" AutoPostBack="True">
-                <asp:ListItem Text="AgapeConnect" Value="/DesktopModules/AgapeConnect/" Selected="True" />
-                <asp:ListItem Text="All Modules" Value="/DesktopModules/" />
-                <asp:ListItem Text="Everything" Value="/" />
-                
+                    <td>
+                        <asp:DropDownList ID="ddlRoot" runat="server" AutoPostBack="True">
+                            <asp:ListItem Text="AgapeConnect" Value="/DesktopModules/AgapeConnect/" Selected="True" />
+                             <asp:ListItem Text="Core" Value="Core" />
+                            <asp:ListItem Text="All Modules" Value="/DesktopModules/" />
+                            <asp:ListItem Text="Everything" Value="/" />
 
 
-            </asp:DropDownList></td>
+
+                        </asp:DropDownList></td>
                 </tr>
             </table>
-           
+
 
 
 
@@ -191,17 +198,39 @@
             <br />
         </td>
         <td width="100%">
-            <asp:Label ID="Label1" runat="server" Font-Size="XX-Small" ForeColor="Gray" Text="This page will autosave every 10 seconds."></asp:Label>
-            <asp:Label ID="lblSaveStatus" runat="server" Font-Size="XX-Small" Font-Bold="true"
-                Text=""></asp:Label><br />
-            <div id="tabs" width="100%" style="width: 90%; text-align: Left;">
-                <ul>
-                    <asp:PlaceHolder ID="phHeaders" runat="server"></asp:PlaceHolder>
-                </ul>
-                <div style="width: 100%; min-height: 350px; background-color: #FFFFFF;">
-                    <asp:PlaceHolder ID="phTabs" runat="server"></asp:PlaceHolder>
+            <asp:Panel ID="pnlTranslation" runat="server">
+                <asp:Label ID="Label1" runat="server" Font-Size="XX-Small" ForeColor="Gray" Text="This page will autosave every 10 seconds."></asp:Label>
+                <asp:Label ID="lblSaveStatus" runat="server" Font-Size="XX-Small" Font-Bold="true"
+                    Text=""></asp:Label><br />
+                <div id="tabs" width="100%" style="width: 90%; text-align: Left;">
+                    <ul>
+                        <asp:PlaceHolder ID="phHeaders" runat="server"></asp:PlaceHolder>
+                    </ul>
+                    <div style="width: 100%; min-height: 350px; background-color: #FFFFFF;">
+                        <asp:PlaceHolder ID="phTabs" runat="server"></asp:PlaceHolder>
+                    </div>
                 </div>
-            </div>
+            </asp:Panel>
+            <asp:Panel ID="pnlDnnTranslation" runat="server" Visible="false">
+                There are many translatable elements in DNN, but here are just a few of the essential items visible to public users.
+                For this section, you must click save, for your translatins to be stored.
+
+                <table>
+                    <tr>
+                        <td><asp:TextBox ID="TextBox2" runat="server" Enabled="False">Login</asp:TextBox></td>
+                        <td><asp:TextBox ID="tbLogin" runat="server"></asp:TextBox></td>
+                    </tr>
+                    <tr>
+                        <td><asp:TextBox ID="TextBox1" runat="server" Enabled="False">You are here:</asp:TextBox></td>
+                        <td><asp:TextBox ID="tbBreadcrumb" runat="server"></asp:TextBox></td>
+                    </tr>
+                    <tr>
+                        <td><asp:TextBox ID="TextBox3" runat="server" Enabled="False">Search:</asp:TextBox></td>
+                        <td><asp:TextBox ID="tbSearch" runat="server"></asp:TextBox></td>
+                    </tr>
+                </table>
+                <asp:Button ID="btnSave" runat="server" Text="Save" CssClass="aButton" />
+            </asp:Panel>
         </td>
     </tr>
 </table>
