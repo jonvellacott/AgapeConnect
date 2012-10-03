@@ -285,7 +285,11 @@ Namespace DotNetNuke.Modules.StaffAdmin
 
                     ' User1.Profile.SetProfileProperty("Birthday", B1.ToString("dd/MM/yyyy"))
                     Dim MaritalStatus = CType(FormView1.FindControl("ddlMaritalStatus"), DropDownList).SelectedValue
+
+
                     If MaritalStatus = -1 Then 'notstaff
+                        
+
                         q.First.UserId2 = MaritalStatus
                         Dim dob2 As String = CType(FormView1.FindControl("tbSpouseDateNotStaff"), TextBox).Text
                         If dob2 <> "" Then
@@ -302,10 +306,16 @@ Namespace DotNetNuke.Modules.StaffAdmin
                         StaffBrokerFunctions.AddProfileValue(PortalId, q.First.StaffId, "SpouseName", CType(FormView1.FindControl("tbName2"), TextBox).Text)
 
                     ElseIf MaritalStatus = -2 Then 'single
+                        If q.First.UserId2 <> -2 Then
+                            q.First.DisplayName = q.First.User.LastName & ", " & q.First.User.FirstName
+                        End If
+
                         q.First.UserId2 = MaritalStatus
 
 
                     Else
+                        
+
                         Try
                             Dim B2 As Date = DateTime.Parse(CType(FormView1.FindControl("tbSpouseDateStaff"), TextBox).Text, CultureInfo.CurrentCulture)
                             StaffBrokerFunctions.SetUserProfileProperty(PortalId, q.First.UserId2, "Birthday", B2.ToString, 359)
