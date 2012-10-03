@@ -60,7 +60,7 @@ a:hover{color:#026890; text-decoration: underline;  }
     text-align: left;   
 }
 
-.dnnGridHeader, .dnnGridFooter, .dnnGridHeader th{font-weight:bold; background-image: none; color: White;
+.ui-widget-header.dnnGridHeader, .ui-widget-header.dnnGridFooter, .ui-widget-header.dnnGridHeader th{font-weight:bold; background-image: none; color: White;
                                                
                                                   }
 .DataGrid_Header td, .NormalBold td{font-weight:bold; color: White;}
