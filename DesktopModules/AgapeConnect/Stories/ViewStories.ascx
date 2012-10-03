@@ -97,6 +97,8 @@
 <asp:HiddenField ID="StoryIdHF" runat="server" />
 <asp:HiddenField ID="ShortTextHF" runat="server" />
 <asp:HiddenField ID="PhotoIdHF" runat="server" />
+<asp:HiddenField ID="TranslationGroupHF" runat="server" />
+
 <table  style="width: 100%">
     <tr valign="top">
         <td style="width: 100%">
@@ -141,7 +143,7 @@
             </asp:Panel>
         </td>
         <td>
-
+             
              <div style="width: 200px;">
              <!-- AddThis Button BEGIN -->
 <div class="addthis_toolbox addthis_default_style " >
@@ -157,7 +159,9 @@
 
                   
                 </div>
-                <br />
+               
+
+         
                 <div>
                     <div id="fb-root" style="text-align: left;">
                     </div>
@@ -169,13 +173,26 @@
                             fjs.parentNode.insertBefore(js, fjs);
                         } (document, 'script', 'facebook-jssdk'));</script>
                     <br />
-                    <br />
+                   
                     
                 </div>
                 <div style="clear: both;"> </div>
-                
+              
+            <asp:Panel ID="pnlLanguages" runat="server" Visible="false" Width="100%"  >
+
+                <i>This story is also available in:</i>
+                <div style="margin: 4px 0 12px 0;">
+             <asp:DataList ID="dlLanuages" runat="server" RepeatDirection="Horizontal" ItemStyle-HorizontalAlign="Center"  Width="100%" >
+                    <ItemTemplate>
+                       <asp:HyperLink ID="HyperLink2" runat="server" ToolTip='<%# GetLanguageName(Eval("Language")) %>' ImageUrl='<%# GetFlag(Eval("Language"))  %>' NavigateUrl ='<%# NavigateURL() & "?StoryId=" & Eval("StoryId") %>'>HyperLink</asp:HyperLink>
+                    </ItemTemplate>
+             </asp:DataList>
+                    </div>
+           </asp:Panel>
                 <div id="map_canvas"></div>
                 
+        
+
 
             <asp:Panel ID="SuperPowers" runat="server" Visible="false">
                     <br />
@@ -210,9 +227,11 @@
                 </asp:Panel>
                 
               <div style="white-space: nowrap; ">
+                <asp:Button ID="btnTranslate" runat="server" Text="Translate"  Font-Size="X-Small" class="aButton" style="float: left;"  />
               
-                 <asp:Button ID="btnEdit" runat="server" Text="Edit Story" Font-Size="X-Small" class="aButton" style="float: left;" />
-                <asp:Button ID="btnNew" runat="server" Text="New Story"  Font-Size="X-Small" class="aButton" style="float: left;"  />
+                 <asp:Button ID="btnEdit" runat="server" Text="Edit" Font-Size="X-Small" class="aButton" style="float: left;" />
+              
+                  <asp:Button ID="btnNew" runat="server" Text="New"  Font-Size="X-Small" class="aButton" style="float: left;"  />
               
               <input type="checkbox" id="boost" class="boost" style="height:20px;" /><label for="boost" style="height:20px; float: left;" >Boost</label>
 	            <input type="checkbox" id="block" class="block" style="height:20px;"  /><label for="block" style="height:20px; float: left;" >Block</label>

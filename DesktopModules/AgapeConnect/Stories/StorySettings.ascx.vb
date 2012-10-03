@@ -295,7 +295,7 @@ Namespace DotNetNuke.Modules.Stories
                 Else
                     ddlLanguages.SelectedValue = "en"
                 End If
-
+                cbAutoDetectLanguage.Checked = False
                 Try
                     Dim simpleURL = tbRssFeed.Text.Replace("http://", "").Replace("https://", "")
                     If simpleURL.IndexOf("/") > 0 Then
@@ -413,7 +413,7 @@ Namespace DotNetNuke.Modules.Stories
             End If
             insert.ChannelTitle = tbTitle.Text
             insert.Language = ddlLanguages.SelectedValue
-
+            insert.AutoDetectLanguage = cbAutoDetectLanguage.Checked
             Dim geoLoc = tbLocation.Text.Split(",")
             If geoLoc.Count <> 2 Then
                 lblFeedError.Text = "Invalid location. Please click search, to convert into latitude/longitude<br />"
@@ -503,6 +503,7 @@ Namespace DotNetNuke.Modules.Stories
                     tbTitle.Text = q.First.ChannelTitle
                     tbLocation.Text = q.First.Latitude.Value.ToString(New CultureInfo("")) & ", " & q.First.Longitude.Value.ToString(New CultureInfo(""))
                     ddlLanguages.SelectedValue = q.First.Language.ToLower
+                    cbAutoDetectLanguage.Checked = q.First.AutoDetectLanguage
                     Try
                         icImage.FileId = FileManager.Instance.GetFile(PortalId, "_imageCropper/" & q.First.ImageId.Substring(q.First.ImageId.LastIndexOf("/") + 1)).FileId
                         icImage.Aspect = lblAspect.Text
@@ -616,7 +617,7 @@ Namespace DotNetNuke.Modules.Stories
                 End If
                 theChannel.First.ChannelTitle = tbTitle.Text
                 theChannel.First.Language = ddlLanguages.SelectedValue
-
+                theChannel.First.AutoDetectLanguage = cbAutoDetectLanguage.Checked
                 Dim geoLoc = tbLocation.Text.Split(",")
                 If geoLoc.Count <> 2 Then
                     lblFeedError.Text = "Invalid location. Please click search, to convert into latitude/longitude<br />"

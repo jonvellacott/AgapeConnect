@@ -587,7 +587,7 @@
 
 <asp:HyperLink ID="hlStaffProfileProps" runat="server" >Edit Staff Profile Properties</asp:HyperLink> &nbsp; &nbsp;
 <asp:LinkButton ID="btnRepRel" runat="server">Staff Reporting Relationships</asp:LinkButton>  &nbsp; &nbsp;
-<asp:LinkButton ID="btnTnT" runat="server">Refresh All TnT WebUsers</asp:LinkButton>
-
+<asp:LinkButton ID="btnTnT" runat="server">Refresh All TnT WebUsers</asp:LinkButton>  &nbsp; &nbsp;
+<asp:LinkButton ID="btnChangeUsername" runat="server">Change Username</asp:LinkButton>
 
 </div>
