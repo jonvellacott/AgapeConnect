@@ -440,5 +440,9 @@ Namespace DotNetNuke.Modules.StaffAdmin
         Protected Sub btnBulkAdd_Click(sender As Object, e As EventArgs) Handles btnBulkAdd.Click
             Response.Redirect(EditUrl("BulkUpload"))
         End Sub
+
+        Protected Sub btnChangeUsername_Click(sender As Object, e As EventArgs) Handles btnChangeUsername.Click
+            Response.Redirect(EditUrl("ChangeUsername"))
+        End Sub
     End Class
 End Namespace
