@@ -34,7 +34,7 @@ Namespace Stories
 
             Return SearchItemCollection
         End Function
-      
+
     End Class
 
 End Namespace
@@ -58,7 +58,7 @@ Public Class StoryFunctions
 
     End Function
 
-  
+
     Private Shared Sub set_if(ByRef setting As Object, ByVal value As Object)
         If value Is Nothing Then
             Return
@@ -85,10 +85,10 @@ Public Class StoryFunctions
     End Function
 
 
-   
+
 
     Public Shared Sub RefreshFeed(ByVal tabModuleId As Integer, ByVal ChannelId As Integer, Optional ByVal ClearCache As Boolean = False)
-        
+
 
 
 
@@ -111,82 +111,147 @@ Public Class StoryFunctions
 
         Try
 
-       
 
 
 
-        'Refresh the feed
+
+            'Refresh the feed
 
 
-        If ClearCache Then
-            ' d.AP_Stories_Module_Channel_Caches.DeleteAllOnSubmit(theModule.AP_Stories_Module_Channels.Where(Function(x) x.ChannelId = ChannelId).First.AP_Stories_Module_Channel_Caches.Where(Function(x) x.Block <> True And (x.BoostDate Is Nothing Or x.BoostDate < Today)))
-            'd.SubmitChanges()
-        End If
+            If ClearCache Then
+                ' d.AP_Stories_Module_Channel_Caches.DeleteAllOnSubmit(theModule.AP_Stories_Module_Channels.Where(Function(x) x.ChannelId = ChannelId).First.AP_Stories_Module_Channel_Caches.Where(Function(x) x.Block <> True And (x.BoostDate Is Nothing Or x.BoostDate < Today)))
+                'd.SubmitChanges()
+            End If
 
-        Dim theChannel = (From c In theModule.AP_Stories_Module_Channels Where c.ChannelId = ChannelId).First
-        Dim reader = XmlReader.Create(theChannel.URL)
-        Dim feed = SyndicationFeed.Load(reader)
-        'If Not feed.BaseUri Is Nothing Then
-        '    set_if(theChannel.URL, feed.BaseUri.AbsoluteUri)
-        'End If
-        'If Not feed.Title Is Nothing Then
-        '    set_if(theChannel.ChannelTitle, Left(feed.Title.Text, 154))
-        'End If
+            Dim theChannel = (From c In theModule.AP_Stories_Module_Channels Where c.ChannelId = ChannelId).First
+            Dim reader = XmlReader.Create(theChannel.URL)
+            Dim feed = SyndicationFeed.Load(reader)
+            'If Not feed.BaseUri Is Nothing Then
+            '    set_if(theChannel.URL, feed.BaseUri.AbsoluteUri)
+            'End If
+            'If Not feed.Title Is Nothing Then
+            '    set_if(theChannel.ChannelTitle, Left(feed.Title.Text, 154))
+            'End If
 
-        'set_if(theChannel.Language, feed.Language)
+            'set_if(theChannel.Language, feed.Language)
 
 
 
-        For Each row In feed.Items
-            Dim existingStory = From c In theChannel.AP_Stories_Module_Channel_Caches Where c.Link = row.Links.First.Uri.AbsoluteUri
-            If existingStory.Count = 0 Then
-                Dim insert As New Stories.AP_Stories_Module_Channel_Cache
-                    If Not row.Title Is Nothing Then
-                        insert.Headline = Left(row.Title.Text, 154)
-                    End If
-                    If Not row.Summary Is Nothing Then
-                        insert.Description = Left(row.Summary.Text, 500)
-                    End If
-                    insert.ChannelId = theChannel.ChannelId
+            For Each row In feed.Items
+                Try
 
-                    insert.Link = row.Links.First.Uri.AbsoluteUri
-                    insert.Block = False
-                    insert.Precal = 0
 
-                    insert.Latitude = theChannel.Latitude
-                    insert.Longitude = theChannel.Longitude
+                    Dim existingStory = From c In theChannel.AP_Stories_Module_Channel_Caches Where c.Link = row.Links.First.Uri.AbsoluteUri
+                    If existingStory.Count = 0 Then
+                        Dim insert As New Stories.AP_Stories_Module_Channel_Cache
+                        If Not row.Title Is Nothing Then
+                            insert.Headline = Left(row.Title.Text, 154)
+                        End If
+                        If Not row.Summary Is Nothing Then
+                            insert.Description = Left(row.Summary.Text, 500)
+                        End If
+                        insert.ChannelId = theChannel.ChannelId
 
-                    If row.PublishDate = Nothing Then
-                        insert.StoryDate = Today
+                        insert.Link = row.Links.First.Uri.AbsoluteUri
+                        insert.Block = False
+                        insert.Precal = 0
+
+                        'Story Location
+                        If row.ElementExtensions.Where(Function(x) x.OuterName = "lat").Count > 0 And row.ElementExtensions.Where(Function(x) x.OuterName = "long").Count > 0 Then
+                            insert.Latitude = row.ElementExtensions.Where(Function(x) x.OuterName = "lat").First.GetObject(Of XElement).Value
+                            insert.Longitude = row.ElementExtensions.Where(Function(x) x.OuterName = "long").First.GetObject(Of XElement).Value
+                        Else
+                            insert.Latitude = theChannel.Latitude
+                            insert.Longitude = theChannel.Longitude
+                        End If
+                        Try
+
+
+                            If row.ElementExtensions.Where(Function(x) x.OuterName = "translationGroup").Count > 0 Then
+                                insert.TranslationGroup = CInt(row.ElementExtensions.Where(Function(x) x.OuterName = "translationGroup").First.GetObject(Of XElement).Value)
+                            End If
+
+
+
+
+                            If row.ElementExtensions.Where(Function(x) x.OuterName = "language").Count > 0 Then
+                                insert.Langauge = row.ElementExtensions.Where(Function(x) x.OuterName = "language").First.GetObject(Of XElement).Value
+
+                            ElseIf theChannel.AutoDetectLanguage Then
+
+                                Dim req = "https://www.googleapis.com/language/translate/v2/detect?key=AIzaSyBCSoev7-yyoFLIBOcsnbJqcNifaLwOnPc&q=" & HttpUtility.UrlEncode(Left(insert.Description, 80))
+
+                                Dim web As New WebClient()
+
+                                Dim response = web.DownloadString(req)
+                                If response.IndexOf("""language"": """) > 0 Then
+                                    Dim lang = response.Substring(response.IndexOf("""language"": """) + 13)
+                                    If lang.IndexOf(""",") > 0 Then
+                                        lang = lang.Substring(0, lang.IndexOf(""","))
+                                        If lang.Length >= 2 Then
+                                            insert.Langauge = Left(lang, 8)
+                                        End If
+                                    End If
+                                End If
+                            End If
+                        Catch ex As Exception
+
+                        End Try
+                        If insert.Langauge Is Nothing Then
+                            insert.Langauge = theChannel.Language
+                        End If
+                        ' insert.TranslationGroup = row.Id
+
+
+
+
+
+
+                        If row.PublishDate = Nothing Then
+                            insert.StoryDate = Today
+                        Else
+                            insert.StoryDate = row.PublishDate.DateTime
+                        End If
+
+                        insert.Clicks = 1
+                        SetImage(insert, row, theChannel.ImageId)
+
+                        d.AP_Stories_Module_Channel_Caches.InsertOnSubmit(insert)
                     Else
-                        insert.StoryDate = row.PublishDate.DateTime
+                        If Not row.Title Is Nothing Then
+                            existingStory.First.Headline = Left(row.Title.Text, 154)
+                        End If
+                        If Not row.Summary Is Nothing Then
+                            existingStory.First.Description = Left(row.Summary.Text, 500)
+                        End If
+
+                        set_if(existingStory.First.StoryDate, row.PublishDate.DateTime)
+                        Try
+
+                       
+                        If row.ElementExtensions.Where(Function(x) x.OuterName = "translationGroup").Count > 0 Then
+                                existingStory.First.TranslationGroup = CInt(row.ElementExtensions.Where(Function(x) x.OuterName = "translationGroup").First.GetObject(Of XElement).Value)
+                        End If
+
+                        Catch ex As Exception
+
+                        End Try
+
+
                     End If
-
-                    insert.Clicks = 1
-                    SetImage(insert, row, theChannel.ImageId)
-
-                    d.AP_Stories_Module_Channel_Caches.InsertOnSubmit(insert)
-                Else
-                    If Not row.Title Is Nothing Then
-                        existingStory.First.Headline = Left(row.Title.Text, 154)
-                    End If
-                    If Not row.Summary Is Nothing Then
-                        existingStory.First.Description = Left(row.Summary.Text, 500)
-                    End If
-
-                    set_if(existingStory.First.StoryDate, row.PublishDate.DateTime)
-
-                End If
+                Catch ex As Exception
+                    'If a story wont load, just skip to the nect one..
+                End Try
             Next
 
 
-        d.SubmitChanges()
+            d.SubmitChanges()
 
         Catch ex As Exception
 
         End Try
 
-       
+
 
     End Sub
 

@@ -13,14 +13,14 @@ Imports DotNetNuke.Services.FileSystem
 Namespace DotNetNuke.Modules.AgapeConnect.Stories
     Partial Class ContentRotator
         Inherits Entities.Modules.PortalModuleBase
-
+        'Adding Stories Translation
         Dim d As New StoriesDataContext
 
         Protected Sub Page_Init(sender As Object, e As System.EventArgs) Handles Me.Init
             Dim addTitle = MyBase.Actions.Add(GetNextActionID, "AgapeConnect", "AgapeConnect", "", "", "", "", True, SecurityAccessLevel.Edit, True, False)
             addTitle.Actions.Add(GetNextActionID, "Story Settings", "StorySettings", "", "action_settings.gif", EditUrl("StorySettings"), False, SecurityAccessLevel.Edit, True, False)
             addTitle.Actions.Add(GetNextActionID, "New Story", "NewStory", "", "add.gif", EditUrl("AddEditStory"), False, SecurityAccessLevel.Edit, True, False)
-          
+
         End Sub
 
 
@@ -78,39 +78,47 @@ Namespace DotNetNuke.Modules.AgapeConnect.Stories
                 End If
                 'Dim q = From c In d.AP_Stories_Module_Channel_Caches Where c.AP_Stories_Module_Channel.AP_Stories_Module.TabModuleId = TabModuleId Order By CDbl(c.Precal) * (CDbl(1.0 + (c.Clicks * P))) * (1.0 + (G * (1.0 - CDbl(CDbl(Math.Min(200, ((Math.Acos(CDbl(Math.Sin(deg2Rad * (lt))) * CDbl(Math.Sin(deg2Rad * CDbl(c.Latitude))) + CDbl(Math.Cos(deg2Rad * CDbl(lt))) * CDbl(Math.Cos(deg2Rad * CDbl(c.Latitude))) * CDbl(Math.Cos(deg2Rad * (lg - CDbl(c.Longitude)))))) / CDbl(Math.PI) * 180.0) * 1.1515 * 60.0)) / 200.0)))) / 2.0 Descending
                 Dim q = From c In d.AP_Stories_Module_Channel_Caches Where c.AP_Stories_Module_Channel.AP_Stories_Module.TabModuleId = TabModuleId Order By CDbl(c.Precal) * (CDbl(1.0 + (c.Clicks * P))) * (1.0 + (G * (CDbl(1.0) - CDbl(CDbl(Math.Min(CDbl(200), ((Math.Acos(CDbl(Math.Sin(CDbl(deg2Rad) * CDbl(lt))) * CDbl(Math.Sin(deg2Rad * CDbl(c.Latitude))) + CDbl(Math.Cos(CDbl(deg2Rad) * CDbl(lt))) * CDbl(Math.Cos(CDbl(deg2Rad) * CDbl(c.Latitude))) * CDbl(Math.Cos(CDbl(deg2Rad) * (CDbl(lg) - CDbl(c.Longitude)))))) / CDbl(Math.PI) * CDbl(180.0)) * CDbl(1.1515) * CDbl(60.0))) / CDbl(200.0))))) / CDbl(2.0) Descending
+                '  Dim culture = CultureInfo.CurrentCulture.Name.ToLower
+
+                'q = q.Where(Function(c) (CultureInfo.CurrentCulture.Name.ToLower.Contains(c.Langauge.ToLower) Or c.Langauge.ToLower.Contains(CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower)))
+                'q = q.Where(Function(c) culture = c.Langauge.ToLower)
+
 
                 Dim out As String = ""
 
                 For Each row In q.Take(CInt(Settings("NumberOfStories")))
                     Try
-
-                        '  Dim Photo = FileManager.Instance.GetFile(row.PhotoId)
-                        ' Dim PhotoURL = FileManager.Instance.GetUrl(Photo)
-
-                        '   Dim distanceWeight = (CDbl(1.0) + ((CDbl(1.0) - CDbl(Math.Max(CDbl(200), CDbl((CDbl(Math.Acos(Math.Sin(deg2Rad * CDbl(lt)) * Math.Sin(deg2Rad * CDbl(row.Latitude)) + Math.Cos(deg2Rad * CDbl(lt)) * Math.Cos(deg2Rad * CDbl(row.Latitude)) * Math.Cos(deg2Rad * (CDbl(lg) - CDbl(row.Longitude)))) / Math.PI * CDbl(180.0)) * CDbl(1.1515)))) / CDbl(200.0))) / CDbl(2.0)))
-                        '   Dim distanceMiles = StoryFunctions.distance(lt, lg, row.Latitude, row.Longitude) ' (CDbl(1.0) + (G * (CDbl(1.0) - (Math.Min(200, ((Math.Acos(Math.Sin(deg2Rad * (lt)) * Math.Sin(deg2Rad * CDbl(row.Latitude)) + Math.Cos(deg2Rad * (lt)) * Math.Cos(deg2Rad * CDbl(row.Latitude)) * Math.Cos(deg2Rad * (lg - CDbl(row.Longitude))))) / Math.PI * CDbl(180.0)) * CDbl(1.1515) * CDbl(60)) / CDbl(200))))) / CDbl(2)
-
-                        'Dim PreCal = CDbl(row.Precal) * (CDbl(1.0) + (G * (CDbl(1.0) - (Math.Min(200, ((CDbl(Math.Acos(Math.Sin(deg2Rad * (lt))) * CDbl(Math.Sin(deg2Rad * CDbl(row.Latitude))) + CDbl(Math.Cos(deg2Rad * CDbl(lt))) * CDbl(Math.Cos(deg2Rad * CDbl(row.Latitude))) * CDbl(Math.Cos(deg2Rad * (CDbl(lg) - CDbl(row.Longitude)))))) / CDbl(Math.PI) * CDbl(180.0)) * CDbl(1.1515) * CDbl(60)) / CDbl(200))))) / CDbl(2)
-                        'Dim PreCal = ((CDbl(Math.Acos(Math.Sin(deg2Rad * (lt))) * CDbl(Math.Sin(deg2Rad * CDbl(row.Latitude))) + CDbl(Math.Cos(deg2Rad * CDbl(lt))) * CDbl(Math.Cos(deg2Rad * CDbl(row.Latitude))) * CDbl(Math.Cos(deg2Rad * (CDbl(lg) - CDbl(row.Longitude)))))) / CDbl(Math.PI) * CDbl(180.0)) * CDbl(1.1515) * CDbl(60)
-
-
-                        'Dim PreCal = CDbl(row.Precal) * (CDbl(1 + (row.Clicks * P))) * (1.0 + (G * (1.0 - (CDbl(Math.Min(200, ((Math.Acos(CDbl(Math.Sin(deg2Rad * (lt))) * CDbl(Math.Sin(deg2Rad * CDbl(row.Latitude))) + CDbl(Math.Cos(deg2Rad * CDbl(lt))) * CDbl(Math.Cos(deg2Rad * CDbl(row.Latitude))) * CDbl(Math.Cos(deg2Rad * (lg - CDbl(row.Longitude)))))) / CDbl(Math.PI) * 180.0) * 1.1515 * 60.0)) / 200.0)))) / 2.0
-
-
-                        '  Dim dist As Double = CDbl(Math.Sin(deg2Rad * lt)) * CDbl(Math.Sin(deg2Rad * (row.lat))) + Math.Cos(deg2Rad(lat1)) * Math.Cos(deg2Rad(lat2)) * Math.Cos(deg2Rad(theta))
+                        If (CultureInfo.CurrentCulture.Name.ToLower.Contains(row.Langauge.ToLower) Or row.Langauge.ToLower.Contains(CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower)) Then
 
 
 
-                        'StoryFunctions.distance(lt, lg, row.Latitude, row.Longitude) ' CDbl((CDbl(Math.Acos(Math.Sin(deg2Rad * CDbl(lt)) * Math.Sin(deg2Rad * CDbl(row.Latitude)) + Math.Cos(deg2Rad * CDbl(lt)) * Math.Cos(deg2Rad * CDbl(row.Latitude)) * Math.Cos(deg2Rad * (CDbl(lg) - CDbl(row.Longitude)))) / Math.PI * CDbl(180.0)) * CDbl(1.1515)))
+                            '  Dim Photo = FileManager.Instance.GetFile(row.PhotoId)
+                            ' Dim PhotoURL = FileManager.Instance.GetUrl(Photo)
+
+                            '   Dim distanceWeight = (CDbl(1.0) + ((CDbl(1.0) - CDbl(Math.Max(CDbl(200), CDbl((CDbl(Math.Acos(Math.Sin(deg2Rad * CDbl(lt)) * Math.Sin(deg2Rad * CDbl(row.Latitude)) + Math.Cos(deg2Rad * CDbl(lt)) * Math.Cos(deg2Rad * CDbl(row.Latitude)) * Math.Cos(deg2Rad * (CDbl(lg) - CDbl(row.Longitude)))) / Math.PI * CDbl(180.0)) * CDbl(1.1515)))) / CDbl(200.0))) / CDbl(2.0)))
+                            '   Dim distanceMiles = StoryFunctions.distance(lt, lg, row.Latitude, row.Longitude) ' (CDbl(1.0) + (G * (CDbl(1.0) - (Math.Min(200, ((Math.Acos(Math.Sin(deg2Rad * (lt)) * Math.Sin(deg2Rad * CDbl(row.Latitude)) + Math.Cos(deg2Rad * (lt)) * Math.Cos(deg2Rad * CDbl(row.Latitude)) * Math.Cos(deg2Rad * (lg - CDbl(row.Longitude))))) / Math.PI * CDbl(180.0)) * CDbl(1.1515) * CDbl(60)) / CDbl(200))))) / CDbl(2)
+
+                            'Dim PreCal = CDbl(row.Precal) * (CDbl(1.0) + (G * (CDbl(1.0) - (Math.Min(200, ((CDbl(Math.Acos(Math.Sin(deg2Rad * (lt))) * CDbl(Math.Sin(deg2Rad * CDbl(row.Latitude))) + CDbl(Math.Cos(deg2Rad * CDbl(lt))) * CDbl(Math.Cos(deg2Rad * CDbl(row.Latitude))) * CDbl(Math.Cos(deg2Rad * (CDbl(lg) - CDbl(row.Longitude)))))) / CDbl(Math.PI) * CDbl(180.0)) * CDbl(1.1515) * CDbl(60)) / CDbl(200))))) / CDbl(2)
+                            'Dim PreCal = ((CDbl(Math.Acos(Math.Sin(deg2Rad * (lt))) * CDbl(Math.Sin(deg2Rad * CDbl(row.Latitude))) + CDbl(Math.Cos(deg2Rad * CDbl(lt))) * CDbl(Math.Cos(deg2Rad * CDbl(row.Latitude))) * CDbl(Math.Cos(deg2Rad * (CDbl(lg) - CDbl(row.Longitude)))))) / CDbl(Math.PI) * CDbl(180.0)) * CDbl(1.1515) * CDbl(60)
 
 
-                        Dim target = "_blank"
-                        If row.Link.Contains(PortalSettings.DefaultPortalAlias) Then
-                            target = "_self"
+                            'Dim PreCal = CDbl(row.Precal) * (CDbl(1 + (row.Clicks * P))) * (1.0 + (G * (1.0 - (CDbl(Math.Min(200, ((Math.Acos(CDbl(Math.Sin(deg2Rad * (lt))) * CDbl(Math.Sin(deg2Rad * CDbl(row.Latitude))) + CDbl(Math.Cos(deg2Rad * CDbl(lt))) * CDbl(Math.Cos(deg2Rad * CDbl(row.Latitude))) * CDbl(Math.Cos(deg2Rad * (lg - CDbl(row.Longitude)))))) / CDbl(Math.PI) * 180.0) * 1.1515 * 60.0)) / 200.0)))) / 2.0
+
+
+                            '  Dim dist As Double = CDbl(Math.Sin(deg2Rad * lt)) * CDbl(Math.Sin(deg2Rad * (row.lat))) + Math.Cos(deg2Rad(lat1)) * Math.Cos(deg2Rad(lat2)) * Math.Cos(deg2Rad(theta))
+
+
+
+                            'StoryFunctions.distance(lt, lg, row.Latitude, row.Longitude) ' CDbl((CDbl(Math.Acos(Math.Sin(deg2Rad * CDbl(lt)) * Math.Sin(deg2Rad * CDbl(row.Latitude)) + Math.Cos(deg2Rad * CDbl(lt)) * Math.Cos(deg2Rad * CDbl(row.Latitude)) * Math.Cos(deg2Rad * (CDbl(lg) - CDbl(row.Longitude)))) / Math.PI * CDbl(180.0)) * CDbl(1.1515)))
+
+
+                            Dim target = "_blank"
+                            If row.Link.Contains(PortalSettings.DefaultPortalAlias) Then
+                                target = "_self"
+                            End If
+                            out &= "<a href=""javascript: registerClick(" & row.CacheId & "); window.open('" & row.Link & "', '" & target & "');"" > "
+                            out &= "<img src=""" & row.ImageId & """ style=""width: 420px; height: " & CInt((420 * row.ImageHeight) / row.ImageWidth) & "px;"" data-thumb=""" & row.ImageId & """ alt=""" & row.Headline & """  title=""" & row.Headline & """ /></a>"
                         End If
-                        out &= "<a href=""javascript: registerClick(" & row.CacheId & "); window.open('" & row.Link & "', '" & target & "');"" > "
-                        out &= "<img src=""" & row.ImageId & """ style=""width: 420px; height: " & CInt((420 * row.ImageHeight) / row.ImageWidth) & "px;"" data-thumb=""" & row.ImageId & """ alt=""" & row.Headline & """  title=""" & row.Headline & """ /></a>"
-
                     Catch ex As Exception
 
                     End Try
@@ -123,6 +131,6 @@ Namespace DotNetNuke.Modules.AgapeConnect.Stories
 
 
 
-        
+
     End Class
 End Namespace

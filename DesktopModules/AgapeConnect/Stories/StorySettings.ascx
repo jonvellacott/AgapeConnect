@@ -478,6 +478,16 @@
             </td>
         </tr>
        
+             <tr>
+            <td>
+                <dnn:label ID="label9" runat="server" Text="AutoDetect Story Language:" HelpText="Select this option if your feed published in multiple langauges, and has not been generated using AgapeConnect. The system will automatically detect the language of each story." />
+            </td>   
+            
+            <td>
+                <asp:CheckBox ID="cbAutoDetectLanguage" runat="server" />
+                
+            </td>
+        </tr>
         <tr>
             <td>
                 <dnn:label ID="Label8" runat="server" Text="Image:" HelpText="The feed image is used when there is no Story Image, or the supplied story image is too low quality" />
