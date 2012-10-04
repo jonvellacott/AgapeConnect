@@ -24,7 +24,7 @@
         <td><asp:Button ID="btnProcess" runat="server" Text="Process" CssClass="aButton" /></td>
     </tr>
    
-</table>
-<asp:Label ID="lblResponse" runat="server" Text=""></asp:Label>
-<asp:LinkButton ID="btnDownload" runat="server">Download a Sample Spreadsheet</asp:LinkButton>
-<asp:Button ID="btnReturn" runat="server" Text="Back"  CssClass="aButton"/>
+</table><br />
+<asp:Label ID="lblResponse" runat="server" Text=""></asp:Label><br />
+
+<asp:LinkButton ID="btnReturn" runat="server" Text="Back"  CssClass="aButton"/>
