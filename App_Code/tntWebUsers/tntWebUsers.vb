@@ -255,7 +255,9 @@ Public Class tntWebUsers
     Public Sub CheckOrCreateWebUser(ByVal UserId As String)
         'objEventLog.AddLog("DB0:", "UserId: " & UserId, PS, 1, Log.EventLog.EventLogController.EventLogType.ADMIN_ALERT)
         'objEventLog.AddLog("DB0:", "PortalId: " & PortalId, PS, 1, Log.EventLog.EventLogController.EventLogType.ADMIN_ALERT)
-
+        If StaffBrokerFunctions.GetSetting("tntWebLinkActive", PortalId) <> "True" Then
+            Return
+        End If
         Dim objUser = UserController.GetUserById(PortalId, UserId)
         If Not objUser Is Nothing Then
             'objEventLog.AddLog("DB1:", "", PS, 1, Log.EventLog.EventLogController.EventLogType.ADMIN_ALERT)
@@ -298,7 +300,9 @@ Public Class tntWebUsers
 
 
     Public Sub CheckOrCreateTNTProfile(ByVal UserId As String, ByVal ProfileCode As String, ByVal ProfileDescription As String)
-
+        If StaffBrokerFunctions.GetSetting("tntWebLinkActive", PortalId) <> "True" Then
+            Return
+        End If
         Dim objUser = UserController.GetUserById(PortalId, UserId)
         If Not objUser Is Nothing Then
 
@@ -319,6 +323,9 @@ Public Class tntWebUsers
 
 
     Public Sub CheckOrDeleteTNTProfile(ByVal UserId As String, ByVal ProfileCode As String, ByVal ProfileDescription As String)
+        If StaffBrokerFunctions.GetSetting("tntWebLinkActive", PortalId) <> "True" Then
+            Return
+        End If
         Dim objUser = UserController.GetUserById(PortalId, UserId)
         If Not objUser Is Nothing Then
 
@@ -337,6 +344,9 @@ Public Class tntWebUsers
     End Sub
 
     Public Sub CheckOrCreateTNTAccount(ByVal UserId As String, ByVal ProfileCode As String, ByVal FinancialAccount As String)
+        If StaffBrokerFunctions.GetSetting("tntWebLinkActive", PortalId) <> "True" Then
+            Return
+        End If
         If String.IsNullOrEmpty(FinancialAccount) Then
             Return
         End If
@@ -369,6 +379,9 @@ Public Class tntWebUsers
     End Sub
 
     Public Sub CheckOrCreateDesignation(ByVal UserId As String, ByVal ProfileCode As String, ByVal Designation As String)
+        If StaffBrokerFunctions.GetSetting("tntWebLinkActive", PortalId) <> "True" Then
+            Return
+        End If
         If String.IsNullOrEmpty(Designation) Then
             Return
         End If
@@ -396,6 +409,9 @@ Public Class tntWebUsers
     End Sub
 
     Public Sub CheckOrDeleteFinancialAccount(ByVal UserId As String, ByVal ProfileCode As String, ByVal FinancialAccount As String)
+        If StaffBrokerFunctions.GetSetting("tntWebLinkActive", PortalId) <> "True" Then
+            Return
+        End If
         If String.IsNullOrEmpty(FinancialAccount) Then
             Return
         End If
@@ -418,6 +434,9 @@ Public Class tntWebUsers
     End Sub
 
     Public Sub CheckOrDeleteDesignation(ByVal UserId As String, ByVal ProfileCode As String, ByVal Designation As String)
+        If StaffBrokerFunctions.GetSetting("tntWebLinkActive", PortalId) <> "True" Then
+            Return
+        End If
         If String.IsNullOrEmpty(Designation) Then
             Return
         End If

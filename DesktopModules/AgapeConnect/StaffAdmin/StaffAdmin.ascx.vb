@@ -284,86 +284,96 @@ Namespace DotNetNuke.Modules.StaffAdmin
                 StaffBrokerFunctions.AddProfileValue(PortalId, q.First.StaffId, "PayOnly", PayOnly)
 
                 ' User1.Profile.SetProfileProperty("Birthday", B1.ToString("dd/MM/yyyy"))
-                Dim MaritalStatus = CType(FormView1.FindControl("ddlMaritalStatus"), DropDownList).SelectedValue
-                If MaritalStatus = -1 Then 'notstaff
-                    q.First.UserId2 = MaritalStatus
-                    Dim dob2 As String = CType(FormView1.FindControl("tbSpouseDateNotStaff"), TextBox).Text
-                    If dob2 <> "" Then
+                    Dim MaritalStatus = CType(FormView1.FindControl("ddlMaritalStatus"), DropDownList).SelectedValue
+
+
+                    If MaritalStatus = -1 Then 'notstaff
+                        
+
+                        q.First.UserId2 = MaritalStatus
+                        Dim dob2 As String = CType(FormView1.FindControl("tbSpouseDateNotStaff"), TextBox).Text
+                        If dob2 <> "" Then
+                            Try
+                                Dim B2 As Date = DateTime.Parse(dob2, CultureInfo.CurrentCulture)
+                                StaffBrokerFunctions.AddProfileValue(PortalId, q.First.StaffId, "SpouseDOB", B2.ToString("dd/MM/yyyy"))
+
+                            Catch ex As Exception
+                                CType(FormView1.FindControl("tbSpouseDateNotStaff"), TextBox).Text = ""
+                            End Try
+
+                        End If
+
+                        StaffBrokerFunctions.AddProfileValue(PortalId, q.First.StaffId, "SpouseName", CType(FormView1.FindControl("tbName2"), TextBox).Text)
+
+                    ElseIf MaritalStatus = -2 Then 'single
+                        If q.First.UserId2 <> -2 Then
+                            q.First.DisplayName = q.First.User.LastName & ", " & q.First.User.FirstName
+                        End If
+
+                        q.First.UserId2 = MaritalStatus
+
+
+                    Else
+                        
+
                         Try
-                            Dim B2 As Date = DateTime.Parse(dob2, CultureInfo.CurrentCulture)
-                            StaffBrokerFunctions.AddProfileValue(PortalId, q.First.StaffId, "SpouseDOB", B2.ToString("dd/MM/yyyy"))
+                            Dim B2 As Date = DateTime.Parse(CType(FormView1.FindControl("tbSpouseDateStaff"), TextBox).Text, CultureInfo.CurrentCulture)
+                            StaffBrokerFunctions.SetUserProfileProperty(PortalId, q.First.UserId2, "Birthday", B2.ToString, 359)
 
                         Catch ex As Exception
-                            CType(FormView1.FindControl("tbSpouseDateNotStaff"), TextBox).Text = ""
+                            CType(FormView1.FindControl("tbSpouseDateStaff"), TextBox).Text = ""
                         End Try
-                        
+
+                        'Dim User2 = UserController.GetUserById(PortalId, q.First.UserId2)
+
+                        'User2.Profile.SetProfileProperty("Birthday", B2.ToString("dd/MM/yyyy"))
+                        'UserController.UpdateUser(PortalId, User2)
                     End If
-                    
-                    StaffBrokerFunctions.AddProfileValue(PortalId, q.First.StaffId, "SpouseName", CType(FormView1.FindControl("tbName2"), TextBox).Text)
-                    
-                ElseIf MaritalStatus = -2 Then 'single
-                    q.First.UserId2 = MaritalStatus
-
-
-                Else
-                    Try
-                        Dim B2 As Date = DateTime.Parse(CType(FormView1.FindControl("tbSpouseDateStaff"), TextBox).Text, CultureInfo.CurrentCulture)
-                        StaffBrokerFunctions.SetUserProfileProperty(PortalId, q.First.UserId2, "Birthday", B2.ToString, 359)
-
-                    Catch ex As Exception
-                        CType(FormView1.FindControl("tbSpouseDateStaff"), TextBox).Text = ""
-                    End Try
-                    
-                    'Dim User2 = UserController.GetUserById(PortalId, q.First.UserId2)
-
-                    'User2.Profile.SetProfileProperty("Birthday", B2.ToString("dd/MM/yyyy"))
-                    'UserController.UpdateUser(PortalId, User2)
-                End If
-                'UserController.UpdateUser(PortalId, User1)
-                'StaffBrokerFunctions.AddProfileValue(PortalId, q.First.UserId1, "Birthday", )
+                    'UserController.UpdateUser(PortalId, User1)
+                    'StaffBrokerFunctions.AddProfileValue(PortalId, q.First.UserId1, "Birthday", )
 
 
 
-                'Now we need to update the Staff Details
+                    'Now we need to update the Staff Details
 
-                'Dim SPP = From c In d.AP_StaffBroker_StaffPropertyDefinitions Where c.Display = True And c.PortalId = PortalId
-                'For Each row In SPP
-                '    StaffBrokerFunctions.AddProfileValue(PortalId, q.First.StaffId, row.PropertyName, )
-                'Next
-                Dim SPP = CType(FormView1.FindControl("DataList1"), DataList).Items
+                    'Dim SPP = From c In d.AP_StaffBroker_StaffPropertyDefinitions Where c.Display = True And c.PortalId = PortalId
+                    'For Each row In SPP
+                    '    StaffBrokerFunctions.AddProfileValue(PortalId, q.First.StaffId, row.PropertyName, )
+                    'Next
+                    Dim SPP = CType(FormView1.FindControl("DataList1"), DataList).Items
 
-                For Each row As DataListItem In SPP
-                    Dim Type = CInt(CType(row.FindControl("hfPropType"), HiddenField).Value)
-                    Select Case Type
-                        Case 0
-                            StaffBrokerFunctions.AddProfileValue(PortalId, q.First.StaffId, CType(row.FindControl("hfPropName"), HiddenField).Value, CType(row.FindControl("tbPropValue"), TextBox).Text)
-                        Case 1
-                            StaffBrokerFunctions.AddProfileValue(PortalId, q.First.StaffId, CType(row.FindControl("hfPropName"), HiddenField).Value, CType(row.FindControl("tbPropValueNumber"), TextBox).Text)
-                        Case 2
-                            StaffBrokerFunctions.AddProfileValue(PortalId, q.First.StaffId, CType(row.FindControl("hfPropName"), HiddenField).Value, CType(row.FindControl("cbProbValue"), CheckBox).Checked)
+                    For Each row As DataListItem In SPP
+                        Dim Type = CInt(CType(row.FindControl("hfPropType"), HiddenField).Value)
+                        Select Case Type
+                            Case 0
+                                StaffBrokerFunctions.AddProfileValue(PortalId, q.First.StaffId, CType(row.FindControl("hfPropName"), HiddenField).Value, CType(row.FindControl("tbPropValue"), TextBox).Text)
+                            Case 1
+                                StaffBrokerFunctions.AddProfileValue(PortalId, q.First.StaffId, CType(row.FindControl("hfPropName"), HiddenField).Value, CType(row.FindControl("tbPropValueNumber"), TextBox).Text)
+                            Case 2
+                                StaffBrokerFunctions.AddProfileValue(PortalId, q.First.StaffId, CType(row.FindControl("hfPropName"), HiddenField).Value, CType(row.FindControl("cbProbValue"), CheckBox).Checked)
 
-                    End Select
+                        End Select
 
 
-                Next
+                    Next
 
-                Dim User1 = UserController.GetUserById(PortalId, q.First.UserId1)
-                If Not User1 Is Nothing Then
-                    User1.Email = CType(FormView1.FindControl("tbEmail"), TextBox).Text
-                    UserController.UpdateUser(PortalId, User1)
-                End If
-                If q.First.UserId2 > 0 Then
-                    Dim User2 = UserController.GetUserById(PortalId, q.First.UserId2)
-                    If Not User2 Is Nothing Then
-                        User2.Email = CType(FormView1.FindControl("tbEmailSpouse"), TextBox).Text
-                        UserController.UpdateUser(PortalId, User2)
+                    Dim User1 = UserController.GetUserById(PortalId, q.First.UserId1)
+                    If Not User1 Is Nothing Then
+                        User1.Email = CType(FormView1.FindControl("tbEmail"), TextBox).Text
+                        UserController.UpdateUser(PortalId, User1)
                     End If
-                End If
-                'Dim cc = CType(FormView1.FindControl("DropDownList1"), DropDownList).SelectedValue
-                'q.First.CostCenter = cc
+                    If q.First.UserId2 > 0 Then
+                        Dim User2 = UserController.GetUserById(PortalId, q.First.UserId2)
+                        If Not User2 Is Nothing Then
+                            User2.Email = CType(FormView1.FindControl("tbEmailSpouse"), TextBox).Text
+                            UserController.UpdateUser(PortalId, User2)
+                        End If
+                    End If
+                    'Dim cc = CType(FormView1.FindControl("DropDownList1"), DropDownList).SelectedValue
+                    'q.First.CostCenter = cc
 
 
-                d.SubmitChanges()
+                    d.SubmitChanges()
 
                 End If
             Catch ex As Exception
@@ -439,6 +449,10 @@ Namespace DotNetNuke.Modules.StaffAdmin
 
         Protected Sub btnBulkAdd_Click(sender As Object, e As EventArgs) Handles btnBulkAdd.Click
             Response.Redirect(EditUrl("BulkUpload"))
+        End Sub
+
+        Protected Sub btnChangeUsername_Click(sender As Object, e As EventArgs) Handles btnChangeUsername.Click
+            Response.Redirect(EditUrl("ChangeUsername"))
         End Sub
     End Class
 End Namespace
