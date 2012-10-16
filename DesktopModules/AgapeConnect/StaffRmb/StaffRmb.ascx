@@ -264,7 +264,7 @@
     function showPopup2() {$("#divSignin2").dialog("open"); return false; }
     function showPopup3() {$("#divSignin3").dialog("open"); return false; }
      function showPopupSplit() {$("#divSplitPopup").dialog("open"); return false; }
-    function showDownload() {$("#divDownload").dialog("open"); return false; }
+     function showDownload() { $("#divDownload").dialog("open"); return false; }
      function showSuggestedPayments() {$("#divSuggestedPayments").dialog("open"); return false; }
     function showAdvanceReq()  {$("#divAdvanceReq").dialog("open");return false;}
 
@@ -1520,8 +1520,8 @@ padding: 5px 5px 5px 5px;
                 <asp:AsyncPostBackTrigger ControlID="btnAddLine" EventName="Click" />
                 <%--  <asp:AsyncPostBackTrigger ControlID="btnPrint"  EventName="Click" />--%>
                 <asp:PostBackTrigger ControlID="btnPrint" />
-                <asp:PostBackTrigger ControlID="btnDownloadBatch" />
-                <asp:PostBackTrigger ControlID="btnSuggestedPayments" />
+              <%--  <asp:PostBackTrigger ControlID="btnDownloadBatch" />
+                <asp:PostBackTrigger ControlID="btnSuggestedPayments" />--%>
                 <%--  <asp:PostBackTrigger ControlID="btnAddLine" />--%>
             </Triggers>
         </asp:UpdatePanel>
@@ -1695,13 +1695,15 @@ padding: 5px 5px 5px 5px;
     <asp:Label ID="Label39" runat="server" ResourceKey="btnAdvReq" class="AgapeLink"></asp:Label>
 </a>
 
-&nbsp; &nbsp;
+    <asp:Label ID="lblMovedMenu" runat="server" Font-Size="XX-Small" Font-Italic="true" ForeColor="Gray" Text="If you are looking for Settings or Suggested Payments, these links have moved. Click the faint Manage Button at the top left of this module (over the New Reimbursment button). "></asp:Label>
+
+&nbsp<%--; &nbsp;
 <asp:LinkButton ID="btnSettings" runat="server" resourcekey="btnSettings"></asp:LinkButton>
 &nbsp; &nbsp;
 <asp:LinkButton ID="btnDownloadBatch" runat="server" resourcekey="btnDownloadBatch"
     OnClientClick="showDownload();">Download Batched Reimbursments</asp:LinkButton> &nbsp; &nbsp;
     
-<asp:LinkButton ID="btnShowSuggestedPayments" OnClientClick="showSuggestedPayments();" runat="server" resourcekey="SuggestedPayments">Suggested Payments</asp:LinkButton>
+<asp:LinkButton ID="btnShowSuggestedPayments" OnClientClick="showSuggestedPayments();" runat="server" resourcekey="SuggestedPayments">Suggested Payments</asp:LinkButton>--%>
 <br />
 
 </div>
