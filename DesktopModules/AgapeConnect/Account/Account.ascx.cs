@@ -67,7 +67,10 @@ namespace DotNetNuke.Modules.Account
                  var ssoGUID = UserInfo.Profile.GetPropertyValue("ssoGUID");
                  var resp = dsw.GetPortalsForUserJson(ssoGUID ).Distinct();
                var thisInstance = StaffBrokerFunctions.GetSetting("DataserverURL", PortalId);
-               
+
+           //    MyCountries.Items.Add(new ListItem("South Africa", "https://tntdataserver.com/dataserver/rsa/dataquery/dataqueryservice.asmx"));
+
+
                  foreach (DSPortalsService.DataserverPortal  p in resp.OrderByDescending(x => x.InstanceUri.Contains(thisInstance)).ThenBy(y => y.InstanceName ))
                  {
                       MyCountries.Items.Add(new ListItem(p.InstanceName , p.InstanceUri ));
@@ -77,8 +80,11 @@ namespace DotNetNuke.Modules.Account
 
                 //MyCountries.Items.Add(new ListItem("devtest","https://tntdataserver.eu/dataserver/devtest/dataquery/dataqueryservice.asmx"));
                 //MyCountries.Items.Add(new ListItem("AgapeAOA","https://tntdataserver.eu/dataserver/AgapeAOA/dataquery/dataqueryservice.asmx"));
-                //MyCountries.Items.Add(new ListItem("UK","https://tntdataserver.eu/dataserver/UK/dataquery/dataqueryservice.asmx"));
-                ////
+                
+                 
+                
+                
+                 ////
                  MyCountries_SelectedIndexChanged(this, null);
 
 
@@ -467,7 +473,12 @@ namespace DotNetNuke.Modules.Account
 
                     currentDonor = gift.GLAccountDescription ;
                     currentDonorCode = gift.GLAccountCode ;
-                    if (currentDonor != null) _donorCodes.Add(currentDonorCode, Server.HtmlEncode(currentDonor));
+
+
+                   
+                        if((!_donorCodes.ContainsKey(currentDonorCode)&&(currentDonor != null))) _donorCodes.Add(currentDonorCode, Server.HtmlEncode(currentDonor));
+                    
+                   
            
                    // if (gift. != null) _accountCodes.Add(Server.HtmlEncode(currentGl), transaction.GLAccountCode);
                     counter++;

@@ -21,6 +21,8 @@ Namespace DotNetNuke.Modules.StaffAdmin
     Partial Class ViewStaffAdmin
         Inherits Entities.Modules.PortalModuleBase
         Dim d As New StaffBrokerDataContext
+        Dim isMarried As Boolean
+
         Protected Sub Page_Init(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Init
             '    jQuery.RequestDnnPluginsRegistration()
 
@@ -114,6 +116,53 @@ Namespace DotNetNuke.Modules.StaffAdmin
 
         End Function
 
+        Public Function GetLocalStaffProfileName(ByVal StaffProfileName As String) As String
+            Dim s = Localization.GetString("ProfileProperties_" & StaffProfileName & ".Text", "/DesktopModules/Admin/Security/App_LocalResources/Profile.ascx.resx", System.Threading.Thread.CurrentThread.CurrentCulture.Name)
+            If String.IsNullOrEmpty(s) Then
+                Return StaffProfileName
+            Else
+                Return s
+            End If
+        End Function
+        Public Function GetLocalStaffProfileHelp(ByVal StaffProfileName As String) As String
+            Dim s = Localization.GetString("ProfileProperties_" & StaffProfileName & ".Help", "/DesktopModules/Admin/Security/App_LocalResources/Profile.ascx.resx", System.Threading.Thread.CurrentThread.CurrentCulture.Name)
+            If String.IsNullOrEmpty(s) Then
+                Return StaffProfileName
+            Else
+                Return s
+            End If
+        End Function
+        Public Function GetPayroll(ByVal Category As String) As ArrayList
+            ' Dim theStaff = StaffBrokerFunctions.GetStaffbyStaffId(CInt(ddlStaff.SelectedValue))
+            Dim pd = DotNetNuke.Entities.Profile.ProfileController.GetPropertyDefinitionsByCategory(PortalId, Category)
+            Dim ProfProps As New ArrayList(pd)
+            
+            Return ProfProps
+
+        End Function
+        Public Function GetProfileValue(ByVal PropertyName As String, ByVal Spouse As Boolean, Optional ByVal Type As Integer = -1) As String
+            Dim theStaff = StaffBrokerFunctions.GetStaffbyStaffId(CInt(ddlStaff.SelectedValue))
+            Dim User1 = UserController.GetUserById(PortalId, theStaff.UserId1)
+            Dim User2 = UserController.GetUserById(PortalId, theStaff.UserId2)
+            If User1 Is Nothing Then
+                Return ""
+            End If
+            If Spouse And User2 Is Nothing Then
+                Return ""
+            End If
+            Dim ukCulture As CultureInfo = New CultureInfo("en-GB")
+            If Not Spouse Then
+                Dim val = User1.Profile.GetPropertyValue(PropertyName)
+                Return val
+
+            Else
+                Dim val = User2.Profile.GetPropertyValue(PropertyName)
+                
+                    Return val
+
+            End If
+            Return ""
+        End Function
         Public Function GetPhoto(ByVal UID As Integer) As String
             Try
                 Dim FileID = UserController.GetUserById(PortalId, UID).Profile.GetPropertyValue("Photo")
@@ -150,6 +199,7 @@ Namespace DotNetNuke.Modules.StaffAdmin
 
         Protected Sub ddlStaff_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ddlStaff.SelectedIndexChanged
             Session("LastStaffId") = ddlStaff.SelectedValue
+
         End Sub
 
 
@@ -357,18 +407,68 @@ Namespace DotNetNuke.Modules.StaffAdmin
 
                     Next
 
+
+                   
+
+
+
                     Dim User1 = UserController.GetUserById(PortalId, q.First.UserId1)
                     If Not User1 Is Nothing Then
                         User1.Email = CType(FormView1.FindControl("tbEmail"), TextBox).Text
                         UserController.UpdateUser(PortalId, User1)
                     End If
+                    Dim User2 As UserInfo
                     If q.First.UserId2 > 0 Then
-                        Dim User2 = UserController.GetUserById(PortalId, q.First.UserId2)
+                        User2 = UserController.GetUserById(PortalId, q.First.UserId2)
                         If Not User2 Is Nothing Then
                             User2.Email = CType(FormView1.FindControl("tbEmailSpouse"), TextBox).Text
                             UserController.UpdateUser(PortalId, User2)
                         End If
                     End If
+
+
+                    Dim Payroll = CType(FormView1.FindControl("dlPayroll"), DataList).Items
+
+                    For Each row As DataListItem In Payroll
+                        Dim PropName As String = CType(row.FindControl("hfPropName"), HiddenField).Value
+                        Dim PropType As Integer = CType(row.FindControl("hfPropType"), HiddenField).Value
+
+                        User1.Profile.SetProfileProperty(PropName, CType(row.FindControl("tbPropValue1"), TextBox).Text)
+                        If Not User2 Is Nothing Then
+                            User2.Profile.SetProfileProperty(PropName, CType(row.FindControl("tbPropValue2"), TextBox).Text)
+                        End If
+                    Next
+
+                    Dim PayrollDeductions = CType(FormView1.FindControl("dlPayrollDeductions"), DataList).Items
+
+                    For Each row As DataListItem In PayrollDeductions
+                       Dim PropName As String = CType(row.FindControl("hfPropName"), HiddenField).Value
+                        Dim PropType As Integer = CType(row.FindControl("hfPropType"), HiddenField).Value
+
+                        User1.Profile.SetProfileProperty(PropName, CType(row.FindControl("tbPropValue1"), TextBox).Text)
+                        If Not User2 Is Nothing Then
+                            User2.Profile.SetProfileProperty(PropName, CType(row.FindControl("tbPropValue2"), TextBox).Text)
+                        End If
+                    Next
+
+                    Dim PayrollEarnings = CType(FormView1.FindControl("dlPayrollEarnings"), DataList).Items
+
+                    For Each row As DataListItem In PayrollEarnings
+                        Dim PropName As String = CType(row.FindControl("hfPropName"), HiddenField).Value
+                        Dim PropType As Integer = CType(row.FindControl("hfPropType"), HiddenField).Value
+
+                        User1.Profile.SetProfileProperty(PropName, CType(row.FindControl("tbPropValue1"), TextBox).Text)
+                        If Not User2 Is Nothing Then
+                            User2.Profile.SetProfileProperty(PropName, CType(row.FindControl("tbPropValue2"), TextBox).Text)
+                        End If
+                    Next
+
+                    UserController.UpdateUser(PortalId, User1)
+                    If Not User2 Is Nothing Then
+                        UserController.UpdateUser(PortalId, User2)
+                    End If
+
+
                     'Dim cc = CType(FormView1.FindControl("DropDownList1"), DropDownList).SelectedValue
                     'q.First.CostCenter = cc
 
@@ -385,6 +485,14 @@ Namespace DotNetNuke.Modules.StaffAdmin
         Protected Sub btnRepRel_Click(sender As Object, e As System.EventArgs) Handles btnRepRel.Click
             Response.Redirect(EditUrl("StaffReportingRelationships"))
         End Sub
+
+        Public Function IsMarriedStaff() As Boolean
+            If isMarried = Nothing Then
+                isMarried = StaffBrokerFunctions.GetStaffbyStaffId(CInt(ddlStaff.SelectedValue)).UserId2 > 0
+            End If
+
+            Return isMarried
+        End Function
 
 
         Protected Sub btnAddSpouse_Click(sender As Object, e As System.EventArgs) Handles btnAddSpouse.Click

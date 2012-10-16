@@ -85,7 +85,7 @@ Partial Class DesktopModules_AgapePortal_StaffBroker_AddStaff
             valStatus = False
 
         End If
-        If ddlMaritalStatus.SelectedValue > -2 Then
+        If ddlMaritalStatus.SelectedValue > 0 Then
 
             If spouse Is Nothing And cbCreate2.Checked = False Then
                 lblError.Text &= "User <i>" & tbSpouseGCX.Text & "</i> does not exist. Check the 'Create?' box to automatically register this account on this site.<br />"

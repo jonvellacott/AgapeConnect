@@ -450,7 +450,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                     'Create a list to add things into
                     Dim list As New ArrayList
                     Dim Advlist As New ArrayList
-                    Dim LargeTransaction As Integer = 1000
+                    Dim LargeTransaction As Integer = Settings("TeamLeaderLimit")
                     'Fill the variables: get your team, your cost centres and create a blank 'to approve' list
 
                     ' Dim ToApprove = From c In d.AP_Staff_Rmbs Where 1 = 0 Select c.RMBNo, c.RmbDate, c.UserRef, c.UserId, c.RID
@@ -2060,7 +2060,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
             If theLine.Count > 0 Then
                 For Each row As TableRow In tblSplit.Rows
                     Dim RowAmount = CType(row.Cells(1).Controls(0), TextBox).Text
-                    Dim RowDesc = CType(row.Cells(1).Controls(0), TextBox).Text
+                    Dim RowDesc = CType(row.Cells(0).Controls(0), TextBox).Text
                     If RowAmount = "" Or RowDesc = "" Then
                         lblSplitError.Visible = True
                         Return
@@ -2373,7 +2373,59 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                 sb.Append("showPopupSplit();")
                 sb.Append("</script>")
                 ScriptManager.RegisterStartupScript(GridView1, t, "popupSplit", sb.ToString, False)
+
+            ElseIf e.CommandName = "myDefer" Then
+                'Try to find a deferred transactions pending reimbursement
+                Dim theLine = From c In d.AP_Staff_RmbLines Where c.RmbLineNo = CInt(e.CommandArgument)
+                If theLine.Count > 0 Then
+                    theLine.First.Spare5 = theLine.First.RmbNo
+                    Dim q = From c In d.AP_Staff_RmbLines Where c.Spare5 = theLine.First.RmbNo And c.AP_Staff_Rmb.Status = RmbStatus.Draft And c.AP_Staff_Rmb.UserId = theLine.First.AP_Staff_Rmb.UserId And c.AP_Staff_Rmb.PortalId = PortalId Select c.AP_Staff_Rmb
+                    If q.Count = 0 Then
+
+                        Dim insert As New AP_Staff_Rmb
+                        insert.UserRef = "Deferred"
+                        insert.AcctComment = "Contains transactions deferred from previous month"
+                        insert.RID = StaffRmbFunctions.GetNewRID(PortalId)
+                        insert.CostCenter = theLine.First.AP_Staff_Rmb.CostCenter
+
+                        insert.UserComment = ""
+                        insert.UserId = theLine.First.AP_Staff_Rmb.UserId
+                        ' insert.PersonalCC = ddlNewChargeTo.Items(0).Value
+                        insert.AdvanceRequest = 0.0
+
+                        insert.PortalId = PortalId
+
+                        insert.Status = RmbStatus.Draft
+
+                        insert.Locked = False
+                        insert.SupplierCode = theLine.First.AP_Staff_Rmb.SupplierCode
+
+                        insert.Department = theLine.First.AP_Staff_Rmb.Department
+
+                        d.AP_Staff_Rmbs.InsertOnSubmit(insert)
+                        d.SubmitChanges()
+                        theLine.First.AP_Staff_Rmb = insert
+
+
+                    Else
+                        theLine.First.AP_Staff_Rmb = q.First
+                    End If
+
+
+                    d.SubmitChanges()
+
+                    LoadRmb(hfRmbNo.Value)
+                    Dim theUser = UserController.GetUserById(PortalId, theLine.First.AP_Staff_Rmb.UserId)
+                    Dim t As Type = GridView1.GetType()
+                    Dim sb As System.Text.StringBuilder = New System.Text.StringBuilder()
+                    sb.Append("<script language='javascript'>")
+                    sb.Append("window.open('mailto:" & theUser.Email & "?subject=Reimbursment " & theLine.First.AP_Staff_Rmb.RID & ": Deferred Transactions');")
+                    sb.Append("</script>")
+                    ScriptManager.RegisterStartupScript(GridView1, t, "email", sb.ToString, False)
+
+                End If
             End If
+
         End Sub
         Protected Sub dlTeamApproved_ItemCommand(ByVal source As Object, ByVal e As System.Web.UI.WebControls.DataListCommandEventArgs) Handles dlTeamApproved.ItemCommand, dlApproved.ItemCommand, dlCancelled.ItemCommand, dlToApprove.ItemCommand, dlSubmitted.ItemCommand, dlPending.ItemCommand, dlReceipts.ItemCommand, dlNoReceipts.ItemCommand, dlPendingDownload.ItemCommand, dlAdvSubmitted.ItemCommand, dlAdvToApprove.ItemCommand, dlAdvApproved.ItemCommand, dlAdvTeamApproved.ItemCommand, dlAdvNoReceipts.ItemCommand, dlAdvPendingDownload.ItemCommand
 

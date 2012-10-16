@@ -170,6 +170,23 @@ Namespace DotNetNuke.Modules.AgapeConnect
             End If
             Return ""
         End Function
+
+        Public Function GetLocalStaffProfileName(ByVal StaffProfileName As String) As String
+            Dim s = Localization.GetString("ProfileProperties_" & StaffProfileName & ".Text", "/DesktopModules/Admin/Security/App_LocalResources/Profile.ascx.resx", System.Threading.Thread.CurrentThread.CurrentCulture.Name)
+            If String.IsNullOrEmpty(s) Then
+                Return StaffProfileName
+            Else
+                Return s
+            End If
+        End Function
+        Public Function GetLocalStaffProfileHelp(ByVal StaffProfileName As String) As String
+            Dim s = Localization.GetString("ProfileProperties_" & StaffProfileName & ".Help", "/DesktopModules/Admin/Security/App_LocalResources/Profile.ascx.resx", System.Threading.Thread.CurrentThread.CurrentCulture.Name)
+            If String.IsNullOrEmpty(s) Then
+                Return StaffProfileName
+            Else
+                Return s
+            End If
+        End Function
         Public Function GetDateFormat() As String
             Dim sdp As String = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToLower
             If sdp.IndexOf("d") < sdp.IndexOf("m") Then

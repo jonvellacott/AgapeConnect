@@ -103,8 +103,8 @@
                                 <tr>
                                     <td width="100px">
                                       
-                                        <uc1:labelcontrol ID="lbcPropName" runat="server" Text='<%# Localization.GetString("ProfileProperties_" & Eval("PropertyName") & ".Text", "/DesktopModules/Admin/Security/App_LocalResources/Profile.ascx.resx", System.Threading.Thread.CurrentThread.CurrentCulture.Name) %>'
-                                            HelpText='<%# Localization.GetString("ProfileProperties_" & Eval("PropertyName") & ".Help", "/DesktopModules/Admin/Security/App_localresources/Profile.ascx.resx", System.Threading.Thread.CurrentThread.CurrentCulture.Name) %>'  Width="100px" />
+                                        <uc1:labelcontrol ID="lbcPropName" runat="server" Text='<%# GetLocalStaffProfileName(Eval("PropertyName"))%>'
+                                            HelpText='<%# GetLocalStaffProfileHelp(Eval("PropertyName")) %>'  Width="100px" />
                                         
                                         <asp:HiddenField ID="hfPropName" runat="server" Value='<%# Eval("PropertyName") %>' />
                                     <asp:HiddenField ID="hfPropType" runat="server" Value='<%# Eval("DataType") %>' />
