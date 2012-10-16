@@ -58,7 +58,27 @@ Namespace DotNetNuke.Modules.StaffRmbMod
             Next
         End Sub
 
+        Private Sub AddClientAction(ByVal Title As String, ByVal theScript As String, ByRef root As DotNetNuke.Entities.Modules.Actions.ModuleAction)
+            Dim jsAction As New DotNetNuke.Entities.Modules.Actions.ModuleAction(ModuleContext.GetNextActionID)
+            With jsAction
+                .Title = Title
+                .CommandName = DotNetNuke.Entities.Modules.Actions.ModuleActionType.AddContent
+                .ClientScript = theScript
+                .Secure = Security.SecurityAccessLevel.Edit
+            End With
+            root.Actions.Add(jsAction)
+        End Sub
+
         Private Sub Page_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Me.Init
+
+            Dim addTitle = MyBase.Actions.Add(GetNextActionID, "AgapeConnect", "AgapeConnect", "", "", "", "", True, SecurityAccessLevel.Edit, True, False)
+            addTitle.Actions.Add(GetNextActionID, "Settings", "RmbSettings", "", "action_settings.gif", EditUrl("RmbSettings"), False, SecurityAccessLevel.Edit, True, False)
+
+            AddClientAction("Download Batched Transactions", "showDownload()", addTitle)
+            AddClientAction("Suggested Payments", "showSuggestedPayments()", addTitle)
+
+
+
             If Not Page.IsPostBack And Request.QueryString("RmbNo") <> "" Then
                 hfRmbNo.Value = CInt(Request.QueryString("RmbNo"))
             End If
@@ -72,7 +92,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                     LoadDefaultSettings()
                 End If
                 Try
-                    
+
                     ddlBankAccount.SelectedValue = CStr(Settings("BankAccount"))
 
                 Catch ex As Exception
@@ -147,9 +167,9 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
                 Dim acc As Boolean = IsAccounts()
-                btnDownloadBatch.Visible = acc
+                ' btnDownloadBatch.Visible = acc
                 btnAdvDownload.Visible = acc
-                btnShowSuggestedPayments.Visible = acc
+                ' btnShowSuggestedPayments.Visible = acc
                 ddlCostcenter.Enabled = acc
                 ddlAccountCode.Enabled = acc
                 pnlAccountsOptions.Visible = acc
@@ -180,7 +200,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                 pnlMain.Visible = False
                 pnlSplash.Visible = True
 
-                btnSettings.Visible = IsEditable
+                '  btnSettings.Visible = IsEditable
 
 
 
@@ -2025,9 +2045,9 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
         End Sub
-        Protected Sub btnSettings_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btnSettings.Click
-            Response.Redirect(EditUrl("RmbSettings"))
-        End Sub
+        'Protected Sub btnSettings_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btnSettings.Click
+        '    Response.Redirect(EditUrl("RmbSettings"))
+        'End Sub
         Protected Sub btnSplitAdd_Click(sender As Object, e As System.EventArgs) Handles btnSplitAdd.Click
             hfRows.Value += 1
             'tblSplit.Rows.Clear()
@@ -2214,10 +2234,10 @@ Namespace DotNetNuke.Modules.StaffRmbMod
             ScriptManager.RegisterClientScriptBlock(Page, t, "popupDownload", sb.ToString, False)
         End Sub
 
-        Protected Sub btnDownloadBatch_Click(sender As Object, e As System.EventArgs) Handles btnDownloadBatch.Click
-            DownloadBatch()
+        'Protected Sub btnDownloadBatch_Click(sender As Object, e As System.EventArgs) Handles btnDownloadBatch.Click
+        '    DownloadBatch()
 
-        End Sub
+        'End Sub
         Protected Sub btnPrint_Click(sender As Object, e As System.EventArgs) Handles btnPrint.Click
             Dim theRmb = From c In d.AP_Staff_Rmbs Where c.RMBNo = CInt(hfRmbNo.Value)
 
