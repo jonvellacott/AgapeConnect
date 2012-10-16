@@ -478,6 +478,35 @@ Namespace DotNetNuke.Modules.StaffRmb
         Protected Sub CancelBtn_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles CancelBtn.Click
             Response.Redirect(NavigateURL())
         End Sub
+
+        Protected Sub gvPerDiemMulti_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles gvPerDiemMulti.RowCommand
+            If e.CommandName = "myInsert" Then
+
+                Dim d As New StaffRmbDataContext
+                Dim insert = New AP_Staff_Rmb_PerDeimMuliType
+                insert.Name = CType(gvPerDiemMulti.FooterRow.Controls(0).FindControl("tbNameI"), TextBox).Text
+                insert.Value = CType(gvPerDiemMulti.FooterRow.Controls(0).FindControl("tbAmountI"), TextBox).Text
+                insert.Currency = CType(gvPerDiemMulti.FooterRow.Controls(0).FindControl("ddlCurrenciesI"), DropDownList).SelectedValue
+                insert.PortalId = PortalId
+
+
+                d.AP_Staff_Rmb_PerDeimMuliTypes.InsertOnSubmit(insert)
+                d.SubmitChanges()
+                gvPerDiemMulti.DataBind()
+            ElseIf e.CommandName = "myEInsert" Then
+                Dim d As New StaffRmbDataContext
+                Dim insert = New AP_Staff_Rmb_PerDeimMuliType
+
+                insert.Name = CType(gvPerDiemMulti.Controls(0).Controls(1).FindControl("tbNameE"), TextBox).Text
+                insert.Value = CType(gvPerDiemMulti.Controls(0).Controls(1).FindControl("tbValueE"), TextBox).Text
+                insert.Currency = CType(gvPerDiemMulti.Controls(0).Controls(1).FindControl("ddlCurrenciesE"), DropDownList).SelectedValue
+                insert.PortalId = PortalId
+
+                d.AP_Staff_Rmb_PerDeimMuliTypes.InsertOnSubmit(insert)
+                d.SubmitChanges()
+                gvPerDiemMulti.DataBind()
+            End If
+        End Sub
     End Class
 
 End Namespace

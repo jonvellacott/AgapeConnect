@@ -145,4 +145,13 @@
       <Column Name="PortalId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
+  <Table Name="dbo.AP_Staff_Rmb_PerDeimMuliTypes" Member="AP_Staff_Rmb_PerDeimMuliTypes">
+    <Type Name="AP_Staff_Rmb_PerDeimMuliType">
+      <Column Name="PerDiemTypeId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Currency" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="Value" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="PortalId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
 </Database>

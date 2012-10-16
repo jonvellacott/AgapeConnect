@@ -54,6 +54,9 @@ namespace StaffRmb
     partial void InsertAP_Staff_AdvanceRequest(AP_Staff_AdvanceRequest instance);
     partial void UpdateAP_Staff_AdvanceRequest(AP_Staff_AdvanceRequest instance);
     partial void DeleteAP_Staff_AdvanceRequest(AP_Staff_AdvanceRequest instance);
+    partial void InsertAP_Staff_Rmb_PerDeimMuliType(AP_Staff_Rmb_PerDeimMuliType instance);
+    partial void UpdateAP_Staff_Rmb_PerDeimMuliType(AP_Staff_Rmb_PerDeimMuliType instance);
+    partial void DeleteAP_Staff_Rmb_PerDeimMuliType(AP_Staff_Rmb_PerDeimMuliType instance);
     #endregion
 		
 		public StaffRmbDataContext() : 
@@ -147,6 +150,14 @@ namespace StaffRmb
 			get
 			{
 				return this.GetTable<AP_Staff_AdvanceRequest>();
+			}
+		}
+		
+		public System.Data.Linq.Table<AP_Staff_Rmb_PerDeimMuliType> AP_Staff_Rmb_PerDeimMuliTypes
+		{
+			get
+			{
+				return this.GetTable<AP_Staff_Rmb_PerDeimMuliType>();
 			}
 		}
 	}
@@ -3191,6 +3202,164 @@ namespace StaffRmb
 		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PortalId", DbType="Int NOT NULL")]
 		public int PortalId
+		{
+			get
+			{
+				return this._PortalId;
+			}
+			set
+			{
+				if ((this._PortalId != value))
+				{
+					this.OnPortalIdChanging(value);
+					this.SendPropertyChanging();
+					this._PortalId = value;
+					this.SendPropertyChanged("PortalId");
+					this.OnPortalIdChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.AP_Staff_Rmb_PerDeimMuliTypes")]
+	public partial class AP_Staff_Rmb_PerDeimMuliType : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _PerDiemTypeId;
+		
+		private string _Name;
+		
+		private string _Currency;
+		
+		private System.Nullable<decimal> _Value;
+		
+		private System.Nullable<int> _PortalId;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnPerDiemTypeIdChanging(int value);
+    partial void OnPerDiemTypeIdChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnCurrencyChanging(string value);
+    partial void OnCurrencyChanged();
+    partial void OnValueChanging(System.Nullable<decimal> value);
+    partial void OnValueChanged();
+    partial void OnPortalIdChanging(System.Nullable<int> value);
+    partial void OnPortalIdChanged();
+    #endregion
+		
+		public AP_Staff_Rmb_PerDeimMuliType()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PerDiemTypeId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int PerDiemTypeId
+		{
+			get
+			{
+				return this._PerDiemTypeId;
+			}
+			set
+			{
+				if ((this._PerDiemTypeId != value))
+				{
+					this.OnPerDiemTypeIdChanging(value);
+					this.SendPropertyChanging();
+					this._PerDiemTypeId = value;
+					this.SendPropertyChanged("PerDiemTypeId");
+					this.OnPerDiemTypeIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50)")]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Currency", DbType="NVarChar(10)")]
+		public string Currency
+		{
+			get
+			{
+				return this._Currency;
+			}
+			set
+			{
+				if ((this._Currency != value))
+				{
+					this.OnCurrencyChanging(value);
+					this.SendPropertyChanging();
+					this._Currency = value;
+					this.SendPropertyChanged("Currency");
+					this.OnCurrencyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Value", DbType="Money")]
+		public System.Nullable<decimal> Value
+		{
+			get
+			{
+				return this._Value;
+			}
+			set
+			{
+				if ((this._Value != value))
+				{
+					this.OnValueChanging(value);
+					this.SendPropertyChanging();
+					this._Value = value;
+					this.SendPropertyChanged("Value");
+					this.OnValueChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PortalId", DbType="Int")]
+		public System.Nullable<int> PortalId
 		{
 			get
 			{

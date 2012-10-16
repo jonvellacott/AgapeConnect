@@ -1193,11 +1193,13 @@ padding: 5px 5px 5px 5px;
                                             CommandArgument='<%# Eval("RmbLineNo") %>' resourcekey="Edit"></asp:LinkButton>
                                         <asp:LinkButton ID="LinkButton6" runat="server" CommandName="mySplit" Visible='<%# (CInt(Eval("AP_Staff_Rmb.Status"))<>StaffRmb.rmbStatus.Processed and CInt(Eval("AP_Staff_Rmb.Status"))<>StaffRmb.rmbStatus.DownloadFailed and CInt(Eval("AP_Staff_Rmb.Status"))<>StaffRmb.rmbStatus.PendingDownload)  and IsAccounts()  %>'
                                             CommandArgument='<%# Eval("RmbLineNo") %>' resourcekey="Split"></asp:LinkButton>
+                                      <asp:LinkButton ID="LinkButton7" runat="server" CommandName="myDefer" ToolTip="Moves this transaction to a new 'Pending' Reimbursement." Visible='<%# (CInt(Eval("AP_Staff_Rmb.Status"))<>StaffRmb.rmbStatus.Processed and CInt(Eval("AP_Staff_Rmb.Status"))<>StaffRmb.rmbStatus.DownloadFailed and CInt(Eval("AP_Staff_Rmb.Status"))<>StaffRmb.rmbStatus.PendingDownload)  and IsAccounts()  %>'
+                                        CommandArgument='<%# Eval("RmbLineNo") %>' resourcekey="Defer" Text="Defer"></asp:LinkButton>
                                     </ItemTemplate>
                                     <HeaderStyle ForeColor="White" />
                                     <ItemStyle HorizontalAlign="Center" />
                                 </asp:TemplateField>
-                                <asp:TemplateField HeaderText="" ItemStyle-Width="10px">
+                                <asp:TemplateField HeaderText="" ItemStyle-Width="10px" ItemStyle-Wrap="false">
                                     <EditItemTemplate>
                                     </EditItemTemplate>
                                     <ItemTemplate>
@@ -1404,7 +1406,7 @@ padding: 5px 5px 5px 5px;
                     <asp:AsyncPostBackTrigger ControlID="btnCancel" EventName="Click" />
                     <asp:PostBackTrigger ControlID="btnDownload" />
                     <asp:PostBackTrigger ControlID="btnAdvDownload" />
-
+                    
                 </Triggers>
             </asp:UpdatePanel>
         </td>

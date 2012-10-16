@@ -183,6 +183,7 @@
             <ul >
                 <li><a href='#Tab1-tab'>Personal Details</a></li>
                 <li><a href='#Tab2-tab'>Staff Details</a></li>
+                <li><a href='#Tab2a-tab'>Payroll</a></li>
                 <li><a href='#Tab3-tab'>Leadership Relationships</a></li>
             </ul>
             <div style="width: 100%;  min-height: 350px; background-color: #FFFFFF;">
@@ -303,6 +304,110 @@
                         </tr>
                     </table>
                     <br />
+                </div>
+                <div id='Tab2a-tab' >
+                    <table>
+                       <tr>
+                            <!-- NAMES -->
+                            <td style="width:100px"> &nbsp;
+                            </td>
+                            <td style="white-space: nowrap; width: 50%;">
+                                
+                                <asp:Label ID="Label1"  CssClass="AgapeH3" runat="server" Font-Size="20pt" Font-Bold="true" Text='<%# Eval("User.FirstName") %>' />
+                                
+                                
+                                <div style="clear: both ;"></div>
+                            </td>
+                            <td width="50px" style="min-width: 50px !important;" >
+                            &nbsp;  
+                            </td>
+                            <td style="white-space: nowrap; width: 50%;">
+                                
+                                <asp:Label ID="Label3"  CssClass="AgapeH3" runat="server" Font-Size="20pt" Font-Bold="true" Text='<%# Eval("User2.FirstName") %>' />
+                                
+                               
+                                
+                            </td>
+                        </tr>
+                        
+                        
+                    </table>
+
+                    <h4>Payroll</h4>
+                            <asp:DataList ID="dlPayroll" runat="server" Width="100%" DataSource='<%# GetPayroll("Payroll")%>'>
+                                <ItemTemplate>
+                                    <table width="100%" align="left">
+                                        <tr>
+                                            <td width="100px">
+
+                                                <uc1:labelcontrol ID="lbcPropName" runat="server" Text='<%# GetLocalStaffProfileName(Eval("PropertyName")) %>'
+                                                    HelpText='<%# GetLocalStaffProfileHelp(Eval("PropertyName"))  %>' Width="100px" />
+
+                                                <asp:HiddenField ID="hfPropName" runat="server" Value='<%# Eval("PropertyName") %>' />
+                                                <asp:HiddenField ID="hfPropType" runat="server" Value='<%# Eval("DataType") %>' />
+                                            </td>
+                                            <td width="50%" align="left">
+                                                <asp:TextBox ID="tbPropValue1" runat="server"  Text='<%# GetProfileValue(Eval("PropertyName"), False,  Eval("DataType") ) %>' Width="90%"></asp:TextBox>
+                                            </td>
+                                            <td width="50%" align="left">
+                                                <asp:TextBox ID="tbPropValue2" runat="server" Visible='<%# IsMarriedStaff() %>'  Text='<%# GetProfileValue(Eval("PropertyName"), True,  Eval("DataType") ) %>' Width="90%"></asp:TextBox>
+                                              
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </ItemTemplate>
+                            </asp:DataList>
+                    <h4>Payroll-Deductions</h4>
+                            <asp:DataList ID="dlPayrollDeductions" runat="server" Width="100%" DataSource='<%# GetPayroll("Payroll-Deductions") %>'>
+                                <ItemTemplate>
+                                    <table width="100%" align="left">
+                                        <tr>
+                                            <td width="100px">
+
+                                                <uc1:labelcontrol ID="lbcPropName" runat="server" Text='<%# GetLocalStaffProfileName(Eval("PropertyName")) %>'
+                                                    HelpText='<%# GetLocalStaffProfileHelp(Eval("PropertyName"))  %>' Width="100px" />
+
+                                                <asp:HiddenField ID="hfPropName" runat="server" Value='<%# Eval("PropertyName") %>' />
+                                                <asp:HiddenField ID="hfPropType" runat="server" Value='<%# Eval("DataType") %>' />
+                                            </td>
+                                            <td width="50%" align="left">
+                                                <asp:TextBox ID="tbPropValue1" runat="server"  Text='<%# GetProfileValue(Eval("PropertyName"), False,  Eval("DataType") ) %>' Width="90%"></asp:TextBox>
+                                            </td>
+                                            <td width="50%" align="left">
+                                                <asp:TextBox ID="tbPropValue2" runat="server" Visible='<%# IsMarriedStaff() %>'  Text='<%# GetProfileValue(Eval("PropertyName"), True,  Eval("DataType") ) %>' Width="90%"></asp:TextBox>
+                                              
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </ItemTemplate>
+                            </asp:DataList>
+                    <h4>Payroll-Earnings</h4>
+                            <asp:DataList ID="dlPayrollEarnings" runat="server" Width="100%" DataSource='<%# GetPayroll("Payroll-Earnings") %>'>
+                                <ItemTemplate>
+                                    <table width="100%" align="left">
+                                        <tr>
+                                            <td width="100px">
+
+                                                <uc1:labelcontrol ID="lbcPropName" runat="server" Text='<%# GetLocalStaffProfileName(Eval("PropertyName")) %>'
+                                                    HelpText='<%# GetLocalStaffProfileHelp(Eval("PropertyName"))  %>' Width="100px" />
+
+                                                <asp:HiddenField ID="hfPropName" runat="server" Value='<%# Eval("PropertyName") %>' />
+                                                <asp:HiddenField ID="hfPropType" runat="server" Value='<%# Eval("DataType") %>' />
+                                            </td>
+                                            <td width="50%" align="left">
+                                                <asp:TextBox ID="tbPropValue1" runat="server"  Text='<%# GetProfileValue(Eval("PropertyName"), False,  Eval("DataType") ) %>' Width="90%"></asp:TextBox>
+                                            </td>
+                                            <td width="50%" align="left">
+                                                <asp:TextBox ID="tbPropValue2" runat="server" Visible='<%# IsMarriedStaff() %>'  Text='<%# GetProfileValue(Eval("PropertyName"), True,  Eval("DataType") ) %>' Width="90%"></asp:TextBox>
+                                              
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </ItemTemplate>
+                            </asp:DataList>
+
+
+                        
                 </div>
                 <div id='Tab3-tab' >
                     Use this panel to define leadership relationships. This will affect who can approve
