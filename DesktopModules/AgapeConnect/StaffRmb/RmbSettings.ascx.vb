@@ -200,6 +200,18 @@ Namespace DotNetNuke.Modules.StaffRmb
                     '    cbCurConverter.Checked = CType(TabModuleSettings("CurConverter"), Boolean)
                     'End If
                     cbCurConverter.Checked = StaffBrokerFunctions.GetSetting("CurConverter", PortalId) = "True"
+                    cbDatapump.Checked = StaffBrokerFunctions.GetSetting("RmbDownload", PortalId) <> "False"
+                    pnlSingle.Visible = Not cbDatapump.Checked
+                    If StaffBrokerFunctions.GetSetting("RmbSinglePump", PortalId) <> "True" Then
+                        btnDownload.Enabled = Not cbDatapump.Checked
+                        btnDownload.Text = "Download"
+                        lblDownloading.Visible = False
+                    Else
+                        btnDownload.Enabled = False
+                        btnDownload.Text = "Downloading"
+                        lblDownloading.Visible = True
+                    End If
+
 
 
                     ddlAccountsPayable.DataBind()
@@ -219,7 +231,7 @@ Namespace DotNetNuke.Modules.StaffRmb
                         oopsControlAccount.Text = ""
 
                     End If
-                   
+
 
                     'Advance Account
                     If ddlAccountsReceivable.Items.Count = 0 Then
@@ -386,6 +398,9 @@ Namespace DotNetNuke.Modules.StaffRmb
             ' objModules.UpdateTabModuleSetting(TabModuleId, "CurConverter", cbCurConverter.Checked)
             StaffBrokerFunctions.SetSetting("CurConverter", cbCurConverter.Checked, PortalId)
 
+            StaffBrokerFunctions.SetSetting("RmbDownload", cbDatapump.Checked, PortalId)
+
+
 
             objModules.UpdateTabModuleSetting(TabModuleId, "isLoaded", "Yes")
             Dim d As New StaffRmbDataContext
@@ -506,6 +521,15 @@ Namespace DotNetNuke.Modules.StaffRmb
                 d.SubmitChanges()
                 gvPerDiemMulti.DataBind()
             End If
+        End Sub
+
+        Protected Sub btnDownload_Click(sender As Object, e As EventArgs) Handles btnDownload.Click
+
+            StaffBrokerFunctions.SetSetting("RmbSinglePump", True, PortalId)
+            btnDownload.Enabled = False
+            btnDownload.Text = "Downloading"
+            lblDownloading.Visible = True
+
         End Sub
     End Class
 
