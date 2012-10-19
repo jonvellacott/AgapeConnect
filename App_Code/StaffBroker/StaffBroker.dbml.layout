@@ -259,16 +259,16 @@
         <classShapeMoniker Id="f6f11dfe-3d50-451b-948f-2824824384f6" />
       </nodes>
     </associationConnector>
-    <classShape Id="e56d08b5-5035-4bc5-a1dc-439cfbbe9665" absoluteBounds="16.5, 3.25, 2, 1.9631982421875">
-      <DataClassMoniker Name="/StaffBrokerDataContext/AP_Staff_SuggestedPayment" />
-      <nestedChildShapes>
-        <elementListCompartment Id="0c4818b5-0850-4927-97ea-19c53fd0ea32" absoluteBounds="16.515, 3.71, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
     <classShape Id="308e77d0-2103-462c-aa0d-58132601c2ed" absoluteBounds="4.25, 25, 2, 2.5401025390625">
       <DataClassMoniker Name="/StaffBrokerDataContext/AP_Menu_Link" />
       <nestedChildShapes>
         <elementListCompartment Id="210d9f25-c58e-4a86-9b8d-269e5e46532d" absoluteBounds="4.265, 25.46, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b213e61a-07ce-48e6-86ef-6e5da90a9aaf" absoluteBounds="16.5, 2.625, 2, 2.3478011067708335">
+      <DataClassMoniker Name="/StaffBrokerDataContext/AP_Staff_SuggestedPayment" />
+      <nestedChildShapes>
+        <elementListCompartment Id="38b2fba3-ee22-4fa0-87df-c95784a2e0e9" absoluteBounds="16.515, 3.085, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>

@@ -337,16 +337,6 @@
       <Association Name="AP_StaffBroker_StaffPropertyDefinition_AP_StaffBroker_StaffProfile" Member="AP_StaffBroker_StaffProfiles" ThisKey="StaffPropertyDefinitionId" OtherKey="StaffPropertyDefinitionId" Type="AP_StaffBroker_StaffProfile" />
     </Type>
   </Table>
-  <Table Name="dbo.AP_Staff_SuggestedPayments" Member="AP_Staff_SuggestedPayments">
-    <Type Name="AP_Staff_SuggestedPayment">
-      <Column Name="SuggestedPaymentId" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="CostCenter" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
-      <Column Name="ExpPayable" Type="System.Decimal" DbType="Money" CanBeNull="true" />
-      <Column Name="ExpTaxable" Type="System.Decimal" DbType="Money" CanBeNull="true" />
-      <Column Name="PrevSalary" Type="System.Decimal" DbType="Money" CanBeNull="true" />
-      <Column Name="PortalId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.AP_Menu_Link" Member="AP_Menu_Links">
     <Type Name="AP_Menu_Link">
       <Column Name="LinkId" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -358,6 +348,18 @@
       <Column Name="PortalId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="TabModuleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="ViewOrder" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AP_Staff_SuggestedPayments" Member="AP_Staff_SuggestedPayments">
+    <Type Name="AP_Staff_SuggestedPayment">
+      <Column Name="SuggestedPaymentId" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CostCenter" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="ExpPayable" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="ExpTaxable" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="PrevSalary" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="PortalId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AccountBalance" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="AdvanceBalance" Type="System.Decimal" DbType="Money" CanBeNull="true" />
     </Type>
   </Table>
   <Function Name="dbo.Agape_Main_AlterUserName" Method="Agape_Main_AlterUserName">
