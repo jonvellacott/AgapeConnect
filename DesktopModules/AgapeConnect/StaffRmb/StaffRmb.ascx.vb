@@ -3799,17 +3799,222 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
         End Sub
 
+        Public Function GetLocalStaffProfileName(ByVal StaffProfileName As String) As String
+            Dim s = Localization.GetString("ProfileProperties_" & StaffProfileName & ".Text", "/DesktopModules/Admin/Security/App_LocalResources/Profile.ascx.resx", System.Threading.Thread.CurrentThread.CurrentCulture.Name)
+            If String.IsNullOrEmpty(s) Then
+                Return StaffProfileName
+            Else
+                Return s
+            End If
+        End Function
 
+        Private Sub GetRSADownload(ByRef myCommand As OleDbCommand)
+
+            'Dim sql2 = "Update [Deductions$A2:J2000] Set F1='', F2='', F3='', F4='', F5='', F6='', F7='', F8='', F9='' ;" ', F10='', F11='', F12='', F13='', F14='', F15='' ;" ',F16='', F17='', F18='', F19='', F20='', F21='', F22='', F23='', F24='', F25='', F26='' ;"
+            'myCommand.CommandText = sql2
+            'myCommand.ExecuteNonQuery()
+
+            'sql2 = "Update [Earnings$A4:H2000] Set F1='', F2='', F3='', F4='', F5='', F6='', F7='';"
+            'myCommand.CommandText = sql2
+            'myCommand.ExecuteNonQuery()
+
+            'Maybe this would be better to do my working out the current period
+            Dim currentRmbs = From c In d.AP_Staff_RmbLines Where c.AP_Staff_Rmb.PortalId = PortalId And c.AP_Staff_Rmb.Status = RmbStatus.Processed 'And c.AP_Staff_Rmb.ProcDate > Today.AddDays(-15) And c.Department = False
+
+            Dim Deductions = DotNetNuke.Entities.Profile.ProfileController.GetPropertyDefinitionsByCategory(PortalId, "Payroll-Deductions")
+            Dim Earnings = DotNetNuke.Entities.Profile.ProfileController.GetPropertyDefinitionsByCategory(PortalId, "Payroll-Earnings")
+
+
+            Dim sql = "Update [Deductions$A2:Z2] Set F1='', F2='' "
+            Dim j As Integer = 3
+            For Each item As DotNetNuke.Entities.Profile.ProfilePropertyDefinition In Deductions
+                sql &= ",F" & j & "='" & GetLocalStaffProfileName(item.PropertyName) & "' "
+                j += 1
+            Next
+
+            myCommand.CommandText = sql
+            myCommand.ExecuteNonQuery()
+
+            Dim StaffTypes = {"National Staff", "National Staff, Overseas", "Centrally Funded"}
+            Dim allStaff = StaffBrokerFunctions.GetStaff(1)
+            '.OrderBy(Function(x) x.LastName).ThenBy(Function(x) x.AP_StaffBroker_Staffs.StaffId)
+            Dim i As Integer = 3
+            For Each row In allStaff
+                'Load Values
+                Dim theUser = UserController.GetUserById(PortalId, row.UserID)
+                Dim theStaff = StaffBrokerFunctions.GetStaffMember(theUser.UserID)
+                If Not (theStaff Is Nothing Or theUser Is Nothing) Then
+
+
+                    Dim CurrentPeriod = StaffBrokerFunctions.GetSetting("CurrentFiscalPeriod", PortalId)
+
+                    Dim EmpCode As String = theUser.Profile.GetPropertyValue("EmployeeCode")
+                    If EmpCode Is Nothing Then
+                        EmpCode = ""
+                    End If
+                    Dim CostCenter = theStaff.CostCenter
+
+                    Dim salary As Double = 0
+                    For Each item As DotNetNuke.Entities.Profile.ProfilePropertyDefinition In Earnings
+                        salary += theUser.Profile.GetPropertyValue(item.PropertyName)
+                    Next
+
+                    'Dim VehicleInsurance As Double = theUser.Profile.GetPropertyValue("VehicleInsurance")
+                    'Dim RetirementPolicies As Double = theUser.Profile.GetPropertyValue("RetirementPolicies")
+                    'Dim DependantParent As Double = theUser.Profile.GetPropertyValue("DependantParent")
+                    'Dim HousingAllowance As Double = theUser.Profile.GetPropertyValue("HousingAllowance")
+
+                    Dim NormalSalary As Double = theUser.Profile.GetPropertyValue("NormalSalary")
+
+                    salary += NormalSalary
+
+
+
+
+
+                    Dim AccountBalance As Double = 0
+                    Dim AdvanceBalance As Double = 0
+                    Try
+
+
+                        Dim sugPay = From c In ds.AP_Staff_SuggestedPayments Where c.PortalId = PortalId And c.CostCenter = CostCenter
+
+
+                        If sugPay.Count > 0 Then
+                            If Not sugPay.First.AccountBalance Is Nothing Then
+                                AccountBalance = sugPay.First.AccountBalance
+                            End If
+
+                            If Not sugPay.First.AdvanceBalance Is Nothing Then
+                                AdvanceBalance = sugPay.First.AdvanceBalance
+                            End If
+                        End If
+                    Catch ex As Exception
+
+                    End Try
+                    'lookup Expenses for current period, user
+                    Dim myRmbs = From c In currentRmbs Where c.AP_Staff_Rmb.UserId = row.UserID
+
+                    Dim Travel As Double = 0
+                    Dim AllowancesNontax As Double = 0
+                    Dim AllowancesTax As Double = 0
+
+                    Dim TravelExpenseTypes = {32}
+                    Try
+                        Travel = myRmbs.Where(Function(x) TravelExpenseTypes.Contains(x.LineType)).Sum(Function(y) CType(y.GrossAmount, Decimal?)) ' This needs better definition
+
+                    Catch ex As Exception
+
+                    End Try
+
+
+                    Try
+                        AllowancesNontax = myRmbs.Where(Function(x) x.Taxable = False And Not TravelExpenseTypes.Contains(x.LineType)).Sum(Function(y) CType(y.GrossAmount, Decimal?))
+
+                    Catch ex As Exception
+
+                    End Try
+                    Try
+                        AllowancesTax = myRmbs.Where(Function(x) x.Taxable = True And Not TravelExpenseTypes.Contains(x.LineType)).Sum(Function(y) CType(y.GrossAmount, Decimal?))
+
+                    Catch ex As Exception
+
+                    End Try
+
+                    'Check Balances
+                    If AccountBalance - (salary + Travel + AllowancesNontax + AllowancesTax) < 0 Then
+                        'We need to reduce Salary
+                        salary = Math.Max(AccountBalance - (Travel + AllowancesNontax + AllowancesTax), 0)
+                    End If
+
+
+                    'Dim SanLamGroupLife As Double = theUser.Profile.GetPropertyValue("SanlamGroupLife")
+                    'Dim LibertyLifeRAF As Double = theUser.Profile.GetPropertyValue("LibertyLifeRAF")
+                    'Dim OldMutualRAF As Double = theUser.Profile.GetPropertyValue("OldMutualRAF")
+                    'Dim SalaryAdvance As Double = theUser.Profile.GetPropertyValue("SalaryAdvance")
+                    'Dim SavingsScheme As Double = theUser.Profile.GetPropertyValue("SavingsScheme")
+
+
+
+                    'Complete the Deductions columns
+                    sql = "Update [Deductions$A" & i & ":Z" & i & "] Set F1='" & EmpCode.Trim(" ") & "', F2='CCCSA-FIELD STAFF'"
+                    j = 3
+                    For Each item As DotNetNuke.Entities.Profile.ProfilePropertyDefinition In Deductions
+                        Dim Value = theUser.Profile.GetPropertyValue(item.PropertyName)
+                        If Value <> 0 Then
+                            sql &= ",F" & j & "=" & Value
+
+                        End If
+                        j += 1
+                    Next
+
+
+                    sql &= ",F" & j & "=" & 999
+                    j += 1
+
+                    sql &= ",F" & j & "=" & 1
+
+                    sql &= " ;"
+
+                    myCommand.CommandText = sql
+                    myCommand.ExecuteNonQuery()
+
+
+                    'Complete the Earnings Columns
+                    sql = "Update [Earnings$A" & i & ":H" & i & "] Set F1='" & EmpCode.Trim(" ") & "', F2='CCCSA-FIELD STAFF'"
+                    If salary <> 0 Then
+                        sql &= ",F3=" & salary
+                    End If
+                    If Travel <> 0 Then
+                        sql &= ",F4=" & Travel
+                    End If
+                    If AllowancesTax <> 0 Then
+                        sql &= ",F5=" & AllowancesTax
+                    End If
+                    If AllowancesNontax <> 0 Then
+                        sql &= ",F6=" & AllowancesNontax
+                    End If
+                    If CostCenter <> "" Then
+                        sql &= ",F7='" & CostCenter & "'"
+                    End If
+                    If CostCenter <> "" Then
+                        sql &= ",F8=" & AccountBalance
+                    End If
+                    sql &= " ;"
+
+                    myCommand.CommandText = sql
+                    myCommand.ExecuteNonQuery()
+
+
+
+
+
+                    i += 1
+                End If
+            Next
+
+
+
+
+
+
+
+        End Sub
 
         Protected Sub btnSuggestedPayments_Click(sender As Object, e As System.EventArgs) Handles btnSuggestedPayments.Click
+            
+
             Dim filename As String = "SuggestedPayments.xls"
             If StaffBrokerFunctions.GetSetting("NetSalaries", PortalId) = "True" Then
                 filename = "SuggestedPayments-NETSalary.xls"
             End If
-            If Not File.Exists(PortalSettings.HomeDirectoryMapPath & filename) Then
-                File.Copy(Server.MapPath("/DesktopModules/AgapeConnect/StaffRmb/" & filename), PortalSettings.HomeDirectoryMapPath & filename)
-
+            If StaffBrokerFunctions.GetSetting("ZA-Mode", PortalId) = "True" Then
+                filename = "SuggestedPayments-ZA.xls"
+                'filename = filename
             End If
+           
+            File.Copy(Server.MapPath("/DesktopModules/AgapeConnect/StaffRmb/" & filename), PortalSettings.HomeDirectoryMapPath & filename, True)
+
 
 
             Dim connStr As String = "provider=Microsoft.Jet.OLEDB.4.0;Data Source='" & PortalSettings.HomeDirectoryMapPath & filename & "';Extended Properties='Excel 8.0;HDR=NO'"
@@ -3827,8 +4032,10 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
                 Dim sql2 = "Update [Suggested Payments$A4:J1000] Set F1='', F2='', F3='', F4='', F5='',F6='', F7='', F8='', F10='' ;"
-                MyCommand.CommandText = sql2
-                MyCommand.ExecuteNonQuery()
+                'MyCommand.CommandText = sql2
+                'MyCommand.ExecuteNonQuery()
+
+               
 
 
                 Dim q = From c In ds.AP_Staff_SuggestedPayments Where c.PortalId = PortalId
@@ -3996,6 +4203,15 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                 sql2 = "Update [Suggested Payments$P10:P10] Set F1=" & DownloadFormat & " ;"
                 MyCommand.CommandText = sql2
                 MyCommand.ExecuteNonQuery()
+
+
+                If StaffBrokerFunctions.GetSetting("ZA-Mode", PortalId) = "True" Then
+                    GetRSADownload(MyCommand)
+                End If
+
+
+
+
                 MyConnection.Close()
                 Dim attachment As String = "attachment; filename=SuggestedPayments " & period & ".xls"
 
@@ -4013,6 +4229,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                 lblError.Text = ex.Message
                 lblError.Visible = True
                 MyConnection.Close()
+                ' File.Delete(PortalSettings.HomeDirectoryMapPath & filename)
             Finally
 
 
