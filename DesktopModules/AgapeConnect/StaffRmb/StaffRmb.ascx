@@ -1161,12 +1161,24 @@ padding: 5px 5px 5px 5px;
                                     <HeaderStyle ForeColor="White" />
                                     <ItemStyle HorizontalAlign="Center" />
                                 </asp:TemplateField>
-                                <asp:BoundField DataField="Comment" HeaderText="Comment"
-                                    SortExpression="Commnet" HeaderStyle-ForeColor="White" 
-                                    ItemStyle-HorizontalAlign="Center">
-                                    <HeaderStyle ForeColor="White"></HeaderStyle>
-                                    <ItemStyle HorizontalAlign="Center"></ItemStyle>
-                                </asp:BoundField>
+                               
+                                <asp:TemplateField HeaderText="Comment" SortExpression="Comment" >
+                                    <EditItemTemplate>
+                                    </EditItemTemplate>
+                                    <ItemTemplate>
+                                        <asp:Label ID="lblComment" runat="server" Text='<%#  Eval("Comment")  %>'></asp:Label>
+                                    </ItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:Label ID="lblTotalAmount" runat="server" Font-Bold="True" Text="Total:"></asp:Label>
+                                    <asp:Panel ID="pnlRemBal1" runat="server" Visible='<%# Settings("ShowRemBal") = "True" %>'>
+                                        <asp:Label ID="lblRemainingBalance" runat="server" Font-Size="XX-Small"   Text="Remaining Balance"></asp:Label>
+                                    </asp:Panel>
+                                    </FooterTemplate>
+                                    <HeaderStyle ForeColor="White" />
+                                    <ItemStyle HorizontalAlign="Center" />
+                                    <FooterStyle HorizontalAlign="Right" />
+                                </asp:TemplateField>
+
                                 <asp:TemplateField HeaderText="Amount" SortExpression="GrossAmount" ItemStyle-Width="75px">
                                     <EditItemTemplate>
                                     </EditItemTemplate>
@@ -1175,6 +1187,9 @@ padding: 5px 5px 5px 5px;
                                     </ItemTemplate>
                                     <FooterTemplate>
                                         <asp:Label ID="lblTotalAmount" runat="server" Text='<%# StaffBrokerFunctions.GetSetting("Currency", PortalId) & GetTotal(Eval("RmbNo")).ToString("F2") %>'></asp:Label>
+                                     <asp:Panel ID="pnlRemBal2" runat="server"  Visible='<%# Settings("ShowRemBal") = "True"%>'>
+                                        <asp:Label ID="lblRemainingBalance" runat="server" Font-Size="xx-small" Text='<%# StaffBrokerFunctions.GetFormattedCurrency(PortalId, "0.00")%>'></asp:Label>
+                                    </asp:Panel>
                                     </FooterTemplate>
                                     <HeaderStyle ForeColor="White" />
                                     <ItemStyle HorizontalAlign="Center" />

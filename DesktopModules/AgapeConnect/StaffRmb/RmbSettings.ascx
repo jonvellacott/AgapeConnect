@@ -147,7 +147,16 @@
                         <asp:TextBox ID="tbMenuSize" runat="server" Width="80px"></asp:TextBox>
                     </td>
                 </tr>
-               
+               <tr>
+                    <td>
+                        <b>
+                            <dnn:Label ID="Label30" runat="server" ControlName="cbRemBal" ResourceKey="lblShowRemBal" />
+                        </b>
+                    </td>
+                    <td>
+                        <asp:CheckBox ID="cbRemBal" runat="server"   />
+                    </td>
+                </tr>
 
                 <tr>
                     <td>
