@@ -28,6 +28,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
         Dim objEventLog As New DotNetNuke.Services.Log.EventLog.EventLogController
         'Dim SpouseList As IQueryable(Of StaffBroker.User)  '= AgapeStaffFunctions.SpouseIsLeader()
         Dim VAT3ist As String() = {"111X", "112X", "113", "116", "514X"}
+
 #End Region
 
 #Region "Page Events"
@@ -784,7 +785,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
 
-                    lblAdvCur.Text = StaffBrokerFunctions.GetSetting("Currency", PortalId)
+                    lblAdvCur.Text = "" 'StaffBrokerFunctions.GetSetting("Currency", PortalId)
                     AdvAmount.Text = q.First.RequestAmount.Value.ToString("0.00")
                     AdvReason.Text = q.First.RequestText
                     AdvDate.Text = Translate("AdvDate").Replace("[DATE]", q.First.RequestDate.Value.ToShortDateString)
@@ -808,8 +809,28 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                     If Not q.First.ProcessedDate Is Nothing Then
                         AdvDate.Text &= "<br />" & Translate("AdvProcessed").Replace("[DATE]", q.First.ProcessedDate.Value.ToShortDateString)
                     End If
-                    AccBal.Text = StaffBrokerFunctions.GetSetting("Currency", PortalId) & "3000"
-                    AdvBal.Text = StaffBrokerFunctions.GetSetting("Currency", PortalId) & "150"
+
+                    Dim theStaff = StaffBrokerFunctions.GetStaffMember(q.First.UserId)
+
+
+                    AccBal.Text = "Unknown"
+                    AdvBal.Text = "Unknown"
+                    Dim AdvPay = From c In ds.AP_Staff_SuggestedPayments Where c.PortalId = PortalId And c.CostCenter.StartsWith(theStaff.CostCenter)
+
+                    If AdvPay.Count > 0 Then
+                        If Not AdvPay.First.AdvanceBalance Is Nothing Then
+                            AdvBal.Text = StaffBrokerFunctions.GetFormattedCurrency(PortalId, AdvPay.First.AdvanceBalance.Value.ToString("0.00"))
+                        End If
+                        If Not AdvPay.First.AccountBalance Is Nothing Then
+                            AccBal.Text = StaffBrokerFunctions.GetFormattedCurrency(PortalId, AdvPay.First.AccountBalance.Value.ToString("0.00"))
+                        End If
+                    End If
+
+                   
+
+
+                    '   AccBal.Text = StaffBrokerFunctions.GetSetting("Currency", PortalId) & "3000"
+                    '   AdvBal.Text = StaffBrokerFunctions.GetSetting("Currency", PortalId) & "150"
 
                     Select Case q.First.RequestStatus
 
@@ -1069,21 +1090,20 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
                     Dim theStaff = StaffBrokerFunctions.GetStaffMember(q.First.UserId)
-                    Dim AdvanceCode As String = ""
-                    Dim accountCode As String = ""
+                    'Dim AdvanceCode As String = ""
+                    'Dim accountCode As String = ""
 
-                    If Not String.IsNullOrEmpty(theStaff.CostCenter) Then
-
-
-                        AdvanceCode = theStaff.CostCenter.Trim() & "-" & StaffBrokerFunctions.GetSetting("AdvanceSuffix", PortalId).Trim()
+                    'If Not String.IsNullOrEmpty(theStaff.CostCenter) Then
 
 
-                        accountCode = q.First.CostCenter.Trim
-                    Else
+                    '    AdvanceCode = theStaff.CostCenter.Trim() & "-" & StaffBrokerFunctions.GetSetting("AdvanceSuffix", PortalId).Trim()
 
-                    End If
-                    ' lblAdvanceBalance.Text = "150.00"
 
+                    '    accountCode = q.First.CostCenter.Trim
+                    'Else
+
+                    'End If
+                   
 
 
                     Dim PACMode = (String.IsNullOrEmpty(theStaff.CostCenter) And StaffBrokerFunctions.GetStaffProfileProperty(theStaff.StaffId, "PersonalAccountCode") <> "")
@@ -1094,14 +1114,37 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
 
-                    '  Dim jsonMessage = "$.getJSON('" & GetJsonAccountString() & "', function(json){alert('hello'); $(#" & lblAccountBalance.ClientID & ").html(json) ;});"
-                    Dim JsonMessage As String = "GetAccountBalance('" & GetJsonAccountString(accountCode) & "'); "
-                    JsonMessage &= "GetAdvanceBalance('" & GetJsonAccountString(AdvanceCode) & "'); "
-                    SendMessage("", JsonMessage, True)
+                    'Dim JsonMessage As String = "GetAccountBalance('" & GetJsonAccountString(accountCode) & "'); "
+                    'JsonMessage &= "GetAdvanceBalance('" & GetJsonAccountString(AdvanceCode) & "'); "
+                    'SendMessage("", JsonMessage, True)
+
+
+                    lblAccountBalance.Text = "Unknown"
+                    lblAdvanceBalance.Text = "Unknown"
+                    hfAccountBalance.Value = 0.0
+                    Dim AdvPay = From c In ds.AP_Staff_SuggestedPayments Where c.PortalId = PortalId And c.CostCenter.StartsWith(theStaff.CostCenter)
+
+                    If AdvPay.Count > 0 Then
+                        If Not AdvPay.First.AdvanceBalance Is Nothing Then
+                            lblAdvanceBalance.Text = StaffBrokerFunctions.GetFormattedCurrency(PortalId, AdvPay.First.AdvanceBalance.Value.ToString("0.00"))
+                        End If
+
+                    End If
+
+                    Dim AccPay = From c In ds.AP_Staff_SuggestedPayments Where c.PortalId = PortalId And c.CostCenter.StartsWith(q.First.CostCenter)
+
+                    If AccPay.Count > 0 Then
+                        If Not AccPay.First.AccountBalance Is Nothing Then
+                            lblAccountBalance.Text = StaffBrokerFunctions.GetFormattedCurrency(PortalId, AccPay.First.AccountBalance.Value.ToString("0.00"))
+                            hfAccountBalance.Value = AccPay.First.AccountBalance
+                        End If
+
+                    End If
 
 
 
-                    StaffBrokerFunctions.GetSetting("DataserverURL", PortalId)
+
+                    'StaffBrokerFunctions.GetSetting("DataserverURL", PortalId)
                     '   Dim CountryURL = "https://tntdataserver.eu/dataserver/devtest/dataquery/dataqueryservice.asmx"
 
                     '  AccountCode
@@ -2003,17 +2046,24 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                     row.CostCenter = ddlChargeTo.SelectedValue
                 Next
                 rmb.First.CostCenter = ddlChargeTo.SelectedValue
-                If tbAdvanceAmount.Text <> "" Then
-                    Try
-                        rmb.First.AdvanceRequest = Double.Parse(tbAdvanceAmount.Text, New CultureInfo("en-US"))
-                    Catch
-                        lblAdvError.Text = Translate("AdvanceError")
-                        Return
-                    End Try
+                If tbAdvanceAmount.Text = "" Then
+                    tbAdvanceAmount.Text = 0
                 End If
+
+                Try
+                    rmb.First.AdvanceRequest = Double.Parse(tbAdvanceAmount.Text, New CultureInfo("en-US"))
+                    If rmb.First.AdvanceRequest > rmb.First.AP_Staff_RmbLines.Sum(Function(x) x.GrossAmount) Then
+                        rmb.First.AdvanceRequest = rmb.First.AP_Staff_RmbLines.Sum(Function(x) x.GrossAmount)
+                        tbAdvanceAmount.Text = rmb.First.AdvanceRequest.ToString("0.00")
+                    End If
+                Catch
+                    lblAdvError.Text = Translate("AdvanceError")
+                    Return
+                End Try
+
                 d.SubmitChanges()
             End If
-
+            LoadRmb(hfRmbNo.Value)
 
         End Sub
 
@@ -2782,6 +2832,33 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                 Return (CInt(hfRmbNo.Value) = -AdvanceNo)
             End If
         End Function
+
+        Public Function GetRemainingBalance() As String
+            Dim AccountBalance As Double = 0
+            If hfAccountBalance.Value <> "" Then
+                AccountBalance = hfAccountBalance.Value
+            End If
+           
+            Dim r = (From c In d.AP_Staff_Rmbs Where c.RMBNo = CInt(hfRmbNo.Value) And PortalId = PortalId).First
+
+            Dim Advance As Double = 0
+            If Not r.AdvanceRequest = Nothing Then
+                Advance = r.AdvanceRequest
+            End If
+
+            Dim theStaff = StaffBrokerFunctions.GetStaffMember(r.UserId)
+            Dim statusList = {RmbStatus.Approved, RmbStatus.PendingDownload, RmbStatus.DownloadFailed}
+            Dim rTotal = (From c In d.AP_Staff_RmbLines Where c.AP_Staff_Rmb.PortalId = PortalId And (c.AP_Staff_Rmb.UserId = theStaff.UserId1 Or c.AP_Staff_Rmb.UserId = theStaff.UserId2) And statusList.Contains(c.AP_Staff_Rmb.Status) Select c.GrossAmount).Sum
+            Dim a = (From c In d.AP_Staff_AdvanceRequests Where c.PortalId = PortalId And (c.UserId = theStaff.UserId1 Or c.UserId = theStaff.UserId2) And statusList.Contains(c.RequestStatus) Select c.RequestAmount)
+            Dim aTotal = 0
+            If a.count > 0 Then
+                aTotal = a.Sum()
+            End If
+
+            Return StaffBrokerFunctions.GetFormattedCurrency(PortalId, (AccountBalance + Advance - (rTotal + aTotal)).ToString("0.00"))
+
+        End Function
+
 #End Region
 
 #Region "Utilities"
