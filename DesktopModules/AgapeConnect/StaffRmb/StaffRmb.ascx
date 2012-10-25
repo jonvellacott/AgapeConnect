@@ -375,6 +375,8 @@ padding: 5px 5px 5px 5px;
 <asp:HiddenField ID="hfPortalId" runat="server" Value="-1" />
 <asp:HiddenField ID="hfAccountingCurrency" runat="server" Value="USD" />
 <asp:HiddenField ID="hfExchangeRate" runat="server" Value="1"   />
+    <asp:HiddenField ID="hfAccountBalance" runat="server"  />
+
 <table width="100%">
     <tr valign="top">
         <td>
@@ -1171,7 +1173,7 @@ padding: 5px 5px 5px 5px;
                                     <FooterTemplate>
                                         <asp:Label ID="lblTotalAmount" runat="server" Font-Bold="True" Text="Total:"></asp:Label>
                                     <asp:Panel ID="pnlRemBal1" runat="server" Visible='<%# Settings("ShowRemBal") = "True" %>'>
-                                        <asp:Label ID="lblRemainingBalance" runat="server" Font-Size="XX-Small"   Text="Remaining Balance"></asp:Label>
+                                        <asp:Label ID="lblRemainingBalance" runat="server" Font-Size="XX-Small"   Text="Estimated Remaining Balance:"></asp:Label>
                                     </asp:Panel>
                                     </FooterTemplate>
                                     <HeaderStyle ForeColor="White" />
@@ -1188,7 +1190,7 @@ padding: 5px 5px 5px 5px;
                                     <FooterTemplate>
                                         <asp:Label ID="lblTotalAmount" runat="server" Text='<%# StaffBrokerFunctions.GetSetting("Currency", PortalId) & GetTotal(Eval("RmbNo")).ToString("F2") %>'></asp:Label>
                                      <asp:Panel ID="pnlRemBal2" runat="server"  Visible='<%# Settings("ShowRemBal") = "True"%>'>
-                                        <asp:Label ID="lblRemainingBalance" runat="server" Font-Size="xx-small" Text='<%# StaffBrokerFunctions.GetFormattedCurrency(PortalId, "0.00")%>'></asp:Label>
+                                        <asp:Label ID="lblRemainingBalance" runat="server" Font-Size="xx-small" Text='<%# GetRemainingBalance()%>'></asp:Label>
                                     </asp:Panel>
                                     </FooterTemplate>
                                     <HeaderStyle ForeColor="White" />
