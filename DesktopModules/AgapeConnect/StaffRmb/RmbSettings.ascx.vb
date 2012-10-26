@@ -193,9 +193,9 @@ Namespace DotNetNuke.Modules.StaffRmb
                     If CType(TabModuleSettings("MenuSize"), String) <> "" Then
                         tbMenuSize.Text = CType(TabModuleSettings("MenuSize"), String)
                     End If
-                    If CType(TabModuleSettings("UseDCode"), String) <> "" Then
-                        cbUseDCode.Checked = CType(TabModuleSettings("UseDCode"), Boolean)
-                    End If
+                    'If CType(TabModuleSettings("UseDCode"), String) <> "" Then
+                    '    cbUseDCode.Checked = CType(TabModuleSettings("UseDCode"), Boolean)
+                    'End If
 
                     If CType(TabModuleSettings("ShowRemBal"), String) <> "" Then
                         cbRemBal.Checked = CType(TabModuleSettings("ShowRemBal"), Boolean)
@@ -303,7 +303,7 @@ Namespace DotNetNuke.Modules.StaffRmb
                     End If
                 End If
 
-                GridView1.Columns(4).Visible = cbUseDCode.Checked
+                '  GridView1.Columns(4).Visible = cbUseDCode.Checked
 
 
 
@@ -390,7 +390,7 @@ Namespace DotNetNuke.Modules.StaffRmb
             objModules.UpdateTabModuleSetting(TabModuleId, "EntOvernight", tbEntOvernight.Text)
             objModules.UpdateTabModuleSetting(TabModuleId, "EntDay", tbEntDay.Text)
             objModules.UpdateTabModuleSetting(TabModuleId, "MenuSize", tbMenuSize.Text)
-            objModules.UpdateTabModuleSetting(TabModuleId, "UseDCode", cbUseDCode.Checked)
+            '  objModules.UpdateTabModuleSetting(TabModuleId, "UseDCode", cbUseDCode.Checked)
             objModules.UpdateTabModuleSetting(TabModuleId, "ControlAccount", ddlControlAccount.SelectedValue)
             objModules.UpdateTabModuleSetting(TabModuleId, "AccountsReceivable", ddlAccountsReceivable.SelectedValue)
 

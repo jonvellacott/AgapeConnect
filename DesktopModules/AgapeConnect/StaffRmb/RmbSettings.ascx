@@ -982,16 +982,16 @@
         </div>
         <div id='Tab4-tab'>
             <table style="font-size: 9pt;">
-                <tr>
+    <%--            <tr>
                     <td>
                         <b>
                             <dnn:Label ID="lblUseDCode" runat="server" ControlName="cbUserDCode" ResourceKey="lblUseDCode" />
                         </b>
                     </td>
                     <td>
-                        <asp:CheckBox ID="cbUseDCode" runat="server" AutoPostBack="true" />
+                        <asp:CheckBox ID="cbUseDCode" runat="server" AutoPostBack="true"  Enabled ="false" />
                     </td>
-                </tr>
+                </tr>--%>
                 <tr valign="top">
                     <td>
                         <b>

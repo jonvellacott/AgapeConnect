@@ -1451,7 +1451,7 @@ padding: 5px 5px 5px 5px;
                             </td>
                             <td width="100%">
                                 <asp:DropDownList ID="ddlLineTypes" runat="server" DataTextField="LocalName" DataValueField="LineTypeId"
-                                    AutoPostBack="true">
+                                 AppendDataBoundItems="true"    AutoPostBack="true">
                                 </asp:DropDownList>
                                 <div id="manualCodes" runat="server" style="float: right;">
                                     <asp:DropDownList ID="ddlAccountCode" runat="server" Width="60px" DataSourceID="dsAccountCodes"
