@@ -217,9 +217,9 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
 
-                Dim lineTypes = From c In d.AP_StaffRmb_PortalLineTypes Where c.PortalId = PortalId Order By c.LocalName Select c.AP_Staff_RmbLineType.LineTypeId, c.LocalName
-                ddlLineTypes.DataSource = lineTypes
-                ddlLineTypes.DataBind()
+                'Dim lineTypes = From c In d.AP_StaffRmb_PortalLineTypes Where c.PortalId = PortalId Order By c.LocalName Select c.AP_Staff_RmbLineType.LineTypeId, c.LocalName
+                'ddlLineTypes.DataSource = lineTypes
+                'ddlLineTypes.DataBind()
 
                 ResetMenu()
 
@@ -960,11 +960,27 @@ Namespace DotNetNuke.Modules.StaffRmbMod
             Try
 
 
+               
                 pnlMain.Visible = True
                 pnlMainAdvance.Visible = False
                 hfRmbNo.Value = RmbNo
                 Dim q = From c In d.AP_Staff_Rmbs Where c.RMBNo = RmbNo
                 If q.Count > 0 Then
+
+
+
+                    'Dim lineTypes = From c In d.AP_StaffRmb_PortalLineTypes Where c.PortalId = PortalId Order By c.LocalName Select c.AP_Staff_RmbLineType.LineTypeId, c.LocalName, c.PCode, c.DCode
+
+                    'If q.First.Department Then
+                    '    lineTypes = lineTypes.Where(Function(x) Not String.IsNullOrEmpty(x.DCode))
+
+                    'Else
+                    '    lineTypes = lineTypes.Where(Function(x) Not String.IsNullOrEmpty(x.DCode))
+                    'End If
+                    'ddlLineTypes.DataSource = lineTypes
+                    'ddlLineTypes.DataBind()
+
+
 
                     Dim RmbRel As Integer = StaffRmbFunctions.Authenticate(UserId, RmbNo, PortalId)
 
@@ -2076,6 +2092,20 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
             ddlCostcenter.SelectedValue = ddlChargeTo.SelectedValue
+
+            ddlLineTypes.Items.Clear()
+            Dim lineTypes = From c In d.AP_StaffRmb_PortalLineTypes Where c.PortalId = PortalId Order By c.LocalName Select c.AP_Staff_RmbLineType.LineTypeId, c.LocalName, c.PCode, c.DCode
+
+            If StaffBrokerFunctions.IsDept(PortalId, ddlChargeTo.SelectedValue) Then
+                lineTypes = lineTypes.Where(Function(x) x.DCode <> "")
+
+            Else
+                lineTypes = lineTypes.Where(Function(x) x.PCode <> "")
+            End If
+            ddlLineTypes.DataSource = lineTypes
+            ddlLineTypes.DataBind()
+          
+
             ResetNewExpensePopup(True)
             cbRecoverVat.Checked = False
             tbVatRate.Text = ""
@@ -2368,9 +2398,36 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                     '    phLineDetail.Controls.Add(theControl)
                     'End If
                     'theControl = Nothing
+                    ddlLineTypes.Items.Clear()
+                    Dim lineTypes = From c In d.AP_StaffRmb_PortalLineTypes Where c.PortalId = PortalId Order By c.LocalName Select c.AP_Staff_RmbLineType.LineTypeId, c.LocalName, c.PCode, c.DCode
+
+                    If StaffBrokerFunctions.IsDept(PortalId, theLine.First.CostCenter) Then
+                        lineTypes = lineTypes.Where(Function(x) x.DCode <> "")
+
+                    Else
+                        lineTypes = lineTypes.Where(Function(x) x.PCode <> "")
+                    End If
+                    ddlLineTypes.DataSource = lineTypes
+                    ddlLineTypes.DataBind()
+
+
+
+                    If lineTypes.Where(Function(x) x.LineTypeId = theLine.First.LineType).Count = 0 Then
+                        ddlLineTypes.Items.Add(New ListItem(theLine.First.AP_Staff_RmbLineType.AP_StaffRmb_PortalLineTypes.Where(Function(x) x.PortalId = PortalId).First.LocalName, theLine.First.LineType))
+                        '  ddlLineTypes.Items.Add(New ListItem(theLine.First.LineType,"Wrong type"))
+
+                        'Wrong Type... needs changing!
+
+
+                    End If
+
+
+
 
                     ddlLineTypes.SelectedValue = theLine.First.LineType
                     ddlLineTypes_SelectedIndexChanged(Me, Nothing)
+
+
                     Dim ucType As Type = theControl.GetType()
                     ucType.GetProperty("Comment").SetValue(theControl, theLine.First.Comment, Nothing)
                     ucType.GetProperty("Amount").SetValue(theControl, CDbl(theLine.First.GrossAmount), Nothing)
@@ -3975,8 +4032,9 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                     Dim Travel As Double = 0
                     Dim AllowancesNontax As Double = 0
                     Dim AllowancesTax As Double = 0
-
-                    Dim TravelExpenseTypes = {32}
+                    '######################## NEED TO SET THE TRAVEL TYPE ########################
+                    Dim TravelExpenseTypes = {58}
+                    '######################## NEED TO SET THE TRAVEL TYPE ########################
                     Try
                         Travel = myRmbs.Where(Function(x) TravelExpenseTypes.Contains(x.LineType)).Sum(Function(y) CType(y.GrossAmount, Decimal?)) ' This needs better definition
 
