@@ -960,7 +960,10 @@ Namespace DotNetNuke.Modules.StaffRmbMod
             Try
 
 
-               
+                pnlError.Visible = False
+                btnSubmit.Enabled = True
+                btnProcess.Enabled = True
+                btnApprove.Enabled = True
                 pnlMain.Visible = True
                 pnlMainAdvance.Visible = False
                 hfRmbNo.Value = RmbNo
@@ -1088,6 +1091,8 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                     lblSubBy.Text = UserController.GetUserById(PortalId, q.First.UserId).DisplayName
 
 
+
+                    lblWrongType.Visible = False
 
 
                     GridView1.DataSource = q.First.AP_Staff_RmbLines
@@ -1358,7 +1363,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
 
-                    pnlError.Visible = False
+
                     If IsAccounts() Then
                         tbAccComments.Visible = True
                         tbAccComments.Enabled = True
@@ -2409,14 +2414,17 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                     End If
                     ddlLineTypes.DataSource = lineTypes
                     ddlLineTypes.DataBind()
-
-
+                    lblIncType.Visible = False
+                    btnAddLine.Enabled = True
 
                     If lineTypes.Where(Function(x) x.LineTypeId = theLine.First.LineType).Count = 0 Then
                         ddlLineTypes.Items.Add(New ListItem(theLine.First.AP_Staff_RmbLineType.AP_StaffRmb_PortalLineTypes.Where(Function(x) x.PortalId = PortalId).First.LocalName, theLine.First.LineType))
                         '  ddlLineTypes.Items.Add(New ListItem(theLine.First.LineType,"Wrong type"))
 
                         'Wrong Type... needs changing!
+                        lblIncType.Visible = True
+                        btnAddLine.Enabled = False
+
 
 
                     End If
@@ -2565,9 +2573,28 @@ Namespace DotNetNuke.Modules.StaffRmbMod
             End If
         End Sub
 
+        
+
 #End Region
 #Region "DropDownList Events"
         Protected Sub ddlLineTypes_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ddlLineTypes.SelectedIndexChanged
+            If lblIncType.Visible And ddlLineTypes.SelectedIndex <> ddlLineTypes.Items.Count - 1 Then
+                Dim oldValue = ddlLineTypes.SelectedValue
+                ddlLineTypes.Items.Clear()
+                Dim lineTypes = From c In d.AP_StaffRmb_PortalLineTypes Where c.PortalId = PortalId Order By c.LocalName Select c.AP_Staff_RmbLineType.LineTypeId, c.LocalName, c.PCode, c.DCode
+
+                If StaffBrokerFunctions.IsDept(PortalId, ddlCostcenter.SelectedValue) Then
+                    lineTypes = lineTypes.Where(Function(x) x.DCode <> "")
+
+                Else
+                    lineTypes = lineTypes.Where(Function(x) x.PCode <> "")
+                End If
+                ddlLineTypes.DataSource = lineTypes
+                ddlLineTypes.DataBind()
+                lblIncType.Visible = False
+                btnAddLine.Enabled = True
+            End If
+
             ResetNewExpensePopup(False)
 
         End Sub
@@ -2914,6 +2941,26 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
             Return StaffBrokerFunctions.GetFormattedCurrency(PortalId, (AccountBalance + Advance - (rTotal + aTotal)).ToString("0.00"))
 
+        End Function
+        Public Function IsWrongType(ByVal CostCenter As String, ByVal LineTypeId As Integer) As Boolean
+
+            Dim isD = StaffBrokerFunctions.IsDept(PortalId, CostCenter)
+            Dim rtn As Boolean
+            If isD Then
+                rtn = d.AP_StaffRmb_PortalLineTypes.Where(Function(x) x.PortalId = PortalId And x.LineTypeId = LineTypeId And x.DCode <> "").Count = 0
+            Else
+                rtn = d.AP_StaffRmb_PortalLineTypes.Where(Function(x) x.PortalId = PortalId And x.LineTypeId = LineTypeId And x.PCode <> "").Count = 0
+
+
+            End If
+            If rtn Then
+                lblWrongType.Visible = True
+                pnlError.Visible = True
+                btnSubmit.Enabled = False
+                btnProcess.Enabled = False
+                btnApprove.Enabled = False
+            End If
+            Return rtn
         End Function
 
 #End Region

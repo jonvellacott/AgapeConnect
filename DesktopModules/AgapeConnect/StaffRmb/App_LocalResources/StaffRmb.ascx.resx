@@ -546,4 +546,10 @@
   <data name="lblBankAccount.Text" xml:space="preserve">
     <value>Bank Account:</value>
   </data>
+  <data name="lblWrongType.Text" xml:space="preserve">
+    <value>This expenses uses an expense that is not valid for this Responsibility Center. You must edit this line and select a valid expense type, before you can submit/process this reimbursement.</value>
+  </data>
+  <data name="lblWrongTypes.Text" xml:space="preserve">
+    <value>The Reimbursement contains expenses with incomatible expense types - highlighted in red. Some expense types are only valid or Personal Reimbursments and others for Department Reimbursements. To correct this, edit the line(s) and select a new (valid) expense type. You must fix these errors before your can Submit/Approve/Process this r.eimbursment.</value>
+  </data>
 </root>

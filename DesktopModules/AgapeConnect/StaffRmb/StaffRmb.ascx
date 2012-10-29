@@ -1158,7 +1158,7 @@ padding: 5px 5px 5px 5px;
                                         <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("LineType") %>'></asp:TextBox>
                                     </EditItemTemplate>
                                     <ItemTemplate>
-                                        <asp:Label ID="Label1" runat="server" Text='<%# GetLocalTypeName(Eval("AP_Staff_RmbLineType.LineTypeId") )%>'></asp:Label>
+                                        <asp:Label ID="Label1" runat="server" CssClass='<%# IIF(IsWrongType(Eval("CostCenter"), Eval("LineType")), "ui-state-error ui-corner-all","") %>' ToolTip='<%# IIF(IsWrongType(Eval("CostCenter"), Eval("LineType")),Translate("lblWrongType"),"") %>' Text='<%# GetLocalTypeName(Eval("AP_Staff_RmbLineType.LineTypeId") )%>'></asp:Label>
                                     </ItemTemplate>
                                     <HeaderStyle ForeColor="White" />
                                     <ItemStyle HorizontalAlign="Center" />
@@ -1270,6 +1270,11 @@ padding: 5px 5px 5px 5px;
                         <legend>
                           <asp:Label ID="Label44" runat="server" CssClass="AgapeH4" ResourceKey="lblErrorMessage"></asp:Label>
                         </legend>
+                            <asp:Label ID="lblWrongType" runat="server" class="ui-state-error ui-corner-all"
+                Style="padding: 3px; margin-top: 5px; display: block; " resourceKey="lblWrongTypes">
+
+
+                            </asp:Label>
                         <asp:Label ID="lblErrorMessage" runat="server" class="ui-state-error ui-corner-all"
                 Style="padding: 3px; margin-top: 5px; display: block; " ></asp:Label>
                           
@@ -1453,10 +1458,14 @@ padding: 5px 5px 5px 5px;
                                 <asp:DropDownList ID="ddlLineTypes" runat="server" DataTextField="LocalName" DataValueField="LineTypeId"
                                  AppendDataBoundItems="true"    AutoPostBack="true">
                                 </asp:DropDownList>
+                                  <asp:Label ID="lblIncType" runat="server" CssClass="ui-state-error ui-corner-all" Text="Incompatible Type" Visible="false"></asp:Label>
+
                                 <div id="manualCodes" runat="server" style="float: right;">
                                     <asp:DropDownList ID="ddlAccountCode" runat="server" Width="60px" DataSourceID="dsAccountCodes"
                                         DataTextField="DisplayName" DataValueField="AccountCode" Enabled="false">
                                     </asp:DropDownList>
+
+                                  
                                     <asp:LinqDataSource ID="dsAccountCodes" runat="server" ContextTypeName="StaffRmb.StaffRmbDataContext"
                                         EntityTypeName="" Select="new (AccountCode,  AccountCode + ' ' + '-' + ' ' + AccountCodeName  as DisplayName )"
                                         TableName="AP_StaffBroker_AccountCodes" OrderBy="AccountCode" Where="PortalId == @PortalId">
