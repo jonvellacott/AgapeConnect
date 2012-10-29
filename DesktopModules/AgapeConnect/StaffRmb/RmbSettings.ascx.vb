@@ -193,13 +193,30 @@ Namespace DotNetNuke.Modules.StaffRmb
                     If CType(TabModuleSettings("MenuSize"), String) <> "" Then
                         tbMenuSize.Text = CType(TabModuleSettings("MenuSize"), String)
                     End If
-                    If CType(TabModuleSettings("UseDCode"), String) <> "" Then
-                        cbUseDCode.Checked = CType(TabModuleSettings("UseDCode"), Boolean)
+                    'If CType(TabModuleSettings("UseDCode"), String) <> "" Then
+                    '    cbUseDCode.Checked = CType(TabModuleSettings("UseDCode"), Boolean)
+                    'End If
+
+                    If CType(TabModuleSettings("ShowRemBal"), String) <> "" Then
+                        cbRemBal.Checked = CType(TabModuleSettings("ShowRemBal"), Boolean)
                     End If
+
                     'If CType(TabModuleSettings("CurConverter"), String) <> "" Then
                     '    cbCurConverter.Checked = CType(TabModuleSettings("CurConverter"), Boolean)
                     'End If
                     cbCurConverter.Checked = StaffBrokerFunctions.GetSetting("CurConverter", PortalId) = "True"
+                    cbDatapump.Checked = StaffBrokerFunctions.GetSetting("RmbDownload", PortalId) <> "False"
+                    pnlSingle.Visible = Not cbDatapump.Checked
+                    If StaffBrokerFunctions.GetSetting("RmbSinglePump", PortalId) <> "True" Then
+                        btnDownload.Enabled = Not cbDatapump.Checked
+                        btnDownload.Text = "Download"
+                        lblDownloading.Visible = False
+                    Else
+                        btnDownload.Enabled = False
+                        btnDownload.Text = "Downloading"
+                        lblDownloading.Visible = True
+                    End If
+
 
 
                     ddlAccountsPayable.DataBind()
@@ -219,7 +236,7 @@ Namespace DotNetNuke.Modules.StaffRmb
                         oopsControlAccount.Text = ""
 
                     End If
-                   
+
 
                     'Advance Account
                     If ddlAccountsReceivable.Items.Count = 0 Then
@@ -286,7 +303,7 @@ Namespace DotNetNuke.Modules.StaffRmb
                     End If
                 End If
 
-                GridView1.Columns(4).Visible = cbUseDCode.Checked
+                '  GridView1.Columns(4).Visible = cbUseDCode.Checked
 
 
 
@@ -373,7 +390,7 @@ Namespace DotNetNuke.Modules.StaffRmb
             objModules.UpdateTabModuleSetting(TabModuleId, "EntOvernight", tbEntOvernight.Text)
             objModules.UpdateTabModuleSetting(TabModuleId, "EntDay", tbEntDay.Text)
             objModules.UpdateTabModuleSetting(TabModuleId, "MenuSize", tbMenuSize.Text)
-            objModules.UpdateTabModuleSetting(TabModuleId, "UseDCode", cbUseDCode.Checked)
+            '  objModules.UpdateTabModuleSetting(TabModuleId, "UseDCode", cbUseDCode.Checked)
             objModules.UpdateTabModuleSetting(TabModuleId, "ControlAccount", ddlControlAccount.SelectedValue)
             objModules.UpdateTabModuleSetting(TabModuleId, "AccountsReceivable", ddlAccountsReceivable.SelectedValue)
 
@@ -385,6 +402,11 @@ Namespace DotNetNuke.Modules.StaffRmb
 
             ' objModules.UpdateTabModuleSetting(TabModuleId, "CurConverter", cbCurConverter.Checked)
             StaffBrokerFunctions.SetSetting("CurConverter", cbCurConverter.Checked, PortalId)
+
+            objModules.UpdateTabModuleSetting(TabModuleId, "ShowRemBal", cbRemBal.Checked)
+
+            StaffBrokerFunctions.SetSetting("RmbDownload", cbDatapump.Checked, PortalId)
+
 
 
             objModules.UpdateTabModuleSetting(TabModuleId, "isLoaded", "Yes")
@@ -506,6 +528,15 @@ Namespace DotNetNuke.Modules.StaffRmb
                 d.SubmitChanges()
                 gvPerDiemMulti.DataBind()
             End If
+        End Sub
+
+        Protected Sub btnDownload_Click(sender As Object, e As EventArgs) Handles btnDownload.Click
+
+            StaffBrokerFunctions.SetSetting("RmbSinglePump", True, PortalId)
+            btnDownload.Enabled = False
+            btnDownload.Text = "Downloading"
+            lblDownloading.Visible = True
+
         End Sub
     End Class
 

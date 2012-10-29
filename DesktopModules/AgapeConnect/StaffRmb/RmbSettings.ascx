@@ -3,6 +3,11 @@
 <%@ Register Assembly="DotNetNuke" Namespace="DotNetNuke.UI.WebControls" TagPrefix="cc1" %>
 <%@ Register TagPrefix="dnn" TagName="TextEditor" Src="~/controls/TextEditor.ascx" %>
 <%@ Register TagPrefix="dnn" TagName="Label" Src="~/controls/LabelControl.ascx" %>
+
+<script src="/js/engage.itoggle/engage.itoggle.js"></script>
+<script src="/js/engage.itoggle/jquery.easing.1.3.js"></script>
+
+<link href="/js/engage.itoggle/engage.itoggle.css" rel="stylesheet" />
 <script src="/js/jquery.watermarkinput.js" type="text/javascript"></script>
 <script src="/js/jquery.numeric.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -21,6 +26,35 @@
             $('.numeric').numeric();
             $('.pdName').Watermark('Rate Name');
             $('.pdValue').Watermark('Rate Value');
+            $('.aButton').button();
+
+            $('input.iPhoneSwitch:checkbox').iToggle({
+                easing: 'easeOutExpo',
+               keepLabel: true,
+                easing: 'easeInExpo',
+                speed: 300,
+                onClick: function () {
+                    //Function here
+                },
+                onClickOn: function () {
+                    //Function here
+                    alert('On');
+                },
+                onClickOff: function () {
+                    //Function here
+                },
+                onSlide: function () {
+                    //Function here
+                },
+                onSlideOn: function () {
+                    //Function here
+                },
+                onSlideOff: function () {
+                    //Function here
+                }
+            });
+            
+
 
         }
 
@@ -44,6 +78,10 @@
     </ul>
     <div style="width: 100%; min-height: 350px; background-color: #FFFFFF;">
         <div id='Tab1-tab'>
+
+            <table>
+                <tr style="vertical-align: top;">
+                    <td>
             <table style="font-size: 9pt;">
                 <tr>
                     <td>
@@ -109,6 +147,17 @@
                         <asp:TextBox ID="tbMenuSize" runat="server" Width="80px"></asp:TextBox>
                     </td>
                 </tr>
+               <tr>
+                    <td>
+                        <b>
+                            <dnn:Label ID="Label30" runat="server" ControlName="cbRemBal" ResourceKey="lblShowRemBal" />
+                        </b>
+                    </td>
+                    <td>
+                        <asp:CheckBox ID="cbRemBal" runat="server"   />
+                    </td>
+                </tr>
+
                 <tr>
                     <td>
                         <b>
@@ -256,6 +305,40 @@
                         </asp:DropDownList>
                         <asp:Label ID="lblOopsBank" runat="server" Text="" ForeColor="Red"></asp:Label>
                         
+                    </td>
+                </tr>
+            </table>
+                        </td>
+                    <td>
+                        <!-- Datapump Manager -->
+                        <fieldset>
+                                <legend class="AgapeH5">Datapump Manager</legend>
+
+
+                            <table>
+                                <tr>
+                                    <td>
+                        <b>
+                            <dnn:Label ID="Label28" runat="server" ControlName="cbDatapump" Text="Autopump Enabled:" HelpText="When checked (recommended), the datapump will automatically insert your reimbursements (as unreleased batches). The datapump runs every 5 minutes (or so)" />
+                        </b>
+                    </td>
+                    <td>
+                         <asp:CheckBox ID="cbDatapump" runat="server" class="iPhoneSwitch"  />
+                    </td>
+                                </tr>
+                                <tr ID="pnlSingle" runat="server">
+                                    <td><dnn:Label ID="Label29" runat="server"  Text="Download Once:"  HelpText="If the datapump is disabled, can have the datapump donwload pending transactins (just once) the next time it runs" /></td>
+                                    <td>
+                                        <asp:Button ID="btnDownload" runat="server" Text="Button" Font-Size="x-small" CssClass="aButton" />
+                                        <asp:Label ID="lblDownloading" runat="server" Visible="false" Font-Size="X-Small" Font-Italic="true" ForeColor="Gray"  Text="Pending expenses will download within 5 minutes."></asp:Label>
+                                    </td>
+                                </tr>
+                            </table>
+                           
+
+
+                        </fieldset>
+
                     </td>
                 </tr>
             </table>
@@ -899,16 +982,16 @@
         </div>
         <div id='Tab4-tab'>
             <table style="font-size: 9pt;">
-                <tr>
+    <%--            <tr>
                     <td>
                         <b>
                             <dnn:Label ID="lblUseDCode" runat="server" ControlName="cbUserDCode" ResourceKey="lblUseDCode" />
                         </b>
                     </td>
                     <td>
-                        <asp:CheckBox ID="cbUseDCode" runat="server" AutoPostBack="true" />
+                        <asp:CheckBox ID="cbUseDCode" runat="server" AutoPostBack="true"  Enabled ="false" />
                     </td>
-                </tr>
+                </tr>--%>
                 <tr valign="top">
                     <td>
                         <b>
