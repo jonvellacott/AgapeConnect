@@ -34,7 +34,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 #Region "Page Events"
         Protected Sub Page_Load1(sender As Object, e As System.EventArgs) Handles Me.Load
             hfPortalId.Value = PortalId
-
+            lblMovedMenu.Visible = IsEditable
 
 
             For i As Integer = 2 To hfRows.Value
