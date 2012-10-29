@@ -315,4 +315,10 @@
   <data name="lblBankAccount.Text" xml:space="preserve">
     <value>Bank Account</value>
   </data>
+  <data name="lblShowRemBal.Help" xml:space="preserve">
+    <value>Displays the reimbaining balance (once this and other "Pending Download" transactions have been processed.) This can be helpful in determining if there are sufficient funds for the reimbursment.</value>
+  </data>
+  <data name="lblShowRemBal.Text" xml:space="preserve">
+    <value>Show Remaining Balance?:</value>
+  </data>
 </root>

@@ -53,6 +53,8 @@ Public Class DatatSync
         Public ExpensesPayable As Double 'Payable (including NET taxable exenses)
         Public SpSalaryAdv As Double 'Taxable Expenses
         Public PreviousSalary As Double 'Taxable
+        Public AccountBalance As Double
+        Public AdvanceBalance As Double
 
     End Structure
 
@@ -87,6 +89,7 @@ Public Class DatatSync
         Public ControlAccount As String
         Public APIVersion As String
         Public VersionStatus As String
+
     End Structure
 
 
@@ -260,6 +263,25 @@ Public Class DatatSync
         Return "HelloWorld"
     End Function
 
+    <WebMethod()> _
+    Public Function TestAPBalances(ByVal Password As String) As Boolean
+        Dim bals As New List(Of APBalanceInfo)
+        Dim ins As New APBalanceInfo
+        ins.AccountBalance = 0
+        ins.AdvanceBalance = 0
+        ins.CostCenter = "1102"
+        ins.ExpensesPayable = 0
+        ins.PreviousSalary = 0
+        ins.SpSalaryAdv = 0
+        bals.Add(ins)
+        Return SetAPBalances(Password, bals.ToArray)
+
+
+
+
+
+    End Function
+
 
     <WebMethod()> _
     Public Function SetAPBalances(ByVal Password As String, ByVal Balances As APBalanceInfo()) As Boolean
@@ -279,6 +301,8 @@ Public Class DatatSync
             insert.ExpPayable = row.ExpensesPayable
             insert.PrevSalary = row.PreviousSalary
             insert.ExpTaxable = row.SpSalaryAdv
+            insert.AccountBalance = row.AccountBalance
+            insert.AdvanceBalance = row.AdvanceBalance
             insert.PortalId = PS.PortalId
             d.AP_Staff_SuggestedPayments.InsertOnSubmit(insert)
         Next
@@ -411,6 +435,8 @@ Public Class DatatSync
         If Validate(pword) = False Then
             Return
         End If
+
+
         Dim PS = CType(HttpContext.Current.Items("PortalSettings"), PortalSettings)
         Dim objEventLog As New DotNetNuke.Services.Log.EventLog.EventLogController
         If uResp.TntStatus.Status = "OK" And GetSetting("tntFlag", PS.PortalId) = "Downloading" Then
@@ -740,8 +766,20 @@ Public Class DatatSync
     Private Sub ProcessRMB(ByRef rtn As DownloadResponse)
 
 
+
+
         Dim d As New StaffRmb.StaffRmbDataContext
         Dim PS = CType(HttpContext.Current.Items("PortalSettings"), PortalSettings)
+        If Not ((GetSetting("RmbDownload", PS.PortalId) <> "False" Or GetSetting("RmbSinglePump", PS.PortalId) = "True")) Then
+            Return
+        End If
+        If GetSetting("RmbSinglePump", PS.PortalId) = "True" Then
+            SetSetting("RmbSinglePump", False, PS.PortalId)
+        End If
+
+
+
+
         Dim Rmbs As New List(Of Rmb)
 
 

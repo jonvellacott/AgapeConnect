@@ -28,6 +28,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
         Dim objEventLog As New DotNetNuke.Services.Log.EventLog.EventLogController
         'Dim SpouseList As IQueryable(Of StaffBroker.User)  '= AgapeStaffFunctions.SpouseIsLeader()
         Dim VAT3ist As String() = {"111X", "112X", "113", "116", "514X"}
+
 #End Region
 
 #Region "Page Events"
@@ -58,7 +59,27 @@ Namespace DotNetNuke.Modules.StaffRmbMod
             Next
         End Sub
 
+        Private Sub AddClientAction(ByVal Title As String, ByVal theScript As String, ByRef root As DotNetNuke.Entities.Modules.Actions.ModuleAction)
+            Dim jsAction As New DotNetNuke.Entities.Modules.Actions.ModuleAction(ModuleContext.GetNextActionID)
+            With jsAction
+                .Title = Title
+                .CommandName = DotNetNuke.Entities.Modules.Actions.ModuleActionType.AddContent
+                .ClientScript = theScript
+                .Secure = Security.SecurityAccessLevel.Edit
+            End With
+            root.Actions.Add(jsAction)
+        End Sub
+
         Private Sub Page_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Me.Init
+
+            Dim addTitle = MyBase.Actions.Add(GetNextActionID, "AgapeConnect", "AgapeConnect", "", "", "", "", True, SecurityAccessLevel.Edit, True, False)
+            addTitle.Actions.Add(GetNextActionID, "Settings", "RmbSettings", "", "action_settings.gif", EditUrl("RmbSettings"), False, SecurityAccessLevel.Edit, True, False)
+
+            AddClientAction("Download Batched Transactions", "showDownload()", addTitle)
+            AddClientAction("Suggested Payments", "showSuggestedPayments()", addTitle)
+
+
+
             If Not Page.IsPostBack And Request.QueryString("RmbNo") <> "" Then
                 hfRmbNo.Value = CInt(Request.QueryString("RmbNo"))
             End If
@@ -72,7 +93,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                     LoadDefaultSettings()
                 End If
                 Try
-                    
+
                     ddlBankAccount.SelectedValue = CStr(Settings("BankAccount"))
 
                 Catch ex As Exception
@@ -147,9 +168,9 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
                 Dim acc As Boolean = IsAccounts()
-                btnDownloadBatch.Visible = acc
+                ' btnDownloadBatch.Visible = acc
                 btnAdvDownload.Visible = acc
-                btnShowSuggestedPayments.Visible = acc
+                ' btnShowSuggestedPayments.Visible = acc
                 ddlCostcenter.Enabled = acc
                 ddlAccountCode.Enabled = acc
                 pnlAccountsOptions.Visible = acc
@@ -180,7 +201,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                 pnlMain.Visible = False
                 pnlSplash.Visible = True
 
-                btnSettings.Visible = IsEditable
+                '  btnSettings.Visible = IsEditable
 
 
 
@@ -196,9 +217,9 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
 
-                Dim lineTypes = From c In d.AP_StaffRmb_PortalLineTypes Where c.PortalId = PortalId Order By c.LocalName Select c.AP_Staff_RmbLineType.LineTypeId, c.LocalName
-                ddlLineTypes.DataSource = lineTypes
-                ddlLineTypes.DataBind()
+                'Dim lineTypes = From c In d.AP_StaffRmb_PortalLineTypes Where c.PortalId = PortalId Order By c.LocalName Select c.AP_Staff_RmbLineType.LineTypeId, c.LocalName
+                'ddlLineTypes.DataSource = lineTypes
+                'ddlLineTypes.DataBind()
 
                 ResetMenu()
 
@@ -764,7 +785,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
 
-                    lblAdvCur.Text = StaffBrokerFunctions.GetSetting("Currency", PortalId)
+                    lblAdvCur.Text = "" 'StaffBrokerFunctions.GetSetting("Currency", PortalId)
                     AdvAmount.Text = q.First.RequestAmount.Value.ToString("0.00")
                     AdvReason.Text = q.First.RequestText
                     AdvDate.Text = Translate("AdvDate").Replace("[DATE]", q.First.RequestDate.Value.ToShortDateString)
@@ -788,8 +809,28 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                     If Not q.First.ProcessedDate Is Nothing Then
                         AdvDate.Text &= "<br />" & Translate("AdvProcessed").Replace("[DATE]", q.First.ProcessedDate.Value.ToShortDateString)
                     End If
-                    AccBal.Text = StaffBrokerFunctions.GetSetting("Currency", PortalId) & "3000"
-                    AdvBal.Text = StaffBrokerFunctions.GetSetting("Currency", PortalId) & "150"
+
+                    Dim theStaff = StaffBrokerFunctions.GetStaffMember(q.First.UserId)
+
+
+                    AccBal.Text = "Unknown"
+                    AdvBal.Text = "Unknown"
+                    Dim AdvPay = From c In ds.AP_Staff_SuggestedPayments Where c.PortalId = PortalId And c.CostCenter.StartsWith(theStaff.CostCenter)
+
+                    If AdvPay.Count > 0 Then
+                        If Not AdvPay.First.AdvanceBalance Is Nothing Then
+                            AdvBal.Text = StaffBrokerFunctions.GetFormattedCurrency(PortalId, AdvPay.First.AdvanceBalance.Value.ToString("0.00"))
+                        End If
+                        If Not AdvPay.First.AccountBalance Is Nothing Then
+                            AccBal.Text = StaffBrokerFunctions.GetFormattedCurrency(PortalId, AdvPay.First.AccountBalance.Value.ToString("0.00"))
+                        End If
+                    End If
+
+                   
+
+
+                    '   AccBal.Text = StaffBrokerFunctions.GetSetting("Currency", PortalId) & "3000"
+                    '   AdvBal.Text = StaffBrokerFunctions.GetSetting("Currency", PortalId) & "150"
 
                     Select Case q.First.RequestStatus
 
@@ -919,11 +960,30 @@ Namespace DotNetNuke.Modules.StaffRmbMod
             Try
 
 
+                pnlError.Visible = False
+                btnSubmit.Enabled = True
+                btnProcess.Enabled = True
+                btnApprove.Enabled = True
                 pnlMain.Visible = True
                 pnlMainAdvance.Visible = False
                 hfRmbNo.Value = RmbNo
                 Dim q = From c In d.AP_Staff_Rmbs Where c.RMBNo = RmbNo
                 If q.Count > 0 Then
+
+
+
+                    'Dim lineTypes = From c In d.AP_StaffRmb_PortalLineTypes Where c.PortalId = PortalId Order By c.LocalName Select c.AP_Staff_RmbLineType.LineTypeId, c.LocalName, c.PCode, c.DCode
+
+                    'If q.First.Department Then
+                    '    lineTypes = lineTypes.Where(Function(x) Not String.IsNullOrEmpty(x.DCode))
+
+                    'Else
+                    '    lineTypes = lineTypes.Where(Function(x) Not String.IsNullOrEmpty(x.DCode))
+                    'End If
+                    'ddlLineTypes.DataSource = lineTypes
+                    'ddlLineTypes.DataBind()
+
+
 
                     Dim RmbRel As Integer = StaffRmbFunctions.Authenticate(UserId, RmbNo, PortalId)
 
@@ -1032,6 +1092,8 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
 
+                    lblWrongType.Visible = False
+
 
                     GridView1.DataSource = q.First.AP_Staff_RmbLines
                     GridView1.DataBind()
@@ -1049,21 +1111,20 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
                     Dim theStaff = StaffBrokerFunctions.GetStaffMember(q.First.UserId)
-                    Dim AdvanceCode As String = ""
-                    Dim accountCode As String = ""
+                    'Dim AdvanceCode As String = ""
+                    'Dim accountCode As String = ""
 
-                    If Not String.IsNullOrEmpty(theStaff.CostCenter) Then
-
-
-                        AdvanceCode = theStaff.CostCenter.Trim() & "-" & StaffBrokerFunctions.GetSetting("AdvanceSuffix", PortalId).Trim()
+                    'If Not String.IsNullOrEmpty(theStaff.CostCenter) Then
 
 
-                        accountCode = q.First.CostCenter.Trim
-                    Else
+                    '    AdvanceCode = theStaff.CostCenter.Trim() & "-" & StaffBrokerFunctions.GetSetting("AdvanceSuffix", PortalId).Trim()
 
-                    End If
-                    ' lblAdvanceBalance.Text = "150.00"
 
+                    '    accountCode = q.First.CostCenter.Trim
+                    'Else
+
+                    'End If
+                   
 
 
                     Dim PACMode = (String.IsNullOrEmpty(theStaff.CostCenter) And StaffBrokerFunctions.GetStaffProfileProperty(theStaff.StaffId, "PersonalAccountCode") <> "")
@@ -1074,14 +1135,37 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
 
-                    '  Dim jsonMessage = "$.getJSON('" & GetJsonAccountString() & "', function(json){alert('hello'); $(#" & lblAccountBalance.ClientID & ").html(json) ;});"
-                    Dim JsonMessage As String = "GetAccountBalance('" & GetJsonAccountString(accountCode) & "'); "
-                    JsonMessage &= "GetAdvanceBalance('" & GetJsonAccountString(AdvanceCode) & "'); "
-                    SendMessage("", JsonMessage, True)
+                    'Dim JsonMessage As String = "GetAccountBalance('" & GetJsonAccountString(accountCode) & "'); "
+                    'JsonMessage &= "GetAdvanceBalance('" & GetJsonAccountString(AdvanceCode) & "'); "
+                    'SendMessage("", JsonMessage, True)
+
+
+                    lblAccountBalance.Text = "Unknown"
+                    lblAdvanceBalance.Text = "Unknown"
+                    hfAccountBalance.Value = 0.0
+                    Dim AdvPay = From c In ds.AP_Staff_SuggestedPayments Where c.PortalId = PortalId And c.CostCenter.StartsWith(theStaff.CostCenter)
+
+                    If AdvPay.Count > 0 Then
+                        If Not AdvPay.First.AdvanceBalance Is Nothing Then
+                            lblAdvanceBalance.Text = StaffBrokerFunctions.GetFormattedCurrency(PortalId, AdvPay.First.AdvanceBalance.Value.ToString("0.00"))
+                        End If
+
+                    End If
+
+                    Dim AccPay = From c In ds.AP_Staff_SuggestedPayments Where c.PortalId = PortalId And c.CostCenter.StartsWith(q.First.CostCenter)
+
+                    If AccPay.Count > 0 Then
+                        If Not AccPay.First.AccountBalance Is Nothing Then
+                            lblAccountBalance.Text = StaffBrokerFunctions.GetFormattedCurrency(PortalId, AccPay.First.AccountBalance.Value.ToString("0.00"))
+                            hfAccountBalance.Value = AccPay.First.AccountBalance
+                        End If
+
+                    End If
 
 
 
-                    StaffBrokerFunctions.GetSetting("DataserverURL", PortalId)
+
+                    'StaffBrokerFunctions.GetSetting("DataserverURL", PortalId)
                     '   Dim CountryURL = "https://tntdataserver.eu/dataserver/devtest/dataquery/dataqueryservice.asmx"
 
                     '  AccountCode
@@ -1279,7 +1363,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
 
-                    pnlError.Visible = False
+
                     If IsAccounts() Then
                         tbAccComments.Visible = True
                         tbAccComments.Enabled = True
@@ -1983,17 +2067,24 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                     row.CostCenter = ddlChargeTo.SelectedValue
                 Next
                 rmb.First.CostCenter = ddlChargeTo.SelectedValue
-                If tbAdvanceAmount.Text <> "" Then
-                    Try
-                        rmb.First.AdvanceRequest = Double.Parse(tbAdvanceAmount.Text, New CultureInfo("en-US"))
-                    Catch
-                        lblAdvError.Text = Translate("AdvanceError")
-                        Return
-                    End Try
+                If tbAdvanceAmount.Text = "" Then
+                    tbAdvanceAmount.Text = 0
                 End If
+
+                Try
+                    rmb.First.AdvanceRequest = Double.Parse(tbAdvanceAmount.Text, New CultureInfo("en-US"))
+                    If rmb.First.AdvanceRequest > rmb.First.AP_Staff_RmbLines.Sum(Function(x) x.GrossAmount) Then
+                        rmb.First.AdvanceRequest = rmb.First.AP_Staff_RmbLines.Sum(Function(x) x.GrossAmount)
+                        tbAdvanceAmount.Text = rmb.First.AdvanceRequest.ToString("0.00")
+                    End If
+                Catch
+                    lblAdvError.Text = Translate("AdvanceError")
+                    Return
+                End Try
+
                 d.SubmitChanges()
             End If
-
+            LoadRmb(hfRmbNo.Value)
 
         End Sub
 
@@ -2006,6 +2097,20 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
             ddlCostcenter.SelectedValue = ddlChargeTo.SelectedValue
+
+            ddlLineTypes.Items.Clear()
+            Dim lineTypes = From c In d.AP_StaffRmb_PortalLineTypes Where c.PortalId = PortalId Order By c.LocalName Select c.AP_Staff_RmbLineType.LineTypeId, c.LocalName, c.PCode, c.DCode
+
+            If StaffBrokerFunctions.IsDept(PortalId, ddlChargeTo.SelectedValue) Then
+                lineTypes = lineTypes.Where(Function(x) x.DCode <> "")
+
+            Else
+                lineTypes = lineTypes.Where(Function(x) x.PCode <> "")
+            End If
+            ddlLineTypes.DataSource = lineTypes
+            ddlLineTypes.DataBind()
+          
+
             ResetNewExpensePopup(True)
             cbRecoverVat.Checked = False
             tbVatRate.Text = ""
@@ -2025,9 +2130,9 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
         End Sub
-        Protected Sub btnSettings_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btnSettings.Click
-            Response.Redirect(EditUrl("RmbSettings"))
-        End Sub
+        'Protected Sub btnSettings_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btnSettings.Click
+        '    Response.Redirect(EditUrl("RmbSettings"))
+        'End Sub
         Protected Sub btnSplitAdd_Click(sender As Object, e As System.EventArgs) Handles btnSplitAdd.Click
             hfRows.Value += 1
             'tblSplit.Rows.Clear()
@@ -2214,10 +2319,10 @@ Namespace DotNetNuke.Modules.StaffRmbMod
             ScriptManager.RegisterClientScriptBlock(Page, t, "popupDownload", sb.ToString, False)
         End Sub
 
-        Protected Sub btnDownloadBatch_Click(sender As Object, e As System.EventArgs) Handles btnDownloadBatch.Click
-            DownloadBatch()
+        'Protected Sub btnDownloadBatch_Click(sender As Object, e As System.EventArgs) Handles btnDownloadBatch.Click
+        '    DownloadBatch()
 
-        End Sub
+        'End Sub
         Protected Sub btnPrint_Click(sender As Object, e As System.EventArgs) Handles btnPrint.Click
             Dim theRmb = From c In d.AP_Staff_Rmbs Where c.RMBNo = CInt(hfRmbNo.Value)
 
@@ -2298,9 +2403,39 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                     '    phLineDetail.Controls.Add(theControl)
                     'End If
                     'theControl = Nothing
+                    ddlLineTypes.Items.Clear()
+                    Dim lineTypes = From c In d.AP_StaffRmb_PortalLineTypes Where c.PortalId = PortalId Order By c.LocalName Select c.AP_Staff_RmbLineType.LineTypeId, c.LocalName, c.PCode, c.DCode
+
+                    If StaffBrokerFunctions.IsDept(PortalId, theLine.First.CostCenter) Then
+                        lineTypes = lineTypes.Where(Function(x) x.DCode <> "")
+
+                    Else
+                        lineTypes = lineTypes.Where(Function(x) x.PCode <> "")
+                    End If
+                    ddlLineTypes.DataSource = lineTypes
+                    ddlLineTypes.DataBind()
+                    lblIncType.Visible = False
+                    btnAddLine.Enabled = True
+
+                    If lineTypes.Where(Function(x) x.LineTypeId = theLine.First.LineType).Count = 0 Then
+                        ddlLineTypes.Items.Add(New ListItem(theLine.First.AP_Staff_RmbLineType.AP_StaffRmb_PortalLineTypes.Where(Function(x) x.PortalId = PortalId).First.LocalName, theLine.First.LineType))
+                        '  ddlLineTypes.Items.Add(New ListItem(theLine.First.LineType,"Wrong type"))
+
+                        'Wrong Type... needs changing!
+                        lblIncType.Visible = True
+                        btnAddLine.Enabled = False
+
+
+
+                    End If
+
+
+
 
                     ddlLineTypes.SelectedValue = theLine.First.LineType
                     ddlLineTypes_SelectedIndexChanged(Me, Nothing)
+
+
                     Dim ucType As Type = theControl.GetType()
                     ucType.GetProperty("Comment").SetValue(theControl, theLine.First.Comment, Nothing)
                     ucType.GetProperty("Amount").SetValue(theControl, CDbl(theLine.First.GrossAmount), Nothing)
@@ -2438,9 +2573,28 @@ Namespace DotNetNuke.Modules.StaffRmbMod
             End If
         End Sub
 
+        
+
 #End Region
 #Region "DropDownList Events"
         Protected Sub ddlLineTypes_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ddlLineTypes.SelectedIndexChanged
+            If lblIncType.Visible And ddlLineTypes.SelectedIndex <> ddlLineTypes.Items.Count - 1 Then
+                Dim oldValue = ddlLineTypes.SelectedValue
+                ddlLineTypes.Items.Clear()
+                Dim lineTypes = From c In d.AP_StaffRmb_PortalLineTypes Where c.PortalId = PortalId Order By c.LocalName Select c.AP_Staff_RmbLineType.LineTypeId, c.LocalName, c.PCode, c.DCode
+
+                If StaffBrokerFunctions.IsDept(PortalId, ddlCostcenter.SelectedValue) Then
+                    lineTypes = lineTypes.Where(Function(x) x.DCode <> "")
+
+                Else
+                    lineTypes = lineTypes.Where(Function(x) x.PCode <> "")
+                End If
+                ddlLineTypes.DataSource = lineTypes
+                ddlLineTypes.DataBind()
+                lblIncType.Visible = False
+                btnAddLine.Enabled = True
+            End If
+
             ResetNewExpensePopup(False)
 
         End Sub
@@ -2762,6 +2916,53 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                 Return (CInt(hfRmbNo.Value) = -AdvanceNo)
             End If
         End Function
+
+        Public Function GetRemainingBalance() As String
+            Dim AccountBalance As Double = 0
+            If hfAccountBalance.Value <> "" Then
+                AccountBalance = hfAccountBalance.Value
+            End If
+           
+            Dim r = (From c In d.AP_Staff_Rmbs Where c.RMBNo = CInt(hfRmbNo.Value) And PortalId = PortalId).First
+
+            Dim Advance As Double = 0
+            If Not r.AdvanceRequest = Nothing Then
+                Advance = r.AdvanceRequest
+            End If
+
+            Dim theStaff = StaffBrokerFunctions.GetStaffMember(r.UserId)
+            Dim statusList = {RmbStatus.Approved, RmbStatus.PendingDownload, RmbStatus.DownloadFailed}
+            Dim rTotal = (From c In d.AP_Staff_RmbLines Where c.AP_Staff_Rmb.PortalId = PortalId And (c.AP_Staff_Rmb.UserId = theStaff.UserId1 Or c.AP_Staff_Rmb.UserId = theStaff.UserId2) And statusList.Contains(c.AP_Staff_Rmb.Status) Select c.GrossAmount).Sum
+            Dim a = (From c In d.AP_Staff_AdvanceRequests Where c.PortalId = PortalId And (c.UserId = theStaff.UserId1 Or c.UserId = theStaff.UserId2) And statusList.Contains(c.RequestStatus) Select c.RequestAmount)
+            Dim aTotal = 0
+            If a.count > 0 Then
+                aTotal = a.Sum()
+            End If
+
+            Return StaffBrokerFunctions.GetFormattedCurrency(PortalId, (AccountBalance + Advance - (rTotal + aTotal)).ToString("0.00"))
+
+        End Function
+        Public Function IsWrongType(ByVal CostCenter As String, ByVal LineTypeId As Integer) As Boolean
+
+            Dim isD = StaffBrokerFunctions.IsDept(PortalId, CostCenter)
+            Dim rtn As Boolean
+            If isD Then
+                rtn = d.AP_StaffRmb_PortalLineTypes.Where(Function(x) x.PortalId = PortalId And x.LineTypeId = LineTypeId And x.DCode <> "").Count = 0
+            Else
+                rtn = d.AP_StaffRmb_PortalLineTypes.Where(Function(x) x.PortalId = PortalId And x.LineTypeId = LineTypeId And x.PCode <> "").Count = 0
+
+
+            End If
+            If rtn Then
+                lblWrongType.Visible = True
+                pnlError.Visible = True
+                btnSubmit.Enabled = False
+                btnProcess.Enabled = False
+                btnApprove.Enabled = False
+            End If
+            Return rtn
+        End Function
+
 #End Region
 
 #Region "Utilities"
@@ -3779,17 +3980,223 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
         End Sub
 
+        Public Function GetLocalStaffProfileName(ByVal StaffProfileName As String) As String
+            Dim s = Localization.GetString("ProfileProperties_" & StaffProfileName & ".Text", "/DesktopModules/Admin/Security/App_LocalResources/Profile.ascx.resx", System.Threading.Thread.CurrentThread.CurrentCulture.Name)
+            If String.IsNullOrEmpty(s) Then
+                Return StaffProfileName
+            Else
+                Return s
+            End If
+        End Function
 
+        Private Sub GetRSADownload(ByRef myCommand As OleDbCommand)
+
+            'Dim sql2 = "Update [Deductions$A2:J2000] Set F1='', F2='', F3='', F4='', F5='', F6='', F7='', F8='', F9='' ;" ', F10='', F11='', F12='', F13='', F14='', F15='' ;" ',F16='', F17='', F18='', F19='', F20='', F21='', F22='', F23='', F24='', F25='', F26='' ;"
+            'myCommand.CommandText = sql2
+            'myCommand.ExecuteNonQuery()
+
+            'sql2 = "Update [Earnings$A4:H2000] Set F1='', F2='', F3='', F4='', F5='', F6='', F7='';"
+            'myCommand.CommandText = sql2
+            'myCommand.ExecuteNonQuery()
+
+            'Maybe this would be better to do my working out the current period
+            Dim currentRmbs = From c In d.AP_Staff_RmbLines Where c.AP_Staff_Rmb.PortalId = PortalId And c.AP_Staff_Rmb.Status = RmbStatus.Processed 'And c.AP_Staff_Rmb.ProcDate > Today.AddDays(-15) And c.Department = False
+
+            Dim Deductions = DotNetNuke.Entities.Profile.ProfileController.GetPropertyDefinitionsByCategory(PortalId, "Payroll-Deductions")
+            Dim Earnings = DotNetNuke.Entities.Profile.ProfileController.GetPropertyDefinitionsByCategory(PortalId, "Payroll-Earnings")
+
+
+            Dim sql = "Update [Deductions$A2:Z2] Set F1='', F2='' "
+            Dim j As Integer = 3
+            For Each item As DotNetNuke.Entities.Profile.ProfilePropertyDefinition In Deductions
+                sql &= ",F" & j & "='" & GetLocalStaffProfileName(item.PropertyName) & "' "
+                j += 1
+            Next
+
+            myCommand.CommandText = sql
+            myCommand.ExecuteNonQuery()
+
+            Dim StaffTypes = {"National Staff", "National Staff, Overseas", "Centrally Funded"}
+            Dim allStaff = StaffBrokerFunctions.GetStaff(1)
+            '.OrderBy(Function(x) x.LastName).ThenBy(Function(x) x.AP_StaffBroker_Staffs.StaffId)
+            Dim i As Integer = 3
+            For Each row In allStaff
+                'Load Values
+                Dim theUser = UserController.GetUserById(PortalId, row.UserID)
+                Dim theStaff = StaffBrokerFunctions.GetStaffMember(theUser.UserID)
+                If Not (theStaff Is Nothing Or theUser Is Nothing) Then
+
+
+                    Dim CurrentPeriod = StaffBrokerFunctions.GetSetting("CurrentFiscalPeriod", PortalId)
+
+                    Dim EmpCode As String = theUser.Profile.GetPropertyValue("EmployeeCode")
+                    If EmpCode Is Nothing Then
+                        EmpCode = ""
+                    End If
+                    Dim CostCenter = theStaff.CostCenter
+
+                    Dim salary As Double = 0
+                    For Each item As DotNetNuke.Entities.Profile.ProfilePropertyDefinition In Earnings
+                        salary += theUser.Profile.GetPropertyValue(item.PropertyName)
+                    Next
+
+                    'Dim VehicleInsurance As Double = theUser.Profile.GetPropertyValue("VehicleInsurance")
+                    'Dim RetirementPolicies As Double = theUser.Profile.GetPropertyValue("RetirementPolicies")
+                    'Dim DependantParent As Double = theUser.Profile.GetPropertyValue("DependantParent")
+                    'Dim HousingAllowance As Double = theUser.Profile.GetPropertyValue("HousingAllowance")
+
+                    Dim NormalSalary As Double = theUser.Profile.GetPropertyValue("NormalSalary")
+
+                    salary += NormalSalary
+
+
+
+
+
+                    Dim AccountBalance As Double = 0
+                    Dim AdvanceBalance As Double = 0
+                    Try
+
+
+                        Dim sugPay = From c In ds.AP_Staff_SuggestedPayments Where c.PortalId = PortalId And c.CostCenter = CostCenter
+
+
+                        If sugPay.Count > 0 Then
+                            If Not sugPay.First.AccountBalance Is Nothing Then
+                                AccountBalance = sugPay.First.AccountBalance
+                            End If
+
+                            If Not sugPay.First.AdvanceBalance Is Nothing Then
+                                AdvanceBalance = sugPay.First.AdvanceBalance
+                            End If
+                        End If
+                    Catch ex As Exception
+
+                    End Try
+                    'lookup Expenses for current period, user
+                    Dim myRmbs = From c In currentRmbs Where c.AP_Staff_Rmb.UserId = row.UserID
+
+                    Dim Travel As Double = 0
+                    Dim AllowancesNontax As Double = 0
+                    Dim AllowancesTax As Double = 0
+                    '######################## NEED TO SET THE TRAVEL TYPE ########################
+                    Dim TravelExpenseTypes = {58}
+                    '######################## NEED TO SET THE TRAVEL TYPE ########################
+                    Try
+                        Travel = myRmbs.Where(Function(x) TravelExpenseTypes.Contains(x.LineType)).Sum(Function(y) CType(y.GrossAmount, Decimal?)) ' This needs better definition
+
+                    Catch ex As Exception
+
+                    End Try
+
+
+                    Try
+                        AllowancesNontax = myRmbs.Where(Function(x) x.Taxable = False And Not TravelExpenseTypes.Contains(x.LineType)).Sum(Function(y) CType(y.GrossAmount, Decimal?))
+
+                    Catch ex As Exception
+
+                    End Try
+                    Try
+                        AllowancesTax = myRmbs.Where(Function(x) x.Taxable = True And Not TravelExpenseTypes.Contains(x.LineType)).Sum(Function(y) CType(y.GrossAmount, Decimal?))
+
+                    Catch ex As Exception
+
+                    End Try
+
+                    'Check Balances
+                    If AccountBalance - (salary + Travel + AllowancesNontax + AllowancesTax) < 0 Then
+                        'We need to reduce Salary
+                        salary = Math.Max(AccountBalance - (Travel + AllowancesNontax + AllowancesTax), 0)
+                    End If
+
+
+                    'Dim SanLamGroupLife As Double = theUser.Profile.GetPropertyValue("SanlamGroupLife")
+                    'Dim LibertyLifeRAF As Double = theUser.Profile.GetPropertyValue("LibertyLifeRAF")
+                    'Dim OldMutualRAF As Double = theUser.Profile.GetPropertyValue("OldMutualRAF")
+                    'Dim SalaryAdvance As Double = theUser.Profile.GetPropertyValue("SalaryAdvance")
+                    'Dim SavingsScheme As Double = theUser.Profile.GetPropertyValue("SavingsScheme")
+
+
+
+                    'Complete the Deductions columns
+                    sql = "Update [Deductions$A" & i & ":Z" & i & "] Set F1='" & EmpCode.Trim(" ") & "', F2='CCCSA-FIELD STAFF'"
+                    j = 3
+                    For Each item As DotNetNuke.Entities.Profile.ProfilePropertyDefinition In Deductions
+                        Dim Value = theUser.Profile.GetPropertyValue(item.PropertyName)
+                        If Value <> 0 Then
+                            sql &= ",F" & j & "=" & Value
+
+                        End If
+                        j += 1
+                    Next
+
+
+                    sql &= ",F" & j & "=" & 999
+                    j += 1
+
+                    sql &= ",F" & j & "=" & 1
+
+                    sql &= " ;"
+
+                    myCommand.CommandText = sql
+                    myCommand.ExecuteNonQuery()
+
+
+                    'Complete the Earnings Columns
+                    sql = "Update [Earnings$A" & i & ":H" & i & "] Set F1='" & EmpCode.Trim(" ") & "', F2='CCCSA-FIELD STAFF'"
+                    If salary <> 0 Then
+                        sql &= ",F3=" & salary
+                    End If
+                    If Travel <> 0 Then
+                        sql &= ",F4=" & Travel
+                    End If
+                    If AllowancesTax <> 0 Then
+                        sql &= ",F5=" & AllowancesTax
+                    End If
+                    If AllowancesNontax <> 0 Then
+                        sql &= ",F6=" & AllowancesNontax
+                    End If
+                    If CostCenter <> "" Then
+                        sql &= ",F7='" & CostCenter & "'"
+                    End If
+                    If CostCenter <> "" Then
+                        sql &= ",F8=" & AccountBalance
+                    End If
+                    sql &= " ;"
+
+                    myCommand.CommandText = sql
+                    myCommand.ExecuteNonQuery()
+
+
+
+
+
+                    i += 1
+                End If
+            Next
+
+
+
+
+
+
+
+        End Sub
 
         Protected Sub btnSuggestedPayments_Click(sender As Object, e As System.EventArgs) Handles btnSuggestedPayments.Click
+            
+
             Dim filename As String = "SuggestedPayments.xls"
             If StaffBrokerFunctions.GetSetting("NetSalaries", PortalId) = "True" Then
                 filename = "SuggestedPayments-NETSalary.xls"
             End If
-            If Not File.Exists(PortalSettings.HomeDirectoryMapPath & filename) Then
-                File.Copy(Server.MapPath("/DesktopModules/AgapeConnect/StaffRmb/" & filename), PortalSettings.HomeDirectoryMapPath & filename)
-
+            If StaffBrokerFunctions.GetSetting("ZA-Mode", PortalId) = "True" Then
+                filename = "SuggestedPayments-ZA.xls"
+                'filename = filename
             End If
+           
+            File.Copy(Server.MapPath("/DesktopModules/AgapeConnect/StaffRmb/" & filename), PortalSettings.HomeDirectoryMapPath & filename, True)
+
 
 
             Dim connStr As String = "provider=Microsoft.Jet.OLEDB.4.0;Data Source='" & PortalSettings.HomeDirectoryMapPath & filename & "';Extended Properties='Excel 8.0;HDR=NO'"
@@ -3807,8 +4214,10 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
                 Dim sql2 = "Update [Suggested Payments$A4:J1000] Set F1='', F2='', F3='', F4='', F5='',F6='', F7='', F8='', F10='' ;"
-                MyCommand.CommandText = sql2
-                MyCommand.ExecuteNonQuery()
+                'MyCommand.CommandText = sql2
+                'MyCommand.ExecuteNonQuery()
+
+               
 
 
                 Dim q = From c In ds.AP_Staff_SuggestedPayments Where c.PortalId = PortalId
@@ -3976,6 +4385,15 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                 sql2 = "Update [Suggested Payments$P10:P10] Set F1=" & DownloadFormat & " ;"
                 MyCommand.CommandText = sql2
                 MyCommand.ExecuteNonQuery()
+
+
+                If StaffBrokerFunctions.GetSetting("ZA-Mode", PortalId) = "True" Then
+                    GetRSADownload(MyCommand)
+                End If
+
+
+
+
                 MyConnection.Close()
                 Dim attachment As String = "attachment; filename=SuggestedPayments " & period & ".xls"
 
@@ -3993,6 +4411,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                 lblError.Text = ex.Message
                 lblError.Visible = True
                 MyConnection.Close()
+                ' File.Delete(PortalSettings.HomeDirectoryMapPath & filename)
             Finally
 
 

@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ProfileProperties_SanlamGroupLife.Text">
+    <value>Sanlam Group Life</value>
+  </data>
+  <data name="ProfileProperties_SanlamGroupLife.Help">
+    <value />
+  </data>
+  <data name="ProfileProperties_SanlamGroupLife.Required">
+    <value />
+  </data>
+  <data name="ProfileProperties_SanlamGroupLife.Validation">
+    <value />
+  </data>
+  <data name="ProfileProperties_Payroll-Deductions.Header">
+    <value />
+  </data>
+  <data name="ProfileProperties_LibertyLifeRAF.Text">
+    <value>Liberty Life RAF</value>
+  </data>
+  <data name="ProfileProperties_LibertyLifeRAF.Help">
+    <value />
+  </data>
+  <data name="ProfileProperties_LibertyLifeRAF.Required">
+    <value />
+  </data>
+  <data name="ProfileProperties_LibertyLifeRAF.Validation">
+    <value />
+  </data>
+  <data name="ProfileProperties_OldMutualRAF.Text">
+    <value>Old Mutual RAF</value>
+  </data>
+  <data name="ProfileProperties_OldMutualRAF.Help">
+    <value />
+  </data>
+  <data name="ProfileProperties_OldMutualRAF.Required">
+    <value />
+  </data>
+  <data name="ProfileProperties_OldMutualRAF.Validation">
+    <value />
+  </data>
+  <data name="ProfileProperties_SalaryAdvance.Text">
+    <value>Salary Advance</value>
+  </data>
+  <data name="ProfileProperties_SalaryAdvance.Help">
+    <value />
+  </data>
+  <data name="ProfileProperties_SalaryAdvance.Required">
+    <value />
+  </data>
+  <data name="ProfileProperties_SalaryAdvance.Validation">
+    <value />
+  </data>
+  <data name="ProfileProperties_SavingsScheme.Text">
+    <value>Savings Scheme</value>
+  </data>
+  <data name="ProfileProperties_SavingsScheme.Help">
+    <value />
+  </data>
+  <data name="ProfileProperties_SavingsScheme.Required">
+    <value />
+  </data>
+  <data name="ProfileProperties_SavingsScheme.Validation">
+    <value />
+  </data>
+  <data name="ProfileProperties_VehicleInsurance.Text">
+    <value>Vehicle Insurance</value>
+  </data>
+  <data name="ProfileProperties_VehicleInsurance.Help">
+    <value />
+  </data>
+  <data name="ProfileProperties_VehicleInsurance.Required">
+    <value />
+  </data>
+  <data name="ProfileProperties_VehicleInsurance.Validation">
+    <value />
+  </data>
+  <data name="ProfileProperties_Payroll-Earnings.Header">
+    <value />
+  </data>
+  <data name="ProfileProperties_RetirementPolicies.Text">
+    <value>Retirement Policies</value>
+  </data>
+  <data name="ProfileProperties_RetirementPolicies.Help">
+    <value />
+  </data>
+  <data name="ProfileProperties_RetirementPolicies.Required">
+    <value />
+  </data>
+  <data name="ProfileProperties_RetirementPolicies.Validation">
+    <value />
+  </data>
+  <data name="ProfileProperties_DependantParent.Text">
+    <value>Dependant Parent</value>
+  </data>
+  <data name="ProfileProperties_DependantParent.Help">
+    <value />
+  </data>
+  <data name="ProfileProperties_DependantParent.Required">
+    <value />
+  </data>
+  <data name="ProfileProperties_DependantParent.Validation">
+    <value />
+  </data>
+  <data name="ProfileProperties_HousingAllowance.Text">
+    <value>Housing Allowance</value>
+  </data>
+  <data name="ProfileProperties_HousingAllowance.Help">
+    <value />
+  </data>
+  <data name="ProfileProperties_HousingAllowance.Required">
+    <value />
+  </data>
+  <data name="ProfileProperties_HousingAllowance.Validation">
+    <value />
+  </data>
+  <data name="ProfileProperties_NormalSalary.Text">
+    <value>Normal Salary</value>
+  </data>
+  <data name="ProfileProperties_NormalSalary.Help">
+    <value />
+  </data>
+  <data name="ProfileProperties_NormalSalary.Required">
+    <value />
+  </data>
+  <data name="ProfileProperties_NormalSalary.Validation">
+    <value />
+  </data>
+  <data name="ProfileProperties_Payroll.Header">
+    <value />
+  </data>
+  <data name="ProfileProperties_EmployeeCode.Text">
+    <value>Employee Code</value>
+  </data>
+  <data name="ProfileProperties_EmployeeCode.Help">
+    <value />
+  </data>
+  <data name="ProfileProperties_EmployeeCode.Required">
+    <value />
+  </data>
+  <data name="ProfileProperties_EmployeeCode.Validation">
+    <value />
+  </data>
+</root>

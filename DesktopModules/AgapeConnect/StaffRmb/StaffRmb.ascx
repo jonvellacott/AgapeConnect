@@ -264,7 +264,7 @@
     function showPopup2() {$("#divSignin2").dialog("open"); return false; }
     function showPopup3() {$("#divSignin3").dialog("open"); return false; }
      function showPopupSplit() {$("#divSplitPopup").dialog("open"); return false; }
-    function showDownload() {$("#divDownload").dialog("open"); return false; }
+     function showDownload() { $("#divDownload").dialog("open"); return false; }
      function showSuggestedPayments() {$("#divSuggestedPayments").dialog("open"); return false; }
     function showAdvanceReq()  {$("#divAdvanceReq").dialog("open");return false;}
 
@@ -375,6 +375,8 @@ padding: 5px 5px 5px 5px;
 <asp:HiddenField ID="hfPortalId" runat="server" Value="-1" />
 <asp:HiddenField ID="hfAccountingCurrency" runat="server" Value="USD" />
 <asp:HiddenField ID="hfExchangeRate" runat="server" Value="1"   />
+    <asp:HiddenField ID="hfAccountBalance" runat="server"  />
+
 <table width="100%">
     <tr valign="top">
         <td>
@@ -1156,17 +1158,29 @@ padding: 5px 5px 5px 5px;
                                         <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("LineType") %>'></asp:TextBox>
                                     </EditItemTemplate>
                                     <ItemTemplate>
-                                        <asp:Label ID="Label1" runat="server" Text='<%# GetLocalTypeName(Eval("AP_Staff_RmbLineType.LineTypeId") )%>'></asp:Label>
+                                        <asp:Label ID="Label1" runat="server" CssClass='<%# IIF(IsWrongType(Eval("CostCenter"), Eval("LineType")), "ui-state-error ui-corner-all","") %>' ToolTip='<%# IIF(IsWrongType(Eval("CostCenter"), Eval("LineType")),Translate("lblWrongType"),"") %>' Text='<%# GetLocalTypeName(Eval("AP_Staff_RmbLineType.LineTypeId") )%>'></asp:Label>
                                     </ItemTemplate>
                                     <HeaderStyle ForeColor="White" />
                                     <ItemStyle HorizontalAlign="Center" />
                                 </asp:TemplateField>
-                                <asp:BoundField DataField="Comment" HeaderText="Comment"
-                                    SortExpression="Commnet" HeaderStyle-ForeColor="White" 
-                                    ItemStyle-HorizontalAlign="Center">
-                                    <HeaderStyle ForeColor="White"></HeaderStyle>
-                                    <ItemStyle HorizontalAlign="Center"></ItemStyle>
-                                </asp:BoundField>
+                               
+                                <asp:TemplateField HeaderText="Comment" SortExpression="Comment" >
+                                    <EditItemTemplate>
+                                    </EditItemTemplate>
+                                    <ItemTemplate>
+                                        <asp:Label ID="lblComment" runat="server" Text='<%#  Eval("Comment")  %>'></asp:Label>
+                                    </ItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:Label ID="lblTotalAmount" runat="server" Font-Bold="True" Text="Total:"></asp:Label>
+                                    <asp:Panel ID="pnlRemBal1" runat="server" Visible='<%# Settings("ShowRemBal") = "True" %>'>
+                                        <asp:Label ID="lblRemainingBalance" runat="server" Font-Size="XX-Small"   Text="Estimated Remaining Balance:"></asp:Label>
+                                    </asp:Panel>
+                                    </FooterTemplate>
+                                    <HeaderStyle ForeColor="White" />
+                                    <ItemStyle HorizontalAlign="Center" />
+                                    <FooterStyle HorizontalAlign="Right" />
+                                </asp:TemplateField>
+
                                 <asp:TemplateField HeaderText="Amount" SortExpression="GrossAmount" ItemStyle-Width="75px">
                                     <EditItemTemplate>
                                     </EditItemTemplate>
@@ -1175,6 +1189,9 @@ padding: 5px 5px 5px 5px;
                                     </ItemTemplate>
                                     <FooterTemplate>
                                         <asp:Label ID="lblTotalAmount" runat="server" Text='<%# StaffBrokerFunctions.GetSetting("Currency", PortalId) & GetTotal(Eval("RmbNo")).ToString("F2") %>'></asp:Label>
+                                     <asp:Panel ID="pnlRemBal2" runat="server"  Visible='<%# Settings("ShowRemBal") = "True"%>'>
+                                        <asp:Label ID="lblRemainingBalance" runat="server" Font-Size="xx-small" Text='<%# GetRemainingBalance()%>'></asp:Label>
+                                    </asp:Panel>
                                     </FooterTemplate>
                                     <HeaderStyle ForeColor="White" />
                                     <ItemStyle HorizontalAlign="Center" />
@@ -1253,6 +1270,11 @@ padding: 5px 5px 5px 5px;
                         <legend>
                           <asp:Label ID="Label44" runat="server" CssClass="AgapeH4" ResourceKey="lblErrorMessage"></asp:Label>
                         </legend>
+                            <asp:Label ID="lblWrongType" runat="server" class="ui-state-error ui-corner-all"
+                Style="padding: 3px; margin-top: 5px; display: block; " resourceKey="lblWrongTypes">
+
+
+                            </asp:Label>
                         <asp:Label ID="lblErrorMessage" runat="server" class="ui-state-error ui-corner-all"
                 Style="padding: 3px; margin-top: 5px; display: block; " ></asp:Label>
                           
@@ -1434,12 +1456,16 @@ padding: 5px 5px 5px 5px;
                             </td>
                             <td width="100%">
                                 <asp:DropDownList ID="ddlLineTypes" runat="server" DataTextField="LocalName" DataValueField="LineTypeId"
-                                    AutoPostBack="true">
+                                 AppendDataBoundItems="true"    AutoPostBack="true">
                                 </asp:DropDownList>
+                                  <asp:Label ID="lblIncType" runat="server" CssClass="ui-state-error ui-corner-all" Text="Incompatible Type" Visible="false"></asp:Label>
+
                                 <div id="manualCodes" runat="server" style="float: right;">
                                     <asp:DropDownList ID="ddlAccountCode" runat="server" Width="60px" DataSourceID="dsAccountCodes"
                                         DataTextField="DisplayName" DataValueField="AccountCode" Enabled="false">
                                     </asp:DropDownList>
+
+                                  
                                     <asp:LinqDataSource ID="dsAccountCodes" runat="server" ContextTypeName="StaffRmb.StaffRmbDataContext"
                                         EntityTypeName="" Select="new (AccountCode,  AccountCode + ' ' + '-' + ' ' + AccountCodeName  as DisplayName )"
                                         TableName="AP_StaffBroker_AccountCodes" OrderBy="AccountCode" Where="PortalId == @PortalId">
@@ -1520,8 +1546,8 @@ padding: 5px 5px 5px 5px;
                 <asp:AsyncPostBackTrigger ControlID="btnAddLine" EventName="Click" />
                 <%--  <asp:AsyncPostBackTrigger ControlID="btnPrint"  EventName="Click" />--%>
                 <asp:PostBackTrigger ControlID="btnPrint" />
-                <asp:PostBackTrigger ControlID="btnDownloadBatch" />
-                <asp:PostBackTrigger ControlID="btnSuggestedPayments" />
+              <%--  <asp:PostBackTrigger ControlID="btnDownloadBatch" />
+                <asp:PostBackTrigger ControlID="btnSuggestedPayments" />--%>
                 <%--  <asp:PostBackTrigger ControlID="btnAddLine" />--%>
             </Triggers>
         </asp:UpdatePanel>
@@ -1695,13 +1721,15 @@ padding: 5px 5px 5px 5px;
     <asp:Label ID="Label39" runat="server" ResourceKey="btnAdvReq" class="AgapeLink"></asp:Label>
 </a>
 
-&nbsp; &nbsp;
+    <asp:Label ID="lblMovedMenu" runat="server" Font-Size="XX-Small" Font-Italic="true" ForeColor="Gray" Text="If you are looking for Settings or Suggested Payments, these links have moved. Click the faint Manage Button at the top left of this module (over the New Reimbursment button). "></asp:Label>
+
+&nbsp<%--; &nbsp;
 <asp:LinkButton ID="btnSettings" runat="server" resourcekey="btnSettings"></asp:LinkButton>
 &nbsp; &nbsp;
 <asp:LinkButton ID="btnDownloadBatch" runat="server" resourcekey="btnDownloadBatch"
     OnClientClick="showDownload();">Download Batched Reimbursments</asp:LinkButton> &nbsp; &nbsp;
     
-<asp:LinkButton ID="btnShowSuggestedPayments" OnClientClick="showSuggestedPayments();" runat="server" resourcekey="SuggestedPayments">Suggested Payments</asp:LinkButton>
+<asp:LinkButton ID="btnShowSuggestedPayments" OnClientClick="showSuggestedPayments();" runat="server" resourcekey="SuggestedPayments">Suggested Payments</asp:LinkButton>--%>
 <br />
 
 </div>
