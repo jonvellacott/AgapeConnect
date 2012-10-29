@@ -1095,11 +1095,6 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                     lblWrongType.Visible = False
 
 
-                    GridView1.DataSource = q.First.AP_Staff_RmbLines
-                    GridView1.DataBind()
-
-
-                    pnlTaxable.Visible = (From c In q.First.AP_Staff_RmbLines Where c.Taxable = True).Count > 0
 
 
 
@@ -1157,13 +1152,18 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                     If AccPay.Count > 0 Then
                         If Not AccPay.First.AccountBalance Is Nothing Then
                             lblAccountBalance.Text = StaffBrokerFunctions.GetFormattedCurrency(PortalId, AccPay.First.AccountBalance.Value.ToString("0.00"))
-                            hfAccountBalance.Value = AccPay.First.AccountBalance
+                            hfAccountBalance.Value = AccPay.First.AccountBalance.Value
                         End If
 
                     End If
 
 
 
+                    GridView1.DataSource = q.First.AP_Staff_RmbLines
+                    GridView1.DataBind()
+
+
+                    pnlTaxable.Visible = (From c In q.First.AP_Staff_RmbLines Where c.Taxable = True).Count > 0
 
                     'StaffBrokerFunctions.GetSetting("DataserverURL", PortalId)
                     '   Dim CountryURL = "https://tntdataserver.eu/dataserver/devtest/dataquery/dataqueryservice.asmx"

@@ -375,7 +375,7 @@ padding: 5px 5px 5px 5px;
 <asp:HiddenField ID="hfPortalId" runat="server" Value="-1" />
 <asp:HiddenField ID="hfAccountingCurrency" runat="server" Value="USD" />
 <asp:HiddenField ID="hfExchangeRate" runat="server" Value="1"   />
-    <asp:HiddenField ID="hfAccountBalance" runat="server"  />
+    
 
 <table width="100%">
     <tr valign="top">
@@ -1000,6 +1000,7 @@ padding: 5px 5px 5px 5px;
                         <asp:Label ID="lblAccountBalance" runat="server" Style="float: right;  font-style: italic; margin-right: 3px;"  Text="searching..."></asp:Label>
                         <asp:Label ID="ttlAccountBalance" runat="server" Style="float: right;  margin-right: 3px;
                             font-style: italic;" resourceKey="AccountBalance"></asp:Label> 
+                          <asp:HiddenField ID="hfAccountBalance" runat="server"  />
                         <div style="clear: both;">
                         </div> 
                         </div> 
