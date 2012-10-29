@@ -100,6 +100,14 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
                 End Try
 
+                If StaffBrokerFunctions.GetSetting("ZA-Mode", PortalId) = "True" Then
+                    cbExpenses.Enabled = False
+                    cbExpenses.Checked = True
+                    cbSalaries.Checked = True
+                    cbSalaries.Enabled = False
+
+                End If
+
 
 
                 hfAccountingCurrency.Value = StaffBrokerFunctions.GetSetting("AccountingCurrency", PortalId)
