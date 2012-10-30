@@ -34,7 +34,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 #Region "Page Events"
         Protected Sub Page_Load1(sender As Object, e As System.EventArgs) Handles Me.Load
             hfPortalId.Value = PortalId
-
+            lblMovedMenu.Visible = IsEditable
 
 
             For i As Integer = 2 To hfRows.Value
@@ -73,12 +73,17 @@ Namespace DotNetNuke.Modules.StaffRmbMod
         Private Sub Page_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Me.Init
 
             Dim addTitle = MyBase.Actions.Add(GetNextActionID, "AgapeConnect", "AgapeConnect", "", "", "", "", True, SecurityAccessLevel.Edit, True, False)
+
             addTitle.Actions.Add(GetNextActionID, "Settings", "RmbSettings", "", "action_settings.gif", EditUrl("RmbSettings"), False, SecurityAccessLevel.Edit, True, False)
 
             AddClientAction("Download Batched Transactions", "showDownload()", addTitle)
             AddClientAction("Suggested Payments", "showSuggestedPayments()", addTitle)
 
-
+            For Each a As DotNetNuke.Entities.Modules.Actions.ModuleAction In addTitle.Actions
+                If a.Title = "Download Batched Transactions" Or a.Title = "Suggested Payments" Then
+                    a.Icon = "FileManager/Icons/xls.gif"
+                End If
+            Next
 
             If Not Page.IsPostBack And Request.QueryString("RmbNo") <> "" Then
                 hfRmbNo.Value = CInt(Request.QueryString("RmbNo"))
@@ -99,6 +104,14 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                 Catch ex As Exception
 
                 End Try
+
+                If StaffBrokerFunctions.GetSetting("ZA-Mode", PortalId) = "True" Then
+                    cbExpenses.Enabled = False
+                    cbExpenses.Checked = True
+                    cbSalaries.Checked = True
+                    cbSalaries.Enabled = False
+
+                End If
 
 
 
@@ -1095,11 +1108,6 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                     lblWrongType.Visible = False
 
 
-                    GridView1.DataSource = q.First.AP_Staff_RmbLines
-                    GridView1.DataBind()
-
-
-                    pnlTaxable.Visible = (From c In q.First.AP_Staff_RmbLines Where c.Taxable = True).Count > 0
 
 
 
@@ -1157,13 +1165,18 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                     If AccPay.Count > 0 Then
                         If Not AccPay.First.AccountBalance Is Nothing Then
                             lblAccountBalance.Text = StaffBrokerFunctions.GetFormattedCurrency(PortalId, AccPay.First.AccountBalance.Value.ToString("0.00"))
-                            hfAccountBalance.Value = AccPay.First.AccountBalance
+                            hfAccountBalance.Value = AccPay.First.AccountBalance.Value
                         End If
 
                     End If
 
 
 
+                    GridView1.DataSource = q.First.AP_Staff_RmbLines
+                    GridView1.DataBind()
+
+
+                    pnlTaxable.Visible = (From c In q.First.AP_Staff_RmbLines Where c.Taxable = True).Count > 0
 
                     'StaffBrokerFunctions.GetSetting("DataserverURL", PortalId)
                     '   Dim CountryURL = "https://tntdataserver.eu/dataserver/devtest/dataquery/dataqueryservice.asmx"
@@ -4000,6 +4013,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
             'myCommand.ExecuteNonQuery()
 
             'Maybe this would be better to do my working out the current period
+            Log(0, "Step A")
             Dim currentRmbs = From c In d.AP_Staff_RmbLines Where c.AP_Staff_Rmb.PortalId = PortalId And c.AP_Staff_Rmb.Status = RmbStatus.Processed 'And c.AP_Staff_Rmb.ProcDate > Today.AddDays(-15) And c.Department = False
 
             Dim Deductions = DotNetNuke.Entities.Profile.ProfileController.GetPropertyDefinitionsByCategory(PortalId, "Payroll-Deductions")
@@ -4017,7 +4031,9 @@ Namespace DotNetNuke.Modules.StaffRmbMod
             myCommand.ExecuteNonQuery()
 
             Dim StaffTypes = {"National Staff", "National Staff, Overseas", "Centrally Funded"}
-            Dim allStaff = StaffBrokerFunctions.GetStaff(1)
+            Dim allStaff = StaffBrokerFunctions.GetStaff(-1)
+
+            Log(0, "Step B")
             '.OrderBy(Function(x) x.LastName).ThenBy(Function(x) x.AP_StaffBroker_Staffs.StaffId)
             Dim i As Integer = 3
             For Each row In allStaff
@@ -4027,17 +4043,22 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                 If Not (theStaff Is Nothing Or theUser Is Nothing) Then
 
 
-                    Dim CurrentPeriod = StaffBrokerFunctions.GetSetting("CurrentFiscalPeriod", PortalId)
+                    '  Dim CurrentPeriod = StaffBrokerFunctions.GetSetting("CurrentFiscalPeriod", PortalId)
 
                     Dim EmpCode As String = theUser.Profile.GetPropertyValue("EmployeeCode")
-                    If EmpCode Is Nothing Then
+                    If EmpCode Is Nothing Or EmpCode = "0" Then
                         EmpCode = ""
                     End If
+
+
                     Dim CostCenter = theStaff.CostCenter
 
                     Dim salary As Double = 0
                     For Each item As DotNetNuke.Entities.Profile.ProfilePropertyDefinition In Earnings
-                        salary += theUser.Profile.GetPropertyValue(item.PropertyName)
+                        If item.Deleted = False Then
+                            salary += theUser.Profile.GetPropertyValue(item.PropertyName)
+                        End If
+
                     Next
 
                     'Dim VehicleInsurance As Double = theUser.Profile.GetPropertyValue("VehicleInsurance")
@@ -4119,15 +4140,18 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
                     'Complete the Deductions columns
-                    sql = "Update [Deductions$A" & i & ":Z" & i & "] Set F1='" & EmpCode.Trim(" ") & "', F2='CCCSA-FIELD STAFF'"
+                    sql = "Update [Deductions$A" & i & ":Z" & i & "] Set F1=@EmpCode, F2='CCCSA-FIELD STAFF'"
+                    myCommand.Parameters.AddWithValue("@EmpCode", EmpCode.Trim(" "))
                     j = 3
                     For Each item As DotNetNuke.Entities.Profile.ProfilePropertyDefinition In Deductions
-                        Dim Value = theUser.Profile.GetPropertyValue(item.PropertyName)
-                        If Value <> 0 Then
-                            sql &= ",F" & j & "=" & Value
+                        If item.Deleted = False Then
+                            Dim Value = theUser.Profile.GetPropertyValue(item.PropertyName)
+                            If Value <> 0 Then
+                                sql &= ",F" & j & "=" & Value
 
+                            End If
+                            j += 1
                         End If
-                        j += 1
                     Next
 
 
@@ -4139,34 +4163,51 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                     sql &= " ;"
 
                     myCommand.CommandText = sql
-                    myCommand.ExecuteNonQuery()
 
+
+                    myCommand.ExecuteNonQuery()
+                    myCommand.Parameters.Clear()
 
                     'Complete the Earnings Columns
-                    sql = "Update [Earnings$A" & i & ":H" & i & "] Set F1='" & EmpCode.Trim(" ") & "', F2='CCCSA-FIELD STAFF'"
+                    sql = "Update [Earnings$A" & i & ":H" & i & "] Set F1=@EmpCode, F2='CCCSA-FIELD STAFF'"
+                    myCommand.Parameters.AddWithValue("@EmpCode", EmpCode.Trim(" "))
                     If salary <> 0 Then
-                        sql &= ",F3=" & salary
+                        sql &= ",F3=@Salary"
+                        myCommand.Parameters.AddWithValue("@Salary", salary)
                     End If
                     If Travel <> 0 Then
-                        sql &= ",F4=" & Travel
+                        sql &= ",F4=@Travel"
+                        myCommand.Parameters.AddWithValue("@Travel", Travel)
                     End If
                     If AllowancesTax <> 0 Then
-                        sql &= ",F5=" & AllowancesTax
+                        sql &= ",F5=@AllowancesTax"
+                        myCommand.Parameters.AddWithValue("@AllowancesTax", AllowancesTax)
                     End If
                     If AllowancesNontax <> 0 Then
-                        sql &= ",F6=" & AllowancesNontax
+                        sql &= ",F6=@AllowancesNonTax"
+                        myCommand.Parameters.AddWithValue("@AllowancesNonTax", AllowancesNontax)
                     End If
                     If CostCenter <> "" Then
-                        sql &= ",F7='" & CostCenter & "'"
+                        sql &= ",F7=@RC"
+                        myCommand.Parameters.AddWithValue("@RC", CostCenter.Trim(" "))
                     End If
                     If CostCenter <> "" Then
-                        sql &= ",F8=" & AccountBalance
+                        sql &= ",F8=@AccountBalance"
+                        myCommand.Parameters.AddWithValue("@AccountBalance", AccountBalance)
                     End If
                     sql &= " ;"
 
                     myCommand.CommandText = sql
-                    myCommand.ExecuteNonQuery()
 
+
+
+
+
+
+
+
+                    myCommand.ExecuteNonQuery()
+                    myCommand.Parameters.Clear()
 
 
 
@@ -4221,68 +4262,87 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
 
                 Dim q = From c In ds.AP_Staff_SuggestedPayments Where c.PortalId = PortalId
+
                 Dim i As Integer = 4
 
 
                 For Each row In q
-                    Dim salary1 = ""
-                    Dim salary2 = ""
-                    Dim expense = ""
-                    Dim taxexpenses = ""
-                    If cbSalaries.Checked Then
-                        Dim staffMember = From c In ds.AP_StaffBroker_Staffs Where c.PortalId = PortalId And c.CostCenter = row.CostCenter.TrimEnd(" ")
-                        If staffMember.Count > 0 Then
-                            Dim s1 = From c In staffMember.First.AP_StaffBroker_StaffProfiles Where c.AP_StaffBroker_StaffPropertyDefinition.FixedFieldName = "Salary1" Select c.PropertyValue
-                            If s1.Count > 0 Then
-                                salary1 = s1.First
-                            End If
-                            If staffMember.First.UserId2 > 0 Then
-                                Dim s2 = From c In staffMember.First.AP_StaffBroker_StaffProfiles Where c.AP_StaffBroker_StaffPropertyDefinition.FixedFieldName = "Salary2" Select c.PropertyValue
-                                If s2.Count > 0 Then
-                                    salary2 = s2.First
+                    If d.AP_StaffBroker_CostCenters.Where(Function(x) x.PortalId = PortalId And x.CostCentreCode.Trim() = row.CostCenter.Trim() And x.Type = 1).Count > 0 Then
+
+
+                        Dim salary1 = ""
+                        Dim salary2 = ""
+                        Dim expense = ""
+                        Dim taxexpenses = ""
+                        If cbSalaries.Checked And Not StaffBrokerFunctions.GetSetting("ZA-Mode", PortalId) = "True" Then
+                            Dim staffMember = From c In ds.AP_StaffBroker_Staffs Where c.PortalId = PortalId And c.CostCenter = row.CostCenter.TrimEnd(" ")
+                            If staffMember.Count > 0 Then
+                                Dim s1 = From c In staffMember.First.AP_StaffBroker_StaffProfiles Where c.AP_StaffBroker_StaffPropertyDefinition.FixedFieldName = "Salary1" Select c.PropertyValue
+                                If s1.Count > 0 Then
+                                    salary1 = s1.First
                                 End If
+                                If staffMember.First.UserId2 > 0 Then
+                                    Dim s2 = From c In staffMember.First.AP_StaffBroker_StaffProfiles Where c.AP_StaffBroker_StaffPropertyDefinition.FixedFieldName = "Salary2" Select c.PropertyValue
+                                    If s2.Count > 0 Then
+                                        salary2 = s2.First
+                                    End If
+                                End If
+
+
                             End If
+                        End If
+
+                        If cbExpenses.Checked Then
+
+                            expense = row.ExpPayable
+                            taxexpenses = row.ExpTaxable
 
 
                         End If
-                    End If
 
-                    If cbExpenses.Checked Then
-
-                        expense = row.ExpPayable
-                        taxexpenses = row.ExpTaxable
+                        If Not (salary1 = "" And salary2 = "" And (expense = "" Or expense = "0") And (taxexpenses = "" Or taxexpenses = "0")) Then
 
 
-                    End If
-
-                    If Not (salary1 = "" And salary2 = "" And (expense = "" Or expense = 0) And (taxexpenses = "" Or taxexpenses = 0)) Then
-
-
-                        Dim Name As String = (From c In d.AP_StaffBroker_CostCenters Where c.PortalId = PortalId And c.CostCentreCode = row.CostCenter.TrimEnd(" ")).First.CostCentreName
-                        'Dim test = From c In d.AP_StaffBroker_CostCenters
+                            Dim Name As String = (From c In d.AP_StaffBroker_CostCenters Where c.PortalId = PortalId And c.CostCentreCode = row.CostCenter.TrimEnd(" ")).First.CostCentreName
+                            'Dim test = From c In d.AP_StaffBroker_CostCenters
 
 
 
 
 
-                        Dim sql = "Update [Suggested Payments$A" & i & ":F" & i & "] Set F1='" & row.CostCenter.TrimEnd(" ") & "', F2='" & Name & "'"
-                        If expense <> "" Then
-                            sql &= ",F3=" & expense
+                            Dim sql = "Update [Suggested Payments$A" & i & ":F" & i & "] Set F1=@RC , F2=@Name"
+                            MyCommand.Parameters.AddWithValue("@RC", row.CostCenter.TrimEnd(" "))
+                            MyCommand.Parameters.AddWithValue("@Name", Name)
+
+                            If expense <> "" Then
+                                sql &= ",F3=@Expense"
+                                MyCommand.Parameters.AddWithValue("@Expense", expense)
+                            End If
+                            If taxexpenses <> "" Then
+                                sql &= ",F4=@TaxExpense"
+                                MyCommand.Parameters.AddWithValue("@TaxExpense", taxexpenses)
+                            End If
+                            If salary1 <> "" Then
+                                sql &= ",F5=@Salary1"
+                                MyCommand.Parameters.AddWithValue("@Salary1", salary1)
+                            End If
+                            If salary2 <> "" Then
+                                sql &= ",F6=@Salary2"
+                                MyCommand.Parameters.AddWithValue("@Salary2", salary2)
+                            End If
+                            sql &= " ;"
+
+                            MyCommand.CommandText = sql
+
+
+
+
+
+
+                            MyCommand.ExecuteNonQuery()
+                            MyCommand.Parameters.Clear()
+                            i += 1
                         End If
-                        If taxexpenses <> "" Then
-                            sql &= ",F4=" & taxexpenses
-                        End If
-                        If salary1 <> "" Then
-                            sql &= ",F5=" & salary1
-                        End If
-                        If salary2 <> "" Then
-                            sql &= ",F6=" & salary2
-                        End If
-                        sql &= " ;"
-
-                        MyCommand.CommandText = sql
-                        MyCommand.ExecuteNonQuery()
-                        i += 1
                     End If
                 Next
 
@@ -4312,21 +4372,32 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
                                     Dim Name As String = (From c In d.AP_StaffBroker_CostCenters Where c.PortalId = PortalId And c.CostCentreCode = member.CostCenter).First.CostCentreName
 
-                                    Dim sql = "Update [Suggested Payments$A" & i & ":F" & i & "] Set F1='" & member.CostCenter & "', F2='" & Name & "'"
+                                    Dim sql = "Update [Suggested Payments$A" & i & ":F" & i & "] Set F1=@RC, F2=@Name"
+                                    MyCommand.Parameters.AddWithValue("@RC", member.CostCenter.TrimEnd(" "))
+                                    MyCommand.Parameters.AddWithValue("@Name", Name)
                                     If salary1 <> "" Then
-                                        sql &= ",F5=" & salary1
+                                        sql &= ",F5=@Salary1"
+                                        MyCommand.Parameters.AddWithValue("@Salary1", salary1)
                                     End If
                                     If salary2 <> "" Then
-                                        sql &= ",F6=" & salary2
+                                        sql &= ",F6=@Salary2"
+                                        MyCommand.Parameters.AddWithValue("@Salary2", salary2)
                                     End If
                                     sql &= " ;"
 
                                     MyCommand.CommandText = sql
+
+                                   
+
+
+
                                     MyCommand.ExecuteNonQuery()
+                                    MyCommand.Parameters.Clear()
                                     i += 1
                                 End If
 
                             End If
+
                         End If
                     Next
 
