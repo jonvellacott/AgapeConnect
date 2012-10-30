@@ -132,12 +132,12 @@ Namespace DotNetNuke.Modules.StaffAdmin
                 Return s
             End If
         End Function
-        Public Function GetPayroll(ByVal Category As String) As ArrayList
+        Public Function GetPayroll(ByVal Category As String) As IEnumerable(Of DotNetNuke.Entities.Profile.ProfilePropertyDefinition)
             ' Dim theStaff = StaffBrokerFunctions.GetStaffbyStaffId(CInt(ddlStaff.SelectedValue))
             Dim pd = DotNetNuke.Entities.Profile.ProfileController.GetPropertyDefinitionsByCategory(PortalId, Category)
             Dim ProfProps As New ArrayList(pd)
-            
-            Return ProfProps
+            Dim q = (From c As DotNetNuke.Entities.Profile.ProfilePropertyDefinition In ProfProps Where c.Deleted = False)
+            Return q
 
         End Function
         Public Function GetProfileValue(ByVal PropertyName As String, ByVal Spouse As Boolean, Optional ByVal Type As Integer = -1) As String

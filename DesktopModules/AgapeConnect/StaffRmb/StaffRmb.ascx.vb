@@ -73,12 +73,17 @@ Namespace DotNetNuke.Modules.StaffRmbMod
         Private Sub Page_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Me.Init
 
             Dim addTitle = MyBase.Actions.Add(GetNextActionID, "AgapeConnect", "AgapeConnect", "", "", "", "", True, SecurityAccessLevel.Edit, True, False)
+
             addTitle.Actions.Add(GetNextActionID, "Settings", "RmbSettings", "", "action_settings.gif", EditUrl("RmbSettings"), False, SecurityAccessLevel.Edit, True, False)
 
             AddClientAction("Download Batched Transactions", "showDownload()", addTitle)
             AddClientAction("Suggested Payments", "showSuggestedPayments()", addTitle)
 
-
+            For Each a As DotNetNuke.Entities.Modules.Actions.ModuleAction In addTitle.Actions
+                If a.Title = "Download Batched Transactions" Or a.Title = "Suggested Payments" Then
+                    a.Icon = "FileManager/Icons/xls.gif"
+                End If
+            Next
 
             If Not Page.IsPostBack And Request.QueryString("RmbNo") <> "" Then
                 hfRmbNo.Value = CInt(Request.QueryString("RmbNo"))
@@ -4008,6 +4013,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
             'myCommand.ExecuteNonQuery()
 
             'Maybe this would be better to do my working out the current period
+            Log(0, "Step A")
             Dim currentRmbs = From c In d.AP_Staff_RmbLines Where c.AP_Staff_Rmb.PortalId = PortalId And c.AP_Staff_Rmb.Status = RmbStatus.Processed 'And c.AP_Staff_Rmb.ProcDate > Today.AddDays(-15) And c.Department = False
 
             Dim Deductions = DotNetNuke.Entities.Profile.ProfileController.GetPropertyDefinitionsByCategory(PortalId, "Payroll-Deductions")
@@ -4025,7 +4031,9 @@ Namespace DotNetNuke.Modules.StaffRmbMod
             myCommand.ExecuteNonQuery()
 
             Dim StaffTypes = {"National Staff", "National Staff, Overseas", "Centrally Funded"}
-            Dim allStaff = StaffBrokerFunctions.GetStaff(1)
+            Dim allStaff = StaffBrokerFunctions.GetStaff(-1)
+
+            Log(0, "Step B")
             '.OrderBy(Function(x) x.LastName).ThenBy(Function(x) x.AP_StaffBroker_Staffs.StaffId)
             Dim i As Integer = 3
             For Each row In allStaff
@@ -4035,17 +4043,22 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                 If Not (theStaff Is Nothing Or theUser Is Nothing) Then
 
 
-                    Dim CurrentPeriod = StaffBrokerFunctions.GetSetting("CurrentFiscalPeriod", PortalId)
+                    '  Dim CurrentPeriod = StaffBrokerFunctions.GetSetting("CurrentFiscalPeriod", PortalId)
 
                     Dim EmpCode As String = theUser.Profile.GetPropertyValue("EmployeeCode")
-                    If EmpCode Is Nothing Then
+                    If EmpCode Is Nothing Or EmpCode = "0" Then
                         EmpCode = ""
                     End If
+
+
                     Dim CostCenter = theStaff.CostCenter
 
                     Dim salary As Double = 0
                     For Each item As DotNetNuke.Entities.Profile.ProfilePropertyDefinition In Earnings
-                        salary += theUser.Profile.GetPropertyValue(item.PropertyName)
+                        If item.Deleted = False Then
+                            salary += theUser.Profile.GetPropertyValue(item.PropertyName)
+                        End If
+
                     Next
 
                     'Dim VehicleInsurance As Double = theUser.Profile.GetPropertyValue("VehicleInsurance")
@@ -4128,14 +4141,17 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
                     'Complete the Deductions columns
                     sql = "Update [Deductions$A" & i & ":Z" & i & "] Set F1=@EmpCode, F2='CCCSA-FIELD STAFF'"
+                    myCommand.Parameters.AddWithValue("@EmpCode", EmpCode.Trim(" "))
                     j = 3
                     For Each item As DotNetNuke.Entities.Profile.ProfilePropertyDefinition In Deductions
-                        Dim Value = theUser.Profile.GetPropertyValue(item.PropertyName)
-                        If Value <> 0 Then
-                            sql &= ",F" & j & "=" & Value
+                        If item.Deleted = False Then
+                            Dim Value = theUser.Profile.GetPropertyValue(item.PropertyName)
+                            If Value <> 0 Then
+                                sql &= ",F" & j & "=" & Value
 
+                            End If
+                            j += 1
                         End If
-                        j += 1
                     Next
 
 
@@ -4147,7 +4163,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                     sql &= " ;"
 
                     myCommand.CommandText = sql
-                    myCommand.Parameters.AddWithValue("@EmpCode", EmpCode.Trim(" "))
+
 
                     myCommand.ExecuteNonQuery()
                     myCommand.Parameters.Clear()
