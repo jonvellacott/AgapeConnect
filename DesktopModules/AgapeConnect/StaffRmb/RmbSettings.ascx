@@ -157,7 +157,17 @@
                         <asp:CheckBox ID="cbRemBal" runat="server"   />
                     </td>
                 </tr>
-
+                  </tr>
+               <tr>
+                    <td>
+                        <b>
+                            <dnn:Label ID="Label31" runat="server" ControlName="cbRemBal" ResourceKey="lblWarnIfNegative" />
+                        </b>
+                    </td>
+                    <td>
+                        <asp:CheckBox ID="cbWarnIfNegative" runat="server"   />
+                    </td>
+                </tr>
                 <tr>
                     <td>
                         <b>
