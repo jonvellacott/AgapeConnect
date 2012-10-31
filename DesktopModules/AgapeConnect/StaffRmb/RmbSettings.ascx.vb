@@ -201,6 +201,10 @@ Namespace DotNetNuke.Modules.StaffRmb
                         cbRemBal.Checked = CType(TabModuleSettings("ShowRemBal"), Boolean)
                     End If
 
+                    If CType(TabModuleSettings("WarnIfNegative"), String) <> "" Then
+                        cbWarnIfNegative.Checked = CType(TabModuleSettings("WarnIfNegative"), Boolean)
+                    End If
+
                     'If CType(TabModuleSettings("CurConverter"), String) <> "" Then
                     '    cbCurConverter.Checked = CType(TabModuleSettings("CurConverter"), Boolean)
                     'End If
@@ -404,6 +408,7 @@ Namespace DotNetNuke.Modules.StaffRmb
             StaffBrokerFunctions.SetSetting("CurConverter", cbCurConverter.Checked, PortalId)
 
             objModules.UpdateTabModuleSetting(TabModuleId, "ShowRemBal", cbRemBal.Checked)
+            objModules.UpdateTabModuleSetting(TabModuleId, "WarnIfNegative", cbWarnIfNegative.Checked)
 
             StaffBrokerFunctions.SetSetting("RmbDownload", cbDatapump.Checked, PortalId)
 

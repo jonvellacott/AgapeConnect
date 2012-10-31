@@ -140,6 +140,19 @@
                 }
             });
             $("#divDownload").parent().appendTo($("form:first"));
+            $("#divAccountWarning").dialog({
+                autoOpen: false,
+                height: 150,
+                width: 500,
+                modal: true,
+                title: '<%= Translate("AccountWarning")%>',
+                close: function () {
+                    //  allFields.val("").removeClass("ui-state-error");
+                }
+              });
+            $("#divAccountWarning").parent().appendTo($("form:first"));
+
+            
 
               $("#divSuggestedPayments").dialog({
                 autoOpen: false,
@@ -237,7 +250,10 @@
     function closePopup2() {$("#divSignin2").dialog("close");}
     function closePopup3() {$("#divSignin3").dialog("close");}
     function closePopupSplit() {$("#divSplitPopup").dialog("close");}
-   function closePopupDownload() {$("#divDownload").dialog("close");}
+    function closePopupDownload() {$("#divDownload").dialog("close");}
+    function closePopupAccountWarning() {$("#divAccountWarning").dialog("close");}
+
+    
    function closeSuggestedPayments() {$("#divSuggestedPayments").dialog("close");}
    
    function closeAdvanceReq()  {$("#divAdvanceReq").dialog("close");}
@@ -265,6 +281,9 @@
     function showPopup3() {$("#divSignin3").dialog("open"); return false; }
      function showPopupSplit() {$("#divSplitPopup").dialog("open"); return false; }
      function showDownload() { $("#divDownload").dialog("open"); return false; }
+     function showAccountWarning() { $("#divAccountWarning").dialog("open"); return false; }
+
+     
      function showSuggestedPayments() {$("#divSuggestedPayments").dialog("open"); return false; }
     function showAdvanceReq()  {$("#divAdvanceReq").dialog("open");return false;}
 
@@ -1626,7 +1645,7 @@ padding: 5px 5px 5px 5px;
     <%--Not Used?--%>
     <div>
         <br />
-        <b>The Agap&eacute; Website is trying to open a page in a new window. Do you wish to
+        <b>There is not enough money in the RC to cover this Reimbursement. Processing this expense may result in a negative account balance. Do you wish to
             continue?</b><br />
         <br />
         <div width="100%" align="center">
@@ -1709,7 +1728,18 @@ padding: 5px 5px 5px 5px;
         <asp:Button ID="btnDontMarkProcessed" runat="server" resourcekey="btnNo" class="aButton" />
     </div>
 </div>
-
+    <div id="divAccountWarning" class="ui-widget">
+    <asp:Label ID="Label46" runat="server" Font-Bold="true" resourcekey="lblAccountWarning"></asp:Label>
+    <br />
+    <br />
+    <div width="100%" style="text-align: center">
+        <asp:Button ID="btnAccountWarningYes" runat="server" resourcekey="btnYes" class="aButton" />
+      
+        <input id="Button5" type="button" value='<%= Translate("btnNo")%>' onclick="closePopupAccountWarning();"
+                    class="aButton" />
+        
+    </div>
+</div>
 
 
 

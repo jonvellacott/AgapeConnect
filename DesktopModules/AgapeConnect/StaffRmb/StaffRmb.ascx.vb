@@ -2227,9 +2227,30 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
         End Sub
 
-        Protected Sub btnProcess_Click(sender As Object, e As System.EventArgs) Handles btnProcess.Click
+        Protected Sub btnProcess_Click(sender As Object, e As System.EventArgs) Handles btnProcess.Click, btnAccountWarningYes.Click
+
+
+
             'Mark as Pending Download in next batch.
             Dim theRmb = From c In d.AP_Staff_Rmbs Where c.RMBNo = CInt(hfRmbNo.Value)
+
+            'Check Balance
+            If CType(sender, Button).ID = "btnProcess" And Settings("WarnIfNegative") Then
+                Dim pendingBalance = GetNumericRemainingBalance(2)
+
+                Dim RmbBalance = theRmb.First.AP_Staff_RmbLines.Where(Function(x) x.CostCenter = x.AP_Staff_Rmb.CostCenter).Sum(Function(x) x.GrossAmount)
+                If RmbBalance > pendingBalance Then
+                    Dim message2 = Translate("NextBatch")
+                    Dim t2 As Type = Me.GetType()
+                    Dim sb2 As System.Text.StringBuilder = New System.Text.StringBuilder()
+                    sb2.Append("<script language='javascript'>")
+                    sb2.Append("showAccountWarning();")
+                    sb2.Append("</script>")
+                    ScriptManager.RegisterStartupScript(Page, t2, "popupWarning", sb2.ToString, False)
+                    Return
+                End If
+            End If
+
             theRmb.First.Status = RmbStatus.PendingDownload
             theRmb.First.ProcDate = Today
             theRmb.First.MoreInfoRequested = False
@@ -2930,12 +2951,16 @@ Namespace DotNetNuke.Modules.StaffRmbMod
             End If
         End Function
 
-        Public Function GetRemainingBalance() As String
+        Public Function GetNumericRemainingBalance(ByVal mode As Integer) As Double
+            Dim statusList = {RmbStatus.Approved, RmbStatus.PendingDownload, RmbStatus.DownloadFailed}
+            If mode = 2 Then
+                statusList = {RmbStatus.PendingDownload, RmbStatus.DownloadFailed}
+            End If
             Dim AccountBalance As Double = 0
             If hfAccountBalance.Value <> "" Then
                 AccountBalance = hfAccountBalance.Value
             End If
-           
+
             Dim r = (From c In d.AP_Staff_Rmbs Where c.RMBNo = CInt(hfRmbNo.Value) And PortalId = PortalId).First
 
             Dim Advance As Double = 0
@@ -2944,15 +2969,24 @@ Namespace DotNetNuke.Modules.StaffRmbMod
             End If
 
             Dim theStaff = StaffBrokerFunctions.GetStaffMember(r.UserId)
-            Dim statusList = {RmbStatus.Approved, RmbStatus.PendingDownload, RmbStatus.DownloadFailed}
-            Dim rTotal = (From c In d.AP_Staff_RmbLines Where c.AP_Staff_Rmb.PortalId = PortalId And (c.AP_Staff_Rmb.UserId = theStaff.UserId1 Or c.AP_Staff_Rmb.UserId = theStaff.UserId2) And statusList.Contains(c.AP_Staff_Rmb.Status) Select c.GrossAmount).Sum
+            Dim rTotal As Double = 0
+            Dim rT = (From c In d.AP_Staff_RmbLines Where c.AP_Staff_Rmb.PortalId = PortalId And (c.AP_Staff_Rmb.UserId = theStaff.UserId1 Or c.AP_Staff_Rmb.UserId = theStaff.UserId2) And statusList.Contains(c.AP_Staff_Rmb.Status) Select c.GrossAmount)
+            If rT.Count > 0 Then
+                rTotal = rT.Sum()
+            End If
             Dim a = (From c In d.AP_Staff_AdvanceRequests Where c.PortalId = PortalId And (c.UserId = theStaff.UserId1 Or c.UserId = theStaff.UserId2) And statusList.Contains(c.RequestStatus) Select c.RequestAmount)
-            Dim aTotal = 0
-            If a.count > 0 Then
+            Dim aTotal As Double = 0
+            If a.Count > 0 Then
                 aTotal = a.Sum()
             End If
 
-            Return StaffBrokerFunctions.GetFormattedCurrency(PortalId, (AccountBalance + Advance - (rTotal + aTotal)).ToString("0.00"))
+            Return AccountBalance + Advance - (rTotal + aTotal)
+
+        End Function
+        Public Function GetRemainingBalance() As String
+
+
+            Return StaffBrokerFunctions.GetFormattedCurrency(PortalId, GetNumericRemainingBalance(1).ToString("0.00"))
 
         End Function
         Public Function IsWrongType(ByVal CostCenter As String, ByVal LineTypeId As Integer) As Boolean
@@ -4225,7 +4259,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
         End Sub
 
         Protected Sub btnSuggestedPayments_Click(sender As Object, e As System.EventArgs) Handles btnSuggestedPayments.Click
-            
+
 
             Dim filename As String = "SuggestedPayments.xls"
             If StaffBrokerFunctions.GetSetting("NetSalaries", PortalId) = "True" Then
@@ -4235,7 +4269,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                 filename = "SuggestedPayments-ZA.xls"
                 'filename = filename
             End If
-           
+
             File.Copy(Server.MapPath("/DesktopModules/AgapeConnect/StaffRmb/" & filename), PortalSettings.HomeDirectoryMapPath & filename, True)
 
 
@@ -4258,7 +4292,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
                 'MyCommand.CommandText = sql2
                 'MyCommand.ExecuteNonQuery()
 
-               
+
 
 
                 Dim q = From c In ds.AP_Staff_SuggestedPayments Where c.PortalId = PortalId
@@ -4387,7 +4421,7 @@ Namespace DotNetNuke.Modules.StaffRmbMod
 
                                     MyCommand.CommandText = sql
 
-                                   
+
 
 
 
