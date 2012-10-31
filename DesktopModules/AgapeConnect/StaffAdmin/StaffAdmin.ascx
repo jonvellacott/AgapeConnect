@@ -62,7 +62,8 @@
             $('#<%= GetAddStaffClientId("tbFirstName2") %>').Watermark('First name');
             $('#<%= GetAddStaffClientId("tbLastName1") %>').Watermark('Last name');
             $('#<%= GetAddStaffClientId("tbLastName2") %>').Watermark('Last name');
-
+            <%= IIf( StaffBrokerFunctions.GetSetting("ZA-Mode", PortalId) = "True", "", "removeTab(2);  ")%>
+          
         }
 
         $(document).ready(function () {
@@ -114,6 +115,8 @@
 
 
     }
+
+    function removeTab(i) { $('#tabs').tabs("remove", i); }
 
     function MaritalChange() {
      
