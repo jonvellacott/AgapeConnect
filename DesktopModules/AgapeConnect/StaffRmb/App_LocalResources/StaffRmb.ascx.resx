@@ -552,4 +552,10 @@
   <data name="lblWrongTypes.Text" xml:space="preserve">
     <value>The Reimbursement contains expenses with incomatible expense types - highlighted in red. Some expense types are only valid or Personal Reimbursments and others for Department Reimbursements. To correct this, edit the line(s) and select a new (valid) expense type. You must fix these errors before your can Submit/Approve/Process this r.eimbursment.</value>
   </data>
+  <data name="AccountWarning.Text" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="lblAccountWarning.Text" xml:space="preserve">
+    <value>There is not enough money in the R/C to cover this Reimbursement. Processing this Reimbursement may result in a negative account balance. Do you with to continue?</value>
+  </data>
 </root>

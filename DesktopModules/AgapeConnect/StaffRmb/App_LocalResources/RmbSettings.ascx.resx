@@ -321,4 +321,10 @@
   <data name="lblShowRemBal.Text" xml:space="preserve">
     <value>Show Remaining Balance?:</value>
   </data>
+  <data name="lblWarnIfNegative.Help" xml:space="preserve">
+    <value>When processing an expense, the system will warn if the account balance will go negative as a result of this transaction. </value>
+  </data>
+  <data name="lblWarnIfNegative.Text" xml:space="preserve">
+    <value>Show Account Balance Warning</value>
+  </data>
 </root>
