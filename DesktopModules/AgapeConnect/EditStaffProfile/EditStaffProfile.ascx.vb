@@ -314,7 +314,7 @@ Namespace DotNetNuke.Modules.AgapeConnect
                                 lblTest.Visible = True
                                 Return
                             End If
-                            User2.Email = tbEmail1.Text
+                            User2.Email = tbEmail2.Text
                             UserController.UpdateUser(PortalId, User2)
                         End If
                     End If
